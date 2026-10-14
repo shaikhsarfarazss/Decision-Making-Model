@@ -46,6 +46,9 @@ class DecisionResult:
     def to_dict(self) -> Dict:
         return {
             "is_allowed": self.is_allowed,
+            "allowed": self.is_allowed,
+            "should_blur": not self.is_allowed,
+            "action": "ALLOW" if self.is_allowed else "BLUR",
             "is_study": self.is_study,
             "category": self.category,
             "category_tag": self.category_tag,
@@ -56,6 +59,7 @@ class DecisionResult:
             "latency_ms": self.latency_ms,
             "matched_preference": self.matched_preference,
             "explanation": self.explanation,
+            "reason": self.explanation,
         }
 
 
@@ -414,20 +418,37 @@ class LayaDecisionEngine:
                     "mappa", "ufotable", "gigguk", "mother's basement", "animezone"
                 ],
                 "keywords": [
-                    "anime", "manga", "manhwa", "otaku", "weeb", "shonen", "isekai", "naruto",
-                    "shippuden", "boruto", "sasuke", "kakashi", "itachi", "madara", "one piece",
-                    "luffy", "zoro", "sanji", "gear 5", "bleach", "ichigo", "aizen", "tybw",
-                    "attack on titan", "aot", "eren yeager", "eren", "levi", "mikasa",
-                    "jujutsu kaisen", "jjk", "gojo", "sukuna", "megumi", "demon slayer",
-                    "kimetsu", "tanjiro", "nezuko", "rengoku", "dragon ball", "dragon ball z",
-                    "dragon ball super", "dbz", "dbs", "goku", "vegeta", "ultra instinct",
-                    "super saiyan", "saiyan", "ssj", "bardock", "gohan", "broly", "frieza",
-                    "piccolo", "trunks", "studio ghibli", "ghibli", "solo leveling",
-                    "sung jinwoo", "chainsaw man", "denji", "death note", "light yagami",
-                    "vinland saga", "my hero academia", "deku", "blue lock", "haikyuu",
-                    "one punch man", "saitama", "hunter x hunter", "hxh", "killua",
-                    "tokyo ghoul", "sword art online", "fullmetal alchemist", "berserk",
-                    "evangelion", "jojo", "opening ost", "amv", "anime scene", "anime clip", "anime edit"
+                    "anime", "manga", "manhwa", "manhua", "waifu", "isekai", "shonen", "shounen",
+                    "seinen", "shojo", "amv", "ova", "ona", "crunchyroll", "funimation", "aniplex",
+                    "toei", "mappa", "ufotable", "madhouse", "vtuber", "hololive", "nijisanji",
+                    "english dub", "eng sub", "dragon ball", "dragon ball z", "dragon ball super",
+                    "dbz", "dbs", "dbgt", "daima", "bardock", "saiyan", "super saiyan", "ssj",
+                    "goku", "vegeta", "gohan", "trunks", "frieza", "freeza", "cell", "majin buu",
+                    "broly", "piccolo", "krillin", "beerus", "whis", "jiren", "zamasu", "goku black",
+                    "vegito", "gogeta", "kamehameha", "ultra instinct", "ultra ego", "shenron",
+                    "namek", "naruto", "shippuden", "boruto", "sasuke", "uchiha", "itachi", "madara",
+                    "obito", "kakashi", "jiraiya", "tsunade", "orochimaru", "minato", "hokage",
+                    "sharingan", "rinnegan", "byakugan", "akatsuki", "rasengan", "chidori",
+                    "kurama", "tailed beast", "shinobi", "one piece", "luffy", "zoro", "sanji",
+                    "nami", "usopp", "chopper", "nico robin", "franky", "brook", "jinbe", "shanks",
+                    "kaido", "big mom", "whitebeard", "blackbeard", "akainu", "gear 5", "gear fifth",
+                    "devil fruit", "haki", "straw hat", "mugiwara", "wano", "egghead",
+                    "jujutsu kaisen", "jjk", "gojo", "satoru", "sukuna", "ryomen", "yuji", "itadori",
+                    "megumi", "fushiguro", "domain expansion", "cursed technique",
+                    "demon slayer", "kimetsu no yaiba", "kimetsu", "tanjiro", "nezuko", "zenitsu",
+                    "inosuke", "muzan", "hashira", "rengoku", "akaza", "kokushibo",
+                    "attack on titan", "shingeki no kyojin", "aot", "eren yeager", "eren", "mikasa",
+                    "levi", "ackerman", "armin", "titan", "bleach", "ichigo", "kurosaki", "aizen",
+                    "bankai", "shikai", "espada", "thousand year blood war", "tybw",
+                    "my hero academia", "boku no hero", "mha", "deku", "bakugo", "todoroki",
+                    "all might", "shigaraki", "one punch man", "saitama", "genos", "garou",
+                    "chainsaw man", "denji", "makima", "pochita", "solo leveling", "sung jinwoo",
+                    "jin-woo", "hunter x hunter", "hxh", "gon", "killua", "hisoka", "kurapika",
+                    "death note", "light yagami", "ryuk", "fullmetal alchemist", "edward elric",
+                    "jojo", "bizarre adventure", "jotaro", "dio brando", "blue lock", "haikyuu",
+                    "baki", "vinland saga", "frieren", "dandadan", "studio ghibli", "ghibli",
+                    "tokyo ghoul", "sword art online", "berserk", "evangelion", "opening ost",
+                    "amv", "anime scene", "anime clip", "anime edit", "anime opening"
                 ],
             },
             "cartoon": {
@@ -693,6 +714,14 @@ class LayaDecisionEngine:
                 if cb_pat.search(title_lower):
                     scores["clickbait"] += 4.5
 
+        # Visual / Resolution clip tags (e.g. 【4K UHD】, 60FPS) without academic context
+        if scores["study"] < 2.0 and scores["coding"] < 2.0:
+            if re.search(r"【.*4k.*】|\b4k\s*uhd\b|\b60\s*fps\b", title_lower, re.IGNORECASE):
+                if scores["anime"] > 0:
+                    scores["anime"] += 4.0
+                elif scores["clickbait"] <= 0 and scores["gaming"] <= 0:
+                    scores["anime"] += 3.0
+
         # Find winning category
         best_tag = "other"
         best_score = 0.0
@@ -858,3 +887,13 @@ class LayaDecisionEngine:
         self.cache[key] = result
         if len(self.cache) > self.max_cache_size:
             self.cache.popitem(last=False)
+
+    def classify_video(self, title: str, channel: str = "") -> Dict:
+        """Helper method returning dict compatible with classify endpoints."""
+        res = self.decide(title=title, channel=channel)
+        return res.to_dict()
+
+
+# Alias for backwards compatibility
+DecisionEngine = LayaDecisionEngine
+

@@ -1,179 +1,135 @@
-/* StudyShield Modern Bulletproof Blur & Overlay Styles — YouTube & Shorts */
+/* ==========================================================================
+   StudyShield Overlay CSS - Blur ONLY Thumbnail/Video (Keep Title Unblurred)
+   ========================================================================== */
 
-.studyshield-card-container {
-  position: relative !important;
+/* Card Border Indicators */
+.studyshield-card-allowed {
+  outline: 2px solid #10b981 !important;
+  border-radius: 12px !important;
 }
 
-/* 1. THUMBNAIL / VIDEO CONTAINER */
+.studyshield-card-blocked {
+  outline: 2px solid #ef4444 !important;
+  border-radius: 12px !important;
+}
+
+/* Upper Thumbnail Container (The Blue Square Area Only) */
+ytd-thumbnail,
+yt-thumbnail-view-model,
+.yt-lockup-view-model__content-image,
+.thumb-box,
+.shortsLockupViewModelHostThumbnailContainer,
 .studyshield-thumb-container {
   position: relative !important;
   overflow: hidden !important;
   border-radius: 12px !important;
 }
 
-/* BLUR ONLY THE VIDEO / THUMBNAIL CONTAINER */
-.studyshield-thumb-blurred {
-  outline: 2px dashed rgba(244, 63, 94, 0.85) !important;
-  outline-offset: -2px !important;
-}
-
-.studyshield-thumb-blurred > *:not(.studyshield-overlay):not(.studyshield-study-pill),
-.studyshield-thumb-blurred img,
-.studyshield-thumb-blurred video,
-.studyshield-thumb-blurred .yt-core-image,
-.studyshield-thumb-blurred #thumbnail-container,
-.studyshield-thumb-blurred ytd-player,
-.studyshield-thumb-blurred .html5-main-video {
-  filter: blur(28px) saturate(35%) brightness(0.28) !important;
+/* BLUR ONLY THE IMAGE & VIDEO INSIDE THE UPPER THUMBNAIL BOX */
+.studyshield-card-blocked ytd-thumbnail img,
+.studyshield-card-blocked ytd-thumbnail video,
+.studyshield-card-blocked ytd-thumbnail ytd-moving-thumbnail-renderer,
+.studyshield-card-blocked ytd-thumbnail #video-preview,
+.studyshield-card-blocked yt-thumbnail-view-model img,
+.studyshield-card-blocked yt-thumbnail-view-model video,
+.studyshield-card-blocked .yt-lockup-view-model__content-image img,
+.studyshield-card-blocked .yt-lockup-view-model__content-image video,
+.studyshield-card-blocked .thumb-box img,
+.studyshield-card-blocked .thumb-box video,
+.studyshield-card-blocked .thumb-box,
+.studyshield-card-blocked .shortsLockupViewModelHostThumbnailContainer,
+.studyshield-card-blocked #mouseover-overlay,
+.studyshield-thumb-blurred,
+.studyshield-blur-media {
+  filter: blur(18px) brightness(0.75) !important;
+  transform: scale(1.06) !important; /* Prevents white blur edges inside the box */
+  transition: filter 0.2s ease, transform 0.2s ease !important;
   pointer-events: none !important;
-  user-select: none !important;
-  transition: filter 0.25s ease !important;
 }
 
-/* EXPLICITLY PRESERVE BOTTOM WRITTEN TEXT / TITLE / DESCRIPTION — NEVER BLURRED */
-#details,
-#meta,
-#metadata-line,
-ytd-rich-item-renderer #details,
-ytd-video-renderer #details,
-ytd-compact-video-renderer #details,
-ytd-grid-video-renderer #details,
-yt-lockup-view-model .yt-lockup-view-model__content-metadata,
-yt-lockup-view-model .yt-lockup-metadata-view-model-wiz,
-.shortsLockupViewModelHostOutsideMetadata,
-.reel-item-metadata,
-.info-box,
-.shorts-overlay-info {
+/* Also blur YouTube's floating inline hover preview player when blocked */
+ytd-video-preview.studyshield-preview-blocked video,
+ytd-video-preview.studyshield-preview-blocked img {
+  filter: blur(18px) brightness(0.75) !important;
+}
+
+/* Blur Fullscreen YouTube Shorts Video (Video only, keep header/comments sharp) */
+ytd-reel-video-renderer.studyshield-card-blocked video,
+ytd-reel-video-renderer.studyshield-card-blocked #player-container {
+  filter: blur(28px) brightness(0.65) !important;
+}
+
+/* NEVER BLUR THE DOWNSIDE TEXT (Title, Channel Name, Views, Avatar) */
+.studyshield-card-blocked #details,
+.studyshield-card-blocked #meta,
+.studyshield-card-blocked #video-title,
+.studyshield-card-blocked #video-title-link,
+.studyshield-card-blocked ytd-channel-name,
+.studyshield-card-blocked #metadata-line,
+.studyshield-card-blocked #avatar-link,
+.studyshield-card-blocked #avatar,
+.studyshield-card-blocked .yt-lockup-metadata-view-model,
+.studyshield-card-blocked .yt-core-attributed-string,
+.studyshield-card-blocked .meta-box,
+.studyshield-card-blocked .shortsLockupViewModelHostOutsideMetadata,
+.studyshield-card-allowed #details,
+.studyshield-card-allowed #meta {
   filter: none !important;
-  pointer-events: auto !important;
-  user-select: auto !important;
+  -webkit-filter: none !important;
   opacity: 1 !important;
-}
-
-/* 2. BLUR YOUTUBE SHORTS CARDS IN FEEDS & SHELVES (THUMBNAIL ONLY) */
-ytm-shorts-lockup-view-model.studyshield-blurred .shortsLockupViewModelHostThumbnailContainer,
-ytm-shorts-lockup-view-model-v2.studyshield-blurred .shortsLockupViewModelHostThumbnailContainer,
-.ytGridShelfViewModelGridShelfItem.studyshield-blurred img,
-ytd-reel-item-renderer.studyshield-blurred #thumbnail,
-ytd-rich-grid-slim-media.studyshield-blurred #thumbnail {
-  filter: blur(32px) saturate(30%) brightness(0.28) !important;
-  pointer-events: none !important;
-  user-select: none !important;
-  outline: 2px dashed rgba(244, 63, 94, 0.85) !important;
-  outline-offset: -2px !important;
-  border-radius: 12px !important;
-  transition: filter 0.25s ease !important;
-}
-
-/* 3. BLUR FULLSCREEN YOUTUBE SHORTS PLAYER (VIDEO ONLY) */
-ytd-reel-video-renderer.studyshield-blurred video,
-ytd-reel-video-renderer.studyshield-blurred .html5-main-video,
-ytd-reel-video-renderer.studyshield-blurred #player-container,
-ytd-reel-video-renderer.studyshield-blurred ytd-player {
-  filter: blur(42px) grayscale(80%) brightness(0.25) !important;
-  pointer-events: none !important;
-  user-select: none !important;
-  transition: filter 0.25s ease !important;
-}
-
-/* 4. FLOATING SHIELD BADGE OVERLAY (Centered directly on the thumbnail) */
-.studyshield-overlay {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 2000 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 6px !important;
-  padding: 10px 14px !important;
-  background: rgba(15, 23, 42, 0.94) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border: 1.5px solid rgba(244, 63, 94, 0.75) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85), 0 0 20px rgba(244, 63, 94, 0.25) !important;
-  color: #f8fafc !important;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   pointer-events: auto !important;
-  width: max-content !important;
-  max-width: 90% !important;
-  text-align: center !important;
-  filter: none !important;
 }
 
-.studyshield-overlay-shorts {
-  padding: 8px 12px !important;
-  max-width: 92% !important;
-}
-
-.studyshield-badge-header {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  color: #fda4af !important;
-  letter-spacing: 0.6px !important;
-  text-transform: uppercase !important;
-}
-
-.studyshield-badge-sub {
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  color: #e2e8f0 !important;
-  line-height: 1.3 !important;
-}
-
-.studyshield-unblur-btn {
-  margin-top: 3px !important;
-  padding: 5px 12px !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.14) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 7px !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-}
-
-.studyshield-unblur-btn:hover {
-  background: rgba(244, 63, 94, 0.85) !important;
-  border-color: #fda4af !important;
-  transform: translateY(-1px) !important;
-}
-
-/* 5. VERIFIED ALLOWED VIDEO BADGE */
-.studyshield-thumb-verified {
-  border-radius: 12px !important;
-}
-
-.studyshield-study-pill {
+/* Category Badge (Stays Sharp Above the Blurred Thumbnail) */
+.studyshield-badge {
   position: absolute !important;
   top: 10px !important;
   left: 10px !important;
-  z-index: 5000 !important;
+  z-index: 9999 !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-family: "Roboto", "Arial", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
-  background: rgba(15, 23, 42, 0.88) !important;
-  border: 1px solid rgba(16, 185, 129, 0.7) !important;
-  backdrop-filter: blur(8px) !important;
-  color: #34d399 !important;
-  padding: 4px 10px !important;
-  border-radius: 8px !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.3px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  gap: 5px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+  pointer-events: auto !important;
   filter: none !important;
-  pointer-events: none !important;
+  -webkit-filter: none !important;
 }
 
-/* 6. REAL-TIME HUD TOAST NOTIFICATION */
+.studyshield-badge-study {
+  background-color: #10b981 !important; /* Green */
+}
+
+.studyshield-badge-anime,
+.studyshield-badge-blocked {
+  background-color: #ef4444 !important; /* Red */
+}
+
+/* Unblur Button on Badge or Thumbnail */
+.studyshield-unblur-btn {
+  margin-left: 6px !important;
+  padding: 2px 8px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.studyshield-unblur-btn:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Real-Time Live Toast Notification */
 .studyshield-toast {
   position: fixed !important;
   bottom: 24px !important;

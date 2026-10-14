@@ -1,7 +1,7 @@
-// StudyShield Content Script — 3-Layer YouTube Categorization Engine (20 Categories)
+// StudyShield Content Script — Accurate Title Extraction, 20-Category AI & Thumbnail-Only Blur
 (() => {
   console.log(
-    '%c[StudyShield 🛡️] 3-Layer YouTube Classifier Active (20 Categories: Study & Coding Separated)',
+    '%c[StudyShield 🛡️] 3-Layer YouTube Classifier Active (Thumbnail-Only Blur • 20 Categories)',
     'color: #38bdf8; font-size: 13px; font-weight: bold; background: #0f172a; padding: 4px 8px; border-radius: 4px;'
   );
 
@@ -11,8 +11,23 @@
   let lastUpdatedAt = 0;
   let scanDebounceTimer = null;
   const decisionCache = new Map();
+  const processedCards = new WeakMap();
 
-  // 20 YouTube-Aligned Categories with Official YouTube Category IDs & Channel Priors
+  const VIDEO_CARD_SELECTORS = [
+    'ytd-rich-item-renderer',
+    'ytd-video-renderer',
+    'ytd-compact-video-renderer',
+    'ytd-grid-video-renderer',
+    'yt-lockup-view-model',
+    'ytm-shorts-lockup-view-model',
+    'ytm-shorts-lockup-view-model-v2',
+    '.ytGridShelfViewModelGridShelfItem',
+    'ytd-rich-grid-slim-media',
+    'ytd-reel-item-renderer',
+    'ytd-reel-video-renderer'
+  ].join(', ');
+
+  // 20 YouTube-Aligned Categories with Official YouTube Category IDs & Priors
   const categoryTaxonomies = {
     study: {
       name: '📚 Study & Academics',
@@ -215,13 +230,33 @@
       ytMacro: 'Anime/Animation',
       channels: ['crunchyroll', 'muse asia', 'ani-one asia', 'toei animation', 'mappa', 'animezone'],
       kws: [
-        'anime', 'manga', 'otaku', 'naruto', 'shippuden', 'sasuke', 'itachi', 'one piece',
-        'luffy', 'zoro', 'bleach', 'attack on titan', 'aot', 'jujutsu kaisen', 'jjk', 'gojo',
-        'sukuna', 'demon slayer', 'tanjiro', 'dragon ball', 'dragon ball z', 'dragon ball super',
-        'dbz', 'dbs', 'goku', 'vegeta', 'super saiyan', 'saiyan', 'ssj', 'bardock', 'gohan',
-        'broly', 'frieza', 'piccolo', 'trunks', 'studio ghibli', 'ghibli', 'solo leveling',
-        'sung jinwoo', 'chainsaw man', 'death note', 'vinland saga', 'my hero academia',
-        'blue lock', 'one punch man', 'saitama', 'hunter x hunter', 'amv', 'anime scene', 'anime clip'
+        'anime', 'manga', 'manhwa', 'manhua', 'waifu', 'isekai', 'shonen', 'shounen', 'seinen',
+        'shojo', 'amv', 'ova', 'ona', 'crunchyroll', 'funimation', 'aniplex', 'toei', 'mappa',
+        'ufotable', 'madhouse', 'vtuber', 'hololive', 'nijisanji', 'english dub', 'eng sub',
+        'dragon ball', 'dragon ball z', 'dragon ball super', 'dbz', 'dbs', 'dbgt', 'daima',
+        'bardock', 'saiyan', 'super saiyan', 'ssj', 'goku', 'vegeta', 'gohan', 'trunks',
+        'frieza', 'freeza', 'cell', 'majin buu', 'broly', 'piccolo', 'krillin', 'beerus', 'whis',
+        'jiren', 'zamasu', 'goku black', 'vegito', 'gogeta', 'kamehameha', 'ultra instinct',
+        'ultra ego', 'shenron', 'namek', 'naruto', 'shippuden', 'boruto', 'sasuke', 'uchiha',
+        'itachi', 'madara', 'obito', 'kakashi', 'jiraiya', 'tsunade', 'orochimaru', 'minato',
+        'hokage', 'sharingan', 'rinnegan', 'byakugan', 'akatsuki', 'rasengan', 'chidori',
+        'kurama', 'tailed beast', 'shinobi', 'one piece', 'luffy', 'zoro', 'sanji', 'nami',
+        'usopp', 'chopper', 'nico robin', 'franky', 'brook', 'jinbe', 'shanks', 'kaido',
+        'big mom', 'whitebeard', 'blackbeard', 'akainu', 'gear 5', 'gear fifth', 'devil fruit',
+        'haki', 'straw hat', 'mugiwara', 'wano', 'egghead', 'jujutsu kaisen', 'jjk', 'gojo',
+        'satoru', 'sukuna', 'ryomen', 'yuji', 'itadori', 'megumi', 'fushiguro', 'domain expansion',
+        'cursed technique', 'demon slayer', 'kimetsu no yaiba', 'kimetsu', 'tanjiro', 'nezuko',
+        'zenitsu', 'inosuke', 'muzan', 'hashira', 'rengoku', 'akaza', 'kokushibo', 'attack on titan',
+        'shingeki no kyojin', 'aot', 'eren yeager', 'eren', 'mikasa', 'levi', 'ackerman',
+        'armin', 'titan', 'bleach', 'ichigo', 'kurosaki', 'aizen', 'bankai', 'shikai', 'espada',
+        'thousand year blood war', 'tybw', 'my hero academia', 'boku no hero', 'mha', 'deku',
+        'bakugo', 'todoroki', 'all might', 'shigaraki', 'one punch man', 'saitama', 'genos',
+        'garou', 'chainsaw man', 'denji', 'makima', 'pochita', 'solo leveling', 'sung jinwoo',
+        'jin-woo', 'hunter x hunter', 'hxh', 'gon', 'killua', 'hisoka', 'kurapika', 'death note',
+        'light yagami', 'ryuk', 'fullmetal alchemist', 'edward elric', 'jojo', 'bizarre adventure',
+        'jotaro', 'dio brando', 'blue lock', 'haikyuu', 'baki', 'vinland saga', 'frieren',
+        'dandadan', 'studio ghibli', 'ghibli', 'tokyo ghoul', 'sword art online', 'berserk',
+        'evangelion', 'opening ost', 'amv', 'anime scene', 'anime clip', 'anime edit', 'anime opening'
       ]
     },
     cartoon: {
@@ -310,6 +345,7 @@
         }
       }
       for (const kw of info.kws) {
+        // Enforce strict word boundaries so substrings like "doc" never match inside "Bardock"
         const pattern = new RegExp('(?<!\\w)' + escapeRegex(kw.toLowerCase()) + '(?!\\w)', 'i');
         if (pattern.test(cleanText)) {
           score += kw.split(' ').length * 2 + (kw.includes(' ') ? 1 : 0);
@@ -334,6 +370,14 @@
       scores.gaming = Math.max(0, (scores.gaming || 0) - 4);
     }
 
+    // High-res media clip markers (e.g. 【4K UHD】)
+    if (scores.study < 2 && scores.coding < 2) {
+      if (/【.*4k.*】|\b4k\s*uhd\b|\b60\s*fps\b/i.test(titleLower)) {
+        if (scores.anime > 0) scores.anime += 4;
+        else if ((scores.clickbait || 0) <= 0 && (scores.gaming || 0) <= 0) scores.anime += 3;
+      }
+    }
+
     let bestTag = 'other';
     let maxScore = 0;
     for (const [tag, sc] of Object.entries(scores)) {
@@ -352,6 +396,9 @@
     if (!shieldEnabled) {
       return {
         is_allowed: true,
+        allowed: true,
+        should_blur: false,
+        action: 'ALLOW',
         category: bestInfo.name,
         category_tag: bestTag,
         youtube_category_id: bestInfo.ytId,
@@ -380,13 +427,285 @@
 
     return {
       is_allowed: isAllowed,
+      allowed: isAllowed,
+      should_blur: !isAllowed,
+      action: isAllowed ? 'ALLOW' : 'BLUR',
       category: bestInfo.name,
       category_tag: bestTag,
       youtube_category_id: bestInfo.ytId,
       youtube_macro_category: bestInfo.ytMacro,
-      confidence: maxScore > 0 ? 0.96 : 0.85,
+      confidence: maxScore > 0 ? 0.98 : 0.85,
       matched_preference: matchedPref || 'Blocked'
     };
+  }
+
+  function getThumbnailContainer(card) {
+    return (
+      card.querySelector('ytd-thumbnail') ||
+      card.querySelector('yt-thumbnail-view-model') ||
+      card.querySelector('.yt-lockup-view-model__content-image') ||
+      card.querySelector('.thumb-box') ||
+      card.querySelector('.shortsLockupViewModelHostThumbnailContainer') ||
+      card.querySelector('#thumbnail') ||
+      card.querySelector('#player-container') ||
+      card
+    );
+  }
+
+  function extractVideoInfo(card) {
+    let title = '';
+    let channel = '';
+
+    const modernShortsTitle = card.querySelector(
+      '.shortsLockupViewModelHostOutsideMetadataTitle, h3.shortsLockupViewModelHostMetadataTitle, a.shortsLockupViewModelHostOutsideMetadataEndpoint, .ytShortsVideoTitleViewModelShortsVideoTitle'
+    );
+    if (modernShortsTitle && modernShortsTitle.textContent.trim()) {
+      title = modernShortsTitle.textContent.trim();
+    }
+
+    if (!title) {
+      const fullscreenTitle = card.querySelector(
+        'yt-shorts-video-title-view-model span, ytd-reel-player-header-renderer #title, .reel-player-header-renderer h2, h1.ytShortsVideoTitleViewModelShortsVideoTitle'
+      );
+      if (fullscreenTitle && fullscreenTitle.textContent.trim()) {
+        title = fullscreenTitle.textContent.trim();
+      }
+    }
+
+    if (!title) {
+      const regularTitle = card.querySelector(
+        '#video-title, #video-title-link, yt-formatted-string#video-title, .yt-lockup-metadata-view-model-wiz__title, .yt-lockup-metadata-view-model__title, h3 a'
+      );
+      if (regularTitle && regularTitle.textContent.trim()) {
+        title = regularTitle.textContent.trim();
+      }
+    }
+
+    if (!title) {
+      const anchor = card.querySelector(
+        'a#video-title-link, a.shortsLockupViewModelHostEndpoint, a[href*="/shorts/"], a[href*="/watch?v="], a#thumbnail'
+      );
+      if (anchor) {
+        const attrTitle = anchor.getAttribute('title') || anchor.getAttribute('aria-label');
+        if (attrTitle && attrTitle.trim()) {
+          title = attrTitle.trim();
+        }
+      }
+    }
+
+    if (!title && window.location.pathname.startsWith('/shorts') && card.hasAttribute('is-active')) {
+      const docT = document.title;
+      if (docT && docT.toLowerCase() !== 'youtube') {
+        title = docT.replace(/- YouTube\$/i, '').trim();
+      }
+    }
+
+    if (title) {
+      title = title.replace(/\b\d+\s*(hours?|minutes?|seconds?|views?)\b/gi, '').trim();
+    }
+
+    const channelEl = card.querySelector(
+      '.shortsLockupViewModelHostMetadataSubhead, yt-reel-channel-bar-view-model a, #channel-name, ytd-channel-name, .ytd-channel-name, .yt-content-metadata-view-model__metadata-row'
+    );
+    if (channelEl) {
+      channel = channelEl.textContent.trim().split('\n')[0].trim();
+    }
+
+    const linkEl = card.querySelector('a[href*="/watch?v="], a[href*="/shorts/"]');
+    const href = linkEl ? linkEl.getAttribute('href') : '';
+
+    return { title, channel, href };
+  }
+
+  function getDecision(title, channel) {
+    const key = `${title.toLowerCase()}::${channel.toLowerCase()}::${shieldEnabled}::${activeCategories.join(',')}`;
+    if (decisionCache.has(key)) return Promise.resolve(decisionCache.get(key));
+
+    return new Promise((resolve) => {
+      let resolved = false;
+      const fallbackTimer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          const fb = decideLocally(title, channel);
+          decisionCache.set(key, fb);
+          resolve(fb);
+        }
+      }, 250);
+
+      try {
+        chrome.runtime.sendMessage(
+          { action: 'DECIDE', data: { title, channel } },
+          (response) => {
+            if (resolved) return;
+            resolved = true;
+            clearTimeout(fallbackTimer);
+            if (!chrome.runtime.lastError && response && response.success && response.data) {
+              decisionCache.set(key, response.data);
+              resolve(response.data);
+            } else {
+              const fb = decideLocally(title, channel);
+              decisionCache.set(key, fb);
+              resolve(fb);
+            }
+          }
+        );
+      } catch (_) {
+        if (!resolved) {
+          resolved = true;
+          clearTimeout(fallbackTimer);
+          const fb = decideLocally(title, channel);
+          decisionCache.set(key, fb);
+          resolve(fb);
+        }
+      }
+    });
+  }
+
+  function applyCardState(card, result) {
+    const thumbContainer = getThumbnailContainer(card);
+    if (!thumbContainer) return;
+
+    const isBlocked = Boolean(
+      result.should_blur === true ||
+      result.action === 'BLUR' ||
+      result.is_allowed === false ||
+      result.allowed === false
+    );
+    const category = result.category || (isBlocked ? 'Blocked Distraction' : 'Allowed Content');
+    const ytIdLabel = result.youtube_category_id ? `ID ${result.youtube_category_id}` : '';
+
+    // 1. Reset card indicator borders
+    card.classList.remove('studyshield-card-allowed', 'studyshield-card-blocked');
+    card.classList.add(isBlocked ? 'studyshield-card-blocked' : 'studyshield-card-allowed');
+    card.dataset.studyshieldBlocked = isBlocked ? 'true' : 'false';
+
+    // 2. Ensure downside text/details are NEVER blurred
+    const detailsEl = card.querySelector('#details, #meta, .yt-lockup-metadata-view-model, .meta-box, .shortsLockupViewModelHostOutsideMetadata');
+    if (detailsEl) {
+      detailsEl.style.setProperty('filter', 'none', 'important');
+      detailsEl.style.setProperty('opacity', '1', 'important');
+    }
+
+    // 3. Blur ONLY the media elements inside the upper thumbnail container
+    const mediaElements = thumbContainer.querySelectorAll('img, video, ytd-moving-thumbnail-renderer, #video-preview, .thumb-box, .shortsLockupViewModelHostThumbnailContainer');
+    if (mediaElements.length > 0) {
+      mediaElements.forEach((media) => {
+        if (isBlocked && !card.dataset.studyshieldUserRevealed) {
+          media.classList.add('studyshield-blur-media');
+        } else {
+          media.classList.remove('studyshield-blur-media');
+        }
+      });
+    } else {
+      if (isBlocked && !card.dataset.studyshieldUserRevealed) {
+        thumbContainer.classList.add('studyshield-thumb-blurred');
+      } else {
+        thumbContainer.classList.remove('studyshield-thumb-blurred');
+      }
+    }
+
+    // Pause active video on blocked reel/shorts
+    if (isBlocked && !card.dataset.studyshieldUserRevealed) {
+      const vid = card.querySelector('video');
+      if (vid && !vid.paused) {
+        try {
+          vid.pause();
+          vid.muted = true;
+        } catch (_) {}
+      }
+    }
+
+    // 4. Add or update the badge inside the thumbnail container
+    let badge = thumbContainer.querySelector('.studyshield-badge');
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.className = 'studyshield-badge';
+      thumbContainer.appendChild(badge);
+    }
+
+    badge.classList.remove('studyshield-badge-study', 'studyshield-badge-blocked', 'studyshield-badge-anime');
+    if (isBlocked) {
+      badge.classList.add(category.includes('Anime') ? 'studyshield-badge-anime' : 'studyshield-badge-blocked');
+      badge.innerHTML = `<span>🚫 ${category} ${ytIdLabel}</span>`;
+      
+      // Unblur reveal button
+      if (!card.dataset.studyshieldUserRevealed) {
+        const unblurBtn = document.createElement('button');
+        unblurBtn.className = 'studyshield-unblur-btn';
+        unblurBtn.textContent = '👁️ Reveal';
+        unblurBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          card.dataset.studyshieldUserRevealed = 'true';
+          card.classList.remove('studyshield-card-blocked');
+          card.classList.add('studyshield-card-allowed');
+          mediaElements.forEach((m) => m.classList.remove('studyshield-blur-media'));
+          thumbContainer.classList.remove('studyshield-thumb-blurred');
+          badge.remove();
+          const vid = card.querySelector('video');
+          if (vid) {
+            vid.muted = false;
+            vid.play().catch(() => {});
+          }
+        });
+        badge.appendChild(unblurBtn);
+      }
+    } else {
+      badge.classList.add('studyshield-badge-study');
+      badge.innerHTML = `<span>✓ ${category} ${ytIdLabel}</span>`;
+    }
+  }
+
+  // Keep YouTube's hover inline video preview blurred if the hovered card is blocked
+  document.addEventListener(
+    'mouseover',
+    (e) => {
+      const card = e.target.closest(VIDEO_CARD_SELECTORS);
+      const previewPlayer = document.querySelector('ytd-video-preview');
+      if (!card || !previewPlayer) return;
+
+      if (card.dataset.studyshieldBlocked === 'true' && !card.dataset.studyshieldUserRevealed) {
+        previewPlayer.classList.add('studyshield-preview-blocked');
+      } else {
+        previewPlayer.classList.remove('studyshield-preview-blocked');
+      }
+    },
+    true
+  );
+
+  async function classifyCard(card) {
+    const { title, channel, href } = extractVideoInfo(card);
+    if (!title || title.length < 2) return;
+
+    const signature = `${href}::${title}`;
+    if (card.dataset.studyshieldDone === 'true' && card.dataset.studyshieldSignature === signature) {
+      return;
+    }
+
+    if (card.dataset.studyshieldSignature && card.dataset.studyshieldSignature !== signature) {
+      delete card.dataset.studyshieldUserRevealed;
+    }
+
+    card.dataset.studyshieldDone = 'true';
+    card.dataset.studyshieldSignature = signature;
+    processedCards.set(card, title);
+
+    const result = await getDecision(title, channel);
+    if (result) {
+      applyCardState(card, result);
+    }
+  }
+
+  function scanAllContent() {
+    document.querySelectorAll(VIDEO_CARD_SELECTORS).forEach(classifyCard);
+  }
+
+  function scheduleScan() {
+    if (scanDebounceTimer) return;
+    scanDebounceTimer = setTimeout(() => {
+      scanDebounceTimer = null;
+      scanAllContent();
+    }, 120);
   }
 
   function showToast(message) {
@@ -419,15 +738,10 @@
 
   function triggerImmediateReScan(reason = 'Preferences Updated', showNotification = true) {
     decisionCache.clear();
-    document.querySelectorAll('.studyshield-card-container, .studyshield-thumb-container, [data-studyshield-done]').forEach((el) => {
+    document.querySelectorAll(VIDEO_CARD_SELECTORS).forEach((el) => {
       delete el.dataset.studyshieldDone;
       delete el.dataset.studyshieldSignature;
       delete el.dataset.studyshieldUserRevealed;
-      el.classList.remove('studyshield-thumb-blurred', 'studyshield-thumb-verified', 'studyshield-blurred', 'studyshield-study-verified');
-      const o = el.querySelector('.studyshield-overlay');
-      if (o) o.remove();
-      const p = el.querySelector('.studyshield-study-pill');
-      if (p) p.remove();
     });
     scanAllContent();
     if (showNotification) showToast(reason);
@@ -546,279 +860,12 @@
   syncPreferences();
   setInterval(syncPreferences, 2000);
 
-  function extractMetadata(el) {
-    let title = '';
-    let channel = '';
-
-    const modernShortsTitle = el.querySelector(
-      '.shortsLockupViewModelHostOutsideMetadataTitle, h3.shortsLockupViewModelHostMetadataTitle, a.shortsLockupViewModelHostOutsideMetadataEndpoint, .ytShortsVideoTitleViewModelShortsVideoTitle'
-    );
-    if (modernShortsTitle && modernShortsTitle.textContent.trim()) {
-      title = modernShortsTitle.textContent.trim();
-    }
-
-    if (!title) {
-      const fullscreenTitle = el.querySelector(
-        'yt-shorts-video-title-view-model span, ytd-reel-player-header-renderer #title, .reel-player-header-renderer h2, h1.ytShortsVideoTitleViewModelShortsVideoTitle'
-      );
-      if (fullscreenTitle && fullscreenTitle.textContent.trim()) {
-        title = fullscreenTitle.textContent.trim();
-      }
-    }
-
-    if (!title) {
-      const regularTitle = el.querySelector(
-        '#video-title, #video-title-link, yt-formatted-string#video-title, .yt-lockup-metadata-view-model-wiz__title, .yt-lockup-metadata-view-model__title, h3 a'
-      );
-      if (regularTitle && regularTitle.textContent.trim()) {
-        title = regularTitle.textContent.trim();
-      }
-    }
-
-    if (!title) {
-      const anchor = el.querySelector(
-        'a#video-title-link, a.shortsLockupViewModelHostEndpoint, a[href*="/shorts/"], a[href*="/watch?v="], a#thumbnail'
-      );
-      if (anchor) {
-        const attrTitle = anchor.getAttribute('title') || anchor.getAttribute('aria-label');
-        if (attrTitle && attrTitle.trim()) {
-          title = attrTitle.trim();
-        }
-      }
-    }
-
-    if (!title && window.location.pathname.startsWith('/shorts') && el.hasAttribute('is-active')) {
-      const docT = document.title;
-      if (docT && docT.toLowerCase() !== 'youtube') {
-        title = docT.replace(/- YouTube\$/i, '').trim();
-      }
-    }
-
-    if (title) {
-      title = title.replace(/\b\d+\s*(hours?|minutes?|seconds?|views?)\b/gi, '').trim();
-    }
-
-    const channelEl = el.querySelector(
-      '.shortsLockupViewModelHostMetadataSubhead, yt-reel-channel-bar-view-model a, #channel-name, ytd-channel-name, .ytd-channel-name'
-    );
-    if (channelEl) {
-      channel = channelEl.textContent.trim().split('\n')[0].trim();
-    }
-
-    const linkEl = el.querySelector('a[href*="/watch?v="], a[href*="/shorts/"]');
-    const href = linkEl ? linkEl.getAttribute('href') : '';
-
-    return { title, channel, href };
-  }
-
-  function getThumbnailContainer(el) {
-    const ytdThumb = el.querySelector('ytd-thumbnail, #thumbnail, a#thumbnail');
-    if (ytdThumb) return ytdThumb;
-
-    const thumbBox = el.querySelector('.thumb-box');
-    if (thumbBox) return thumbBox;
-
-    const shortsThumb = el.querySelector(
-      '.shortsLockupViewModelHostThumbnailContainer, .shortsLockupViewModelHostOutsideMetadataEndpoint'
-    );
-    if (shortsThumb) return shortsThumb;
-
-    const lockupImg = el.querySelector(
-      '.yt-lockup-view-model__content-image, .yt-lockup-metadata-view-model-wiz__thumbnail-container'
-    );
-    if (lockupImg) return lockupImg;
-
-    const reelContainer = el.querySelector('#short-video-container, #player-container');
-    if (reelContainer) return reelContainer;
-
-    return el;
-  }
-
-  function getDecision(title, channel) {
-    const key = `${title.toLowerCase()}::${channel.toLowerCase()}::${shieldEnabled}::${activeCategories.join(',')}`;
-    if (decisionCache.has(key)) return Promise.resolve(decisionCache.get(key));
-
-    return new Promise((resolve) => {
-      let resolved = false;
-      const fallbackTimer = setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          const fb = decideLocally(title, channel);
-          decisionCache.set(key, fb);
-          resolve(fb);
-        }
-      }, 220);
-
-      try {
-        chrome.runtime.sendMessage(
-          { action: 'DECIDE', data: { title, channel } },
-          (response) => {
-            if (resolved) return;
-            resolved = true;
-            clearTimeout(fallbackTimer);
-            if (!chrome.runtime.lastError && response && response.success && response.data) {
-              decisionCache.set(key, response.data);
-              resolve(response.data);
-            } else {
-              const fb = decideLocally(title, channel);
-              decisionCache.set(key, fb);
-              resolve(fb);
-            }
-          }
-        );
-      } catch (_) {
-        if (!resolved) {
-          resolved = true;
-          clearTimeout(fallbackTimer);
-          const fb = decideLocally(title, channel);
-          decisionCache.set(key, fb);
-          resolve(fb);
-        }
-      }
-    });
-  }
-
-  async function evaluateElement(el) {
-    const { title, channel, href } = extractMetadata(el);
-    if (!title || title.length < 2) return;
-
-    const signature = `${href}::${title}`;
-    if (el.dataset.studyshieldDone === 'true' && el.dataset.studyshieldSignature === signature) {
-      return;
-    }
-
-    if (el.dataset.studyshieldSignature && el.dataset.studyshieldSignature !== signature) {
-      delete el.dataset.studyshieldUserRevealed;
-    }
-
-    el.classList.add('studyshield-card-container');
-    const decision = await getDecision(title, channel);
-    if (!decision) return;
-
-    el.dataset.studyshieldDone = 'true';
-    el.dataset.studyshieldSignature = signature;
-
-    const thumbEl = getThumbnailContainer(el);
-    thumbEl.classList.add('studyshield-thumb-container');
-
-    const isShort =
-      el.tagName.toLowerCase().includes('reel') ||
-      el.classList.contains('shortsLockupViewModelHost') ||
-      el.classList.contains('ytm-shorts-lockup-view-model') ||
-      el.classList.contains('ytd-rich-grid-slim-media') ||
-      el.classList.contains('ytGridShelfViewModelGridShelfItem') ||
-      el.querySelector('a[href*="/shorts/"]') !== null;
-
-    const ytIdLabel = decision.youtube_category_id ? `YT ID ${decision.youtube_category_id}` : 'YT Filter';
-
-    if (!decision.is_allowed && !el.dataset.studyshieldUserRevealed) {
-      // 🚫 BLUR ONLY THE VIDEO / THUMBNAIL (Never blur the title or description text below!)
-      thumbEl.classList.add('studyshield-thumb-blurred');
-      thumbEl.classList.remove('studyshield-thumb-verified');
-      el.classList.remove('studyshield-study-verified');
-
-      const existingPill = thumbEl.querySelector('.studyshield-study-pill') || el.querySelector('.studyshield-study-pill');
-      if (existingPill) existingPill.remove();
-
-      const isActiveReel = el.hasAttribute('is-active') || el.id === 'shorts-player';
-      const videoTag =
-        el.querySelector('video') ||
-        (window.location.pathname.startsWith('/shorts') && isActiveReel
-          ? document.querySelector('ytd-reel-video-renderer[is-active] video')
-          : null);
-
-      if (videoTag && !videoTag.paused) {
-        try {
-          videoTag.pause();
-          videoTag.muted = true;
-        } catch (_) {}
-      }
-
-      let overlay = thumbEl.querySelector('.studyshield-overlay');
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'studyshield-overlay';
-        if (isShort) overlay.classList.add('studyshield-overlay-shorts');
-        const targetContainer = (isShort && el.querySelector('#short-video-container')) || thumbEl;
-        targetContainer.appendChild(overlay);
-      }
-
-      const confPct = Math.round((decision.confidence || 0.95) * 100);
-      overlay.innerHTML = `
-        <div class="studyshield-badge-header">
-          <span>🛡️ StudyShield • ${ytIdLabel}</span>
-        </div>
-        <div class="studyshield-badge-sub">
-          <strong>${decision.category}</strong> (${confPct}%)
-        </div>
-        <button class="studyshield-unblur-btn" type="button">👁️ Reveal & Play</button>
-      `;
-
-      const unblurBtn = overlay.querySelector('.studyshield-unblur-btn');
-      unblurBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        el.dataset.studyshieldUserRevealed = 'true';
-        thumbEl.classList.remove('studyshield-thumb-blurred');
-        overlay.remove();
-        if (videoTag) {
-          videoTag.muted = false;
-          videoTag.play().catch(() => {});
-        }
-      });
-    } else {
-      // ✅ ALLOWED VIDEO
-      thumbEl.classList.remove('studyshield-thumb-blurred');
-      thumbEl.classList.add('studyshield-thumb-verified');
-      el.classList.add('studyshield-study-verified');
-
-      const existingOverlay = thumbEl.querySelector('.studyshield-overlay') || el.querySelector('.studyshield-overlay');
-      if (existingOverlay) existingOverlay.remove();
-
-      if (!isShort) {
-        let pill = thumbEl.querySelector('.studyshield-study-pill');
-        if (!pill) {
-          pill = document.createElement('div');
-          pill.className = 'studyshield-study-pill';
-          thumbEl.appendChild(pill);
-        }
-        pill.innerHTML = `<span>✓ ${decision.category} (${ytIdLabel})</span>`;
-      }
-    }
-  }
-
-  function scanAllContent() {
-    const selectors = [
-      'ytd-rich-item-renderer',
-      'ytd-video-renderer',
-      'ytd-compact-video-renderer',
-      'ytd-grid-video-renderer',
-      'ytm-shorts-lockup-view-model',
-      'ytm-shorts-lockup-view-model-v2',
-      '.ytGridShelfViewModelGridShelfItem',
-      'ytd-rich-grid-slim-media',
-      'ytd-reel-item-renderer',
-      'yt-lockup-view-model',
-      'ytd-reel-video-renderer'
-    ];
-    document.querySelectorAll(selectors.join(',')).forEach(evaluateElement);
-  }
-
-  function scheduleScan() {
-    if (scanDebounceTimer) return;
-    scanDebounceTimer = setTimeout(() => {
-      scanDebounceTimer = null;
-      scanAllContent();
-    }, 120);
-  }
-
   const observer = new MutationObserver((mutations) => {
     for (const m of mutations) {
       if (
         m.target &&
         m.target.classList &&
-        (m.target.classList.contains('studyshield-overlay') ||
-          m.target.classList.contains('studyshield-study-pill') ||
+        (m.target.classList.contains('studyshield-badge') ||
           m.target.id === 'studyshield-live-toast')
       ) {
         continue;

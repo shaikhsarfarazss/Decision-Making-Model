@@ -118,6 +118,13 @@ def get_decision(req: DecisionRequest) -> Dict[str, Any]:
     return res_dict
 
 
+@app.post("/classify")
+def classify_endpoint(req: DecisionRequest) -> Dict[str, Any]:
+    """Alias for /decide endpoint."""
+    return get_decision(req)
+
+
+
 @app.post("/analyze_link")
 def analyze_link(req: LinkAnalysisRequest) -> Dict[str, Any]:
     input_str = req.url_or_title.strip()

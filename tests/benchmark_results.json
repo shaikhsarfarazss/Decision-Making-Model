@@ -1,9 +1,9 @@
 {
   "accuracy": 1.0,
   "f1_score": 1.0,
-  "mean_latency_ms": 2.999642004724592,
-  "p50_latency_ms": 2.807800017762929,
-  "p95_latency_ms": 4.56130498787388,
+  "mean_latency_ms": 3.4318999957758933,
+  "p50_latency_ms": 3.354749991558492,
+  "p95_latency_ms": 4.6377799881156525,
   "study_count": 10,
   "coding_count": 15,
   "tp": 25,
@@ -26,7 +26,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.7365,
+      "latency_ms": 4.277,
       "is_correct": true
     },
     {
@@ -44,7 +44,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.9101,
+      "latency_ms": 4.2077,
       "is_correct": true
     },
     {
@@ -62,7 +62,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.9853,
+      "latency_ms": 3.7522,
       "is_correct": true
     },
     {
@@ -80,7 +80,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.9491,
+      "latency_ms": 3.5738,
       "is_correct": true
     },
     {
@@ -98,7 +98,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.4684,
+      "latency_ms": 2.9178,
       "is_correct": true
     },
     {
@@ -116,7 +116,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.8937,
+      "latency_ms": 4.3271,
       "is_correct": true
     },
     {
@@ -134,7 +134,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.6247,
+      "latency_ms": 3.2232,
       "is_correct": true
     },
     {
@@ -152,7 +152,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.4173,
+      "latency_ms": 4.7699,
       "is_correct": true
     },
     {
@@ -170,7 +170,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 4.015,
+      "latency_ms": 5.2972,
       "is_correct": true
     },
     {
@@ -188,7 +188,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.754,
+      "latency_ms": 3.4782,
       "is_correct": true
     },
     {
@@ -206,7 +206,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.0342,
+      "latency_ms": 3.3488,
       "is_correct": true
     },
     {
@@ -224,7 +224,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.3693,
+      "latency_ms": 2.4447,
       "is_correct": true
     },
     {
@@ -242,7 +242,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.2405,
+      "latency_ms": 2.6532,
       "is_correct": true
     },
     {
@@ -260,7 +260,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.6402,
+      "latency_ms": 2.8146,
       "is_correct": true
     },
     {
@@ -278,7 +278,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.668,
+      "latency_ms": 3.7708,
       "is_correct": true
     },
     {
@@ -296,7 +296,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 4.1471,
+      "latency_ms": 3.7345,
       "is_correct": true
     },
     {
@@ -314,7 +314,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.8904,
+      "latency_ms": 2.938,
       "is_correct": true
     },
     {
@@ -332,7 +332,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.7655,
+      "latency_ms": 3.0962,
       "is_correct": true
     },
     {
@@ -350,7 +350,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.0242,
+      "latency_ms": 3.0752,
       "is_correct": true
     },
     {
@@ -368,7 +368,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.2915,
+      "latency_ms": 4.217,
       "is_correct": true
     },
     {
@@ -386,7 +386,7 @@
         "/m/04rk0 (Mathematics & Science)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.626,
+      "latency_ms": 4.0574,
       "is_correct": true
     },
     {
@@ -404,7 +404,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.9029,
+      "latency_ms": 4.2766,
       "is_correct": true
     },
     {
@@ -422,7 +422,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.325,
+      "latency_ms": 2.5841,
       "is_correct": true
     },
     {
@@ -440,7 +440,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.1475,
+      "latency_ms": 3.4991,
       "is_correct": true
     },
     {
@@ -458,7 +458,7 @@
         "/m/026sq (Computer Programming)"
       ],
       "confidence": 0.99,
-      "latency_ms": 5.2711,
+      "latency_ms": 3.9696,
       "is_correct": true
     },
     {
@@ -476,7 +476,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.3414,
+      "latency_ms": 3.5204,
       "is_correct": true
     },
     {
@@ -494,7 +494,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.6275,
+      "latency_ms": 2.841,
       "is_correct": true
     },
     {
@@ -512,7 +512,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.7879,
+      "latency_ms": 2.9128,
       "is_correct": true
     },
     {
@@ -530,7 +530,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.3254,
+      "latency_ms": 3.9732,
       "is_correct": true
     },
     {
@@ -548,7 +548,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.2578,
+      "latency_ms": 3.2433,
       "is_correct": true
     },
     {
@@ -566,7 +566,7 @@
         "/m/025zzc (Esports)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.0628,
+      "latency_ms": 3.1079,
       "is_correct": true
     },
     {
@@ -583,7 +583,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.0598,
+      "latency_ms": 4.4763,
       "is_correct": true
     },
     {
@@ -600,7 +600,7 @@
         "/m/013_1c (Videoblogging)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.6226,
+      "latency_ms": 3.7122,
       "is_correct": true
     },
     {
@@ -618,7 +618,7 @@
         "/m/019_rr (Culinary Arts)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.004,
+      "latency_ms": 2.6702,
       "is_correct": true
     },
     {
@@ -635,7 +635,7 @@
         "/m/09kqc (Humor & Comedy)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.8283,
+      "latency_ms": 2.7036,
       "is_correct": true
     },
     {
@@ -652,7 +652,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.4475,
+      "latency_ms": 2.9283,
       "is_correct": true
     },
     {
@@ -669,7 +669,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.0918,
+      "latency_ms": 2.7363,
       "is_correct": true
     },
     {
@@ -686,7 +686,7 @@
         "/m/09kqc (Humor & Comedy)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.3191,
+      "latency_ms": 2.6665,
       "is_correct": true
     },
     {
@@ -703,7 +703,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.0213,
+      "latency_ms": 2.7198,
       "is_correct": true
     },
     {
@@ -720,7 +720,7 @@
         "/m/013_1c (Videoblogging)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.2162,
+      "latency_ms": 3.3607,
       "is_correct": true
     },
     {
@@ -737,7 +737,7 @@
         "/m/09kqc (Humor & Comedy)"
       ],
       "confidence": 0.99,
-      "latency_ms": 1.9826,
+      "latency_ms": 2.0688,
       "is_correct": true
     },
     {
@@ -754,7 +754,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.9277,
+      "latency_ms": 3.5398,
       "is_correct": true
     },
     {
@@ -771,7 +771,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 7.4491,
+      "latency_ms": 4.4539,
       "is_correct": true
     },
     {
@@ -789,7 +789,7 @@
         "/m/02p7_j8 (Computer Hardware)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.935,
+      "latency_ms": 5.3831,
       "is_correct": true
     },
     {
@@ -806,7 +806,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.8277,
+      "latency_ms": 3.443,
       "is_correct": true
     },
     {
@@ -823,7 +823,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.4388,
+      "latency_ms": 2.6041,
       "is_correct": true
     },
     {
@@ -840,7 +840,7 @@
         "/m/09kqc (Humor & Comedy)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.1822,
+      "latency_ms": 2.5187,
       "is_correct": true
     },
     {
@@ -857,7 +857,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 2.4381,
+      "latency_ms": 3.5583,
       "is_correct": true
     },
     {
@@ -876,7 +876,7 @@
         "/m/027x7n (Fitness)"
       ],
       "confidence": 0.99,
-      "latency_ms": 3.7898,
+      "latency_ms": 3.2727,
       "is_correct": true
     },
     {
@@ -893,7 +893,7 @@
         "/m/09k_b (Sensationalism & Viral Media)"
       ],
       "confidence": 0.99,
-      "latency_ms": 4.9002,
+      "latency_ms": 2.8762,
       "is_correct": true
     }
   ]
