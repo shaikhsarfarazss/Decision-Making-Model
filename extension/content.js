@@ -1,143 +1,293 @@
-// StudyShield Content Script — Modern YouTube & Shorts Focus Engine
+// StudyShield Content Script — 3-Layer YouTube Categorization Engine (20 Categories)
 (() => {
   console.log(
-    '%c[StudyShield 🛡️] Initialized. Monitoring YouTube Videos & Shorts.',
+    '%c[StudyShield 🛡️] 3-Layer YouTube Classifier Active (20 Categories: Study & Coding Separated)',
     'color: #38bdf8; font-size: 13px; font-weight: bold; background: #0f172a; padding: 4px 8px; border-radius: 4px;'
   );
 
   let shieldEnabled = true;
-  let activeCategories = ['study'];
+  let activeCategories = ['study', 'coding'];
   let customKeywords = [];
   let lastUpdatedAt = 0;
   let scanDebounceTimer = null;
   const decisionCache = new Map();
 
-  // Clean word-boundary taxonomies (synced with backend LayaDecisionEngine)
+  // 20 YouTube-Aligned Categories with Official YouTube Category IDs & Channel Priors
   const categoryTaxonomies = {
     study: {
-      name: '📚 Study & Education',
+      name: '📚 Study & Academics',
+      ytId: '27',
+      ytMacro: 'Education',
+      channels: [
+        'mit opencourseware', '3blue1brown', 'statquest', 'neso academy', 'gate smashers',
+        'knowledge gate', 'engineering lectures', 'physics wallah', 'unacademy', 'khan academy',
+        'nptel', 'organic chemistry tutor'
+      ],
       kws: [
-        'lecture', 'lectures', 'course', 'crash course', 'full course', 'tutorial',
-        'algorithm', 'algorithms', 'python', 'neural', 'calculus', 'linear algebra',
-        'discrete math', 'discrete mathematics', 'graph theory', 'operating system',
-        'operating systems', 'process scheduling', 'data structure', 'data structures',
-        'dsa', 'machine learning', 'deep learning', 'artificial intelligence',
-        'reinforcement learning', 'q-learning', 'unsupervised learning', 'k-means',
-        'decision tree', 'decision trees', 'entropy', 'information gain', 'svm',
-        'kernel trick', 'eigenvalues', 'eigenvectors', 'convolutional', 'cnn', 'cnns',
-        'nlp', 'natural language processing', 'hugging face', 'transformer',
-        'transformers', 'bert', 'modernbert', 'bidirectional', 'attention',
-        'backpropagation', 'gradient descent', 'engineering', 'gate', 'gate exam', 'cracked gate',
-        'gate preparation', 'gate smashers', 'iit', 'iit bombay', 'exam', 'exams',
-        'syllabus', 'semester', 'diploma', 'coding', 'fastapi', 'rest api',
-        'django', 'react', 'react js', 'programming', 'oop', 'java', 'c++',
-        'c programming', 'computer network', 'computer networks', 'osi model',
-        'tcp/ip', 'dbms', 'database management', 'sql', 'mathematics', 'physics',
-        'chemistry', 'biology', 'digital electronics', 'logic gates', 'k-maps',
-        'boolean algebra', 'pipeline hazards', 'architecture', 'freecodecamp',
-        'neso academy', 'gate smashers', 'love babbar', 'campusx', 'statquest',
-        '3blue1brown', 'mit opencourseware', 'krish naik', 'andrej karpathy',
-        'yannic kilcher', 'deeplizard', 'traversy media', 'apna college', 'telusko',
-        'sentdex', 'fireship', 'upsc', 'study with me', 'class 12', 'neet', 'jee',
-        'how to code', 'for beginners', 'for students', 'roadmap'
+        'lecture', 'lectures', 'calculus', 'linear algebra', 'discrete math', 'discrete mathematics',
+        'graph theory', 'eigenvalues', 'eigenvectors', 'vector fields', 'multiple integrals',
+        'differential equations', 'probability', 'statistics', 'engineering', 'gate exam', 'gate',
+        'cracked gate', 'gate preparation', 'iit', 'iit bombay', 'exam', 'exams', 'university exams',
+        'syllabus', 'semester', '5th sem', 'diploma', 'unit 1', 'unit 2', 'unit 3', 'physics',
+        'chemistry', 'biology', 'thermodynamics', 'electromagnetism', 'organic chemistry',
+        'digital electronics', 'logic gates', 'k-maps', 'boolean algebra', 'computer organization',
+        'pipeline hazards', 'operating system', 'operating systems', 'process scheduling', 'fcfs',
+        'round robin', 'computer network', 'computer networks', 'osi model', 'tcp/ip', 'dbms',
+        'database management', 'history', 'geography', 'polity', 'notes', 'upsc', 'ncert',
+        'study with me', 'class 10', 'class 11', 'class 12', 'neet', 'jee',
+        'explained mathematically', 'mathematical intuition'
+      ]
+    },
+    coding: {
+      name: '💻 Coding & Dev',
+      ytId: '28',
+      ytMacro: 'Science & Technology',
+      channels: [
+        'freecodecamp', 'programming with mosh', 'traversy media', 'fireship', 'love babbar',
+        'apna college', 'telusko', 'codewithharry', 'krish naik', 'campusx', 'andrej karpathy',
+        'yannic kilcher', 'deeplizard', 'sentdex', "jenny's lectures", 'striver', 'neetcode',
+        'chaiaurcode'
+      ],
+      kws: [
+        'coding', 'programming', 'how to code', 'python', 'java', 'c++', 'c programming',
+        'javascript', 'typescript', 'rust', 'golang', 'html', 'css', 'tailwind', 'react',
+        'react js', 'nextjs', 'nodejs', 'django', 'flask', 'fastapi', 'spring boot',
+        'rest api', 'rest apis', 'full stack', 'web development', 'frontend', 'backend',
+        'data structure', 'data structures', 'dsa', 'algorithm', 'algorithms', 'leetcode',
+        'codeforces', 'competitive programming', 'object oriented', 'oop', 'sql', 'postgresql',
+        'mongodb', 'git', 'github', 'docker', 'kubernetes', 'devops', 'system design',
+        'machine learning', 'deep learning', 'artificial intelligence', 'ai & ml', 'neural',
+        'neural network', 'neural networks', 'reinforcement learning', 'q-learning',
+        'unsupervised learning', 'k-means', 'clustering', 'decision tree', 'decision trees',
+        'entropy', 'information gain', 'support vector', 'svm', 'kernel trick', 'convolutional',
+        'cnn', 'cnns', 'nlp', 'natural language processing', 'hugging face', 'transformer',
+        'transformers', 'bert', 'modernbert', 'bidirectional', 'attention', 'backpropagation',
+        'gradient descent', 'pytorch', 'tensorflow', 'llm', 'from scratch', 'complete roadmap'
       ]
     },
     tech: {
-      name: '💻 Technology & Software',
+      name: '🔧 Tech & Gadgets',
+      ytId: '28',
+      ytMacro: 'Science & Technology',
+      channels: [
+        'marques brownlee', 'mkbhd', 'linus tech tips', 'dave2d', 'mrwhosetheboss',
+        'technical guruji', 'trakintech', 'geekyranjit', 'networkchuck'
+      ],
       kws: [
-        'technology', 'software', 'developer', 'linux', 'git', 'github', 'devops',
-        'docker', 'kubernetes', 'cloud', 'aws', 'cybersecurity', 'hardware', 'cpu',
-        'gpu', 'backend', 'frontend', 'system design', 'nvidia'
+        'technology', 'tech review', 'smartphone', 'iphone', 'android', 'samsung', 'laptop',
+        'macbook', 'pc build', 'hardware', 'cpu', 'gpu', 'rtx', 'nvidia', 'amd', 'intel',
+        'linux', 'ubuntu', 'windows 11', 'cloud computing', 'aws', 'cybersecurity',
+        'ethical hacking', 'raspberry pi', 'arduino', 'robotics', 'unboxing', 'first look'
       ]
     },
     scifi: {
-      name: '🚀 Science Fiction & Space',
+      name: '🚀 Science & Space',
+      ytId: '28',
+      ytMacro: 'Science & Technology',
+      channels: [
+        'kurzgesagt', 'veritasium', 'vsauce', 'smartereveryday', 'pbs space time',
+        'nasa', 'isro', 'spacex', 'mark rober', 'star talk'
+      ],
       kws: [
-        'sci-fi', 'science fiction', 'space', 'astronomy', 'astrophysics', 'cosmos',
-        'galaxy', 'nasa', 'interstellar', 'black hole', 'universe', 'relativity',
-        'quantum', 'mars', 'spacex', 'alien', 'kurzgesagt', 'veritasium', 'james webb',
-        'cyberpunk', 'multiverse'
+        'sci-fi', 'science fiction', 'space', 'astronomy', 'astrophysics', 'cosmos', 'galaxy',
+        'nasa', 'isro', 'interstellar', 'black hole', 'wormhole', 'universe', 'multiverse',
+        'relativity', 'quantum', 'dark matter', 'mars', 'spacex', 'starship', 'alien',
+        'kurzgesagt', 'veritasium', 'james webb', 'telescope', 'time travel', 'cyberpunk', 'dune'
+      ]
+    },
+    news: {
+      name: '📰 News & Politics',
+      ytId: '25',
+      ytMacro: 'News & Politics',
+      channels: ['wion', 'firstpost', 'ndtv', 'india today', 'bbc news', 'al jazeera', 'reuters', 'dw news'],
+      kws: [
+        'breaking news', 'world news', 'geopolitics', 'politics', 'election', 'parliament',
+        'supreme court', 'foreign policy', 'current affairs', 'journalism', 'press conference',
+        'headline', 'war update'
+      ]
+    },
+    finance: {
+      name: '📈 Finance & Business',
+      ytId: '27',
+      ytMacro: 'Education',
+      channels: ['zerodha', 'pranjal kamra', 'akshat shrivastava', 'ca rachana ranade', 'warikoo', 'think school'],
+      kws: [
+        'finance', 'personal finance', 'investing', 'stock market', 'share market', 'nifty',
+        'sensex', 'mutual funds', 'sip', 'options trading', 'portfolio', 'business',
+        'startup', 'entrepreneurship', 'shark tank', 'ipo', 'marketing strategy', 'economics',
+        'inflation', 'gdp', 'real estate', 'income tax'
+      ]
+    },
+    howto: {
+      name: '🛠️ How-To & DIY',
+      ytId: '26',
+      ytMacro: 'Howto & Style',
+      channels: ['ali abdaal', 'thomas frank', 'jerryrigeverything', 'ifixit', 'chris fix', 'electroboom'],
+      kws: [
+        'how to', 'diy', 'step by step', 'woodworking', 'home improvement', 'repair',
+        'restoration', '3d printing', 'productivity', 'time management', 'notion', 'obsidian',
+        'communication skills', 'public speaking', 'resume', 'interview preparation',
+        'graphic design', 'photoshop', 'figma', 'video editing', 'blender tutorial'
+      ]
+    },
+    podcast: {
+      name: '🎙️ Podcasts & Talks',
+      ytId: '22',
+      ytMacro: 'People & Blogs',
+      channels: ['lex fridman', 'ted', 'tedx', 'huberman lab', 'diary of a ceo', 'joe rogan', 'trs', 'raj shamani'],
+      kws: [
+        'podcast', 'full episode', 'ted talk', 'tedx', 'lex fridman', 'huberman',
+        'fireside chat', 'panel discussion', 'roundtable', 'documentary', 'full documentary',
+        'biopic', 'untold story'
       ]
     },
     cooking: {
       name: '🍲 Cooking & Food',
+      ytId: '26',
+      ytMacro: 'Howto & Style',
+      channels: ['ranveer brar', 'your food lab', "kabita's kitchen", 'gordon ramsay', 'nick digiovanni', 'first we feast'],
       kws: [
-        'recipe', 'cooking', 'cook', 'food', 'street food', 'kitchen', 'chef',
-        'burger', 'pizza', 'biryani', 'cake', 'baking', 'eating', 'mukbang',
-        'dessert', 'taste test', 'spicy wings'
+        'recipe', 'cooking', 'cook', 'food', 'street food', 'kitchen', 'chef', 'masterchef',
+        'burger', 'pizza', 'pasta', 'biryani', 'paneer', 'cake', 'baking', 'eating', 'mukbang',
+        'spicy wings', 'dessert', 'taste test', 'breakfast recipe', 'dinner recipe', 'restaurant'
       ]
     },
-    cartoon: {
-      name: '🎨 Cartoon & Animation',
+    autos: {
+      name: '🚗 Autos & Vehicles',
+      ytId: '2',
+      ytMacro: 'Autos & Vehicles',
+      channels: ['carwow', 'doug demuro', 'top gear', 'autocar india', 'motoroctane', 'faisal khan', 'powerdrift'],
       kws: [
-        'cartoon', 'animated', 'animation', 'tom and jerry', 'disney', 'pixar',
-        'ben 10', 'shinchan', 'doraemon', 'oggy', 'chhota bheem', 'peppa pig',
-        'mr bean', 'looney tunes'
+        'car review', 'supercar', 'hypercar', 'suv', 'electric vehicle', 'tesla', 'ferrari',
+        'lamborghini', 'porsche', 'bmw', 'motorcycle', 'superbike', 'bike review', 'offroad',
+        'drag race', 'formula 1', 'f1', 'motogp', 'horsepower', 'automotive'
       ]
     },
-    anime: {
-      name: '⚔️ Anime & Manga',
+    pets: {
+      name: '🐾 Pets & Nature',
+      ytId: '15',
+      ytMacro: 'Pets & Animals',
+      channels: ['national geographic', 'bbc earth', 'animal planet', 'the dodo', 'brave wilderness'],
       kws: [
-        'anime', 'manga', 'naruto', 'shippuden', 'sasuke', 'itachi', 'madara',
-        'one piece', 'luffy', 'zoro', 'sanji', 'bleach', 'ichigo', 'aizen', 'tybw',
-        'attack on titan', 'aot', 'eren', 'levi', 'mikasa', 'jujutsu kaisen', 'jjk',
-        'gojo', 'sukuna', 'megumi', 'demon slayer', 'kimetsu', 'tanjiro', 'nezuko',
-        'dragon ball', 'dragon ball z', 'dragon ball super', 'dbz', 'dbs', 'goku',
-        'super saiyan', 'saiyan', 'ssj', 'bardock', 'vegeta', 'gohan', 'broly', 'frieza',
-        'piccolo', 'trunks', 'studio ghibli', 'ghibli', 'solo leveling', 'chainsaw man',
-        'death note', 'vinland saga', 'my hero academia', 'deku', 'one punch man',
-        'saitama', 'hunter x hunter', 'hxh', 'killua', 'tokyo ghoul', 'sword art online',
-        'fullmetal alchemist', 'berserk', 'evangelion', 'jojo', 'crunchyroll',
-        'funimation', 'opening ost', 'amv', 'anime edit', 'anime scene', 'anime clip'
+        'wildlife', 'wild animals', 'national geographic', 'bbc earth', 'nature documentary',
+        'animal rescue', 'puppy', 'puppies', 'dogs', 'kittens', 'cats', 'cute pets',
+        'aquarium', 'sharks', 'lions', 'tigers', 'birds', 'jungle', 'safari'
       ]
     },
-    gaming: {
-      name: '🎮 Gaming & Esports',
+    travel: {
+      name: '✈️ Travel & Culture',
+      ytId: '19',
+      ytMacro: 'Travel & Events',
+      channels: ['drew binsky', 'kara and nate', 'bald and bankrupt', 'yes theory', 'sam chui', 'monkey magic'],
       kws: [
-        'game', 'gameplay', 'gaming', 'minecraft', 'gta', 'valorant', 'fortnite',
-        'pubg', 'bgmi', 'roblox', 'call of duty', 'elden ring', 'walkthrough',
-        'playthrough', 'stream', 'twitch', 'esports', 'boss fight', 'hardest boss',
-        'clutch', '1v5', 'ace', 'ranked', 'ranked match'
+        'travel', 'travel guide', 'solo travel', 'backpacking', 'world tour', 'road trip',
+        'tourist places', 'flight review', 'aviation', 'airport', 'hotel review', 'tourism',
+        'mountain trekking', 'himalayas'
       ]
     },
     music: {
-      name: '🎵 Music & Songs',
+      name: '🎵 Music & Lofi',
+      ytId: '10',
+      ytMacro: 'Music',
+      channels: ['lofi girl', 't-series', 'sony music', 'coke studio', 'vevo', 'ncs'],
       kws: [
-        'music', 'song', 'official music video', 'lyrics', 'audio song', 'remix',
-        'lofi', 'lofi beats', 'acoustic', 'concert', 'singer', 'album', 'soundtrack',
-        'playlist', 'rap song'
-      ]
-    },
-    vlog: {
-      name: '💄 Vlog & Daily Life',
-      kws: [
-        'vlog', 'daily vlog', 'day in my life', 'travel vlog', 'room tour',
-        'house tour', 'flying beast', 'sourav joshi', 'family vlog', 'shopping haul',
-        'morning routine', 'minimalist setup'
-      ]
-    },
-    comedy: {
-      name: '😂 Comedy & Pranks',
-      kws: [
-        'prank', 'prank calling', 'comedy', 'funny', 'funniest', 'stand-up', 'joke',
-        'roast', 'meme', 'memes', 'try not to laugh', 'cringe', 'cringiest',
-        'funny reaction', 'parody', 'fails', 'samay raina'
+        'music', 'song', 'official music video', 'official video', 'lyrics', 'audio song',
+        'remix', 'mashup', 'lofi', 'lofi beats', 'chill beats', 'acoustic', 'concert',
+        'singer', 'album', 'soundtrack', 'playlist', 'rap song', 'hip hop', 'instrumental',
+        'cover song'
       ]
     },
     sports: {
       name: '🏏 Sports & Fitness',
+      ytId: '17',
+      ytMacro: 'Sports',
+      channels: ['icc', 'icc official', 'bcci', 'star sports', 'espn', 'fifa', 'nba', 'ufc', 'wwe', 'athlean-x'],
       kws: [
-        'cricket', 'football', 'match highlights', 'world cup', 'super over', 'ipl',
-        'workout', 'gym fitness', 'bodybuilding', 'boxing', 'ufc', 'wwe'
+        'cricket', 'ipl', 'world cup', 'super over', 'virat kohli', 'rohit sharma', 'ms dhoni',
+        'football', 'premier league', 'champions league', 'messi', 'ronaldo', 'match highlights',
+        'olympics', 'tennis', 'badminton', 'nba', 'workout', 'workout routine', 'gym',
+        'gym fitness', 'bodybuilding', 'calisthenics', 'boxing', 'ufc', 'wwe'
+      ]
+    },
+    anime: {
+      name: '⚔️ Anime & Manga',
+      ytId: '31',
+      ytMacro: 'Anime/Animation',
+      channels: ['crunchyroll', 'muse asia', 'ani-one asia', 'toei animation', 'mappa', 'animezone'],
+      kws: [
+        'anime', 'manga', 'otaku', 'naruto', 'shippuden', 'sasuke', 'itachi', 'one piece',
+        'luffy', 'zoro', 'bleach', 'attack on titan', 'aot', 'jujutsu kaisen', 'jjk', 'gojo',
+        'sukuna', 'demon slayer', 'tanjiro', 'dragon ball', 'dragon ball z', 'dragon ball super',
+        'dbz', 'dbs', 'goku', 'vegeta', 'super saiyan', 'saiyan', 'ssj', 'bardock', 'gohan',
+        'broly', 'frieza', 'piccolo', 'trunks', 'studio ghibli', 'ghibli', 'solo leveling',
+        'sung jinwoo', 'chainsaw man', 'death note', 'vinland saga', 'my hero academia',
+        'blue lock', 'one punch man', 'saitama', 'hunter x hunter', 'amv', 'anime scene', 'anime clip'
+      ]
+    },
+    cartoon: {
+      name: '🎨 Cartoon & Animation',
+      ytId: '1',
+      ytMacro: 'Film & Animation',
+      channels: ['disney', 'pixar', 'cartoon network', 'nickelodeon', 'wb kids', 'alan becker'],
+      kws: [
+        'cartoon', 'cartoons', 'animated', 'animation', 'tom and jerry', 'disney', 'pixar',
+        'ben 10', 'shinchan', 'doraemon', 'oggy', 'chhota bheem', 'motu patlu', 'peppa pig',
+        'mr bean', 'looney tunes', 'spongebob', 'kids show'
+      ]
+    },
+    gaming: {
+      name: '🎮 Gaming & Esports',
+      ytId: '20',
+      ytMacro: 'Gaming',
+      channels: [
+        'dream', 'luke thenotable', 'tenz', 'total gaming', 'techno gamerz', 'mortal',
+        'beastboyshub', 'ign', 'vaatividya'
+      ],
+      kws: [
+        'game', 'gameplay', 'gaming', 'playthrough', 'walkthrough', 'speedrun', 'minecraft',
+        'gta', 'gta 6', 'valorant', '1v5', 'clutch', 'fortnite', 'pubg', 'bgmi', 'free fire',
+        'roblox', 'call of duty', 'warzone', 'cs2', 'apex legends', 'elden ring', 'dark souls',
+        'god of war', 'esports', 'stream', 'twitch', 'boss fight', 'hardest boss', 'no armor',
+        'ranked', 'ranked match', '50 kills', 'radiant ace'
+      ]
+    },
+    vlog: {
+      name: '💄 Vlogs & Lifestyle',
+      ytId: '22',
+      ytMacro: 'People & Blogs',
+      channels: ['sourav joshi vlogs', 'flying beast', 'mumbiker nikhil', 'casey neistat', 'techvlogger'],
+      kws: [
+        'vlog', 'daily vlog', 'day in my life', 'travel vlog', 'room tour', 'house tour',
+        'minimalist setup', 'flying beast', 'sourav joshi', 'family vlog', 'shopping haul',
+        'skincare routine', 'grwm', 'morning routine', 'night routine', 'lifestyle'
+      ]
+    },
+    comedy: {
+      name: '😂 Comedy & Memes',
+      ytId: '23',
+      ytMacro: 'Comedy',
+      channels: [
+        'samay raina', 'zakir khan', 'anubhav singh bassi', 'bb ki vines', 'ashish chanchlani',
+        'carryminati', 'round2hell', 'tanmay bhat', 'nelk', 'animalmemes'
+      ],
+      kws: [
+        'prank', 'prank calling', 'comedy', 'stand-up', 'stand up comedy', 'funny', 'funniest',
+        'joke', 'roast', 'meme', 'memes', 'try not to laugh', 'cringe', 'cringiest',
+        'funny reaction', 'reacting to', 'parody', 'skit', 'fails', 'samay raina', 'zakir khan'
       ]
     },
     clickbait: {
-      name: '🚨 Sensational & Clickbait',
+      name: '🚨 Clickbait & Drama',
+      ytId: '24',
+      ytMacro: 'Entertainment',
+      channels: ['mrbeast', 'dhar mann', 'airrack', 'fukra insaan', 'buzzfeed', 'gossipcentral', 'viraldrama', 'getrichfast', 'cryptoguru', 'hypetech', 'mysteryfiles'],
       kws: [
-        'mrbeast', 'shocking', 'secret hack', 'wealth hack', 'make money fast',
-        'get rich', 'arrested', 'exposed', '$1 vs', 'blindfolded', 'buying everything',
-        'viral challenge', "you won't believe", 'conspiracy theories', 'abandoned island',
-        'red carpet', 'hollywood', 'bollywood'
+        'mrbeast', 'shocking', 'secret hack', 'wealth hack', 'make money fast', 'get rich',
+        'zero effort', 'arrested', 'exposed', '$1 vs', '$1,000,000', 'blindfolded',
+        'buying everything', '24 hours', '7 days straight', 'viral challenge',
+        "you won't believe", 'you wont believe', 'must watch', 'billionaire', 'crypto',
+        'conspiracy theories', 'abandoned island', 'destroyed android', 'red carpet',
+        'unseen moments', 'hollywood', 'bollywood', 'celebrity'
       ]
     }
   };
@@ -146,55 +296,79 @@
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  function decideLocally(text) {
-    const cleanText = text.toLowerCase();
-    let bestCat = 'Distraction / Entertainment';
-    let bestTag = 'other';
-    let maxScore = 0;
+  function decideLocally(title, channel = '') {
+    const titleLower = (title || '').toLowerCase();
+    const channelLower = (channel || '').toLowerCase();
+    const cleanText = `${titleLower} ${channelLower}`.trim();
 
+    const scores = {};
     for (const [tag, info] of Object.entries(categoryTaxonomies)) {
       let score = 0;
-      for (const kw of info.kws) {
-        const pattern = new RegExp('\\b' + escapeRegex(kw.toLowerCase()) + '\\b', 'i');
-        if (pattern.test(cleanText)) {
-          score += kw.split(' ').length * 2;
-          if (
-            tag === 'study' &&
-            ['crash course', 'full course', 'lecture', 'tutorial', 'for students', 'for beginners'].includes(kw)
-          ) {
-            score += 3;
-          }
+      if (channelLower && info.channels) {
+        for (const ch of info.channels) {
+          if (channelLower.includes(ch)) score += 5;
         }
       }
-      if (score > maxScore) {
-        maxScore = score;
-        bestCat = info.name;
+      for (const kw of info.kws) {
+        const pattern = new RegExp('(?<!\\w)' + escapeRegex(kw.toLowerCase()) + '(?!\\w)', 'i');
+        if (pattern.test(cleanText)) {
+          score += kw.split(' ').length * 2 + (kw.includes(' ') ? 1 : 0);
+        }
+      }
+      scores[tag] = score;
+    }
+
+    // Contextual Disambiguation: Study vs Coding
+    const isInstructional = /\b(crash course|full course|complete course|lecture \d+|unit \d+|tutorial|for beginners|for students|explained|deep dive|walkthrough|from scratch|roadmap)\b/i.test(titleLower);
+    if (isInstructional) {
+      if (scores.coding > 0 && scores.coding >= scores.study) {
+        scores.coding += 4.5;
+      } else if (scores.study > 0) {
+        scores.study += 4.5;
+      } else if (scores.tech > 0) {
+        scores.coding += 5;
+      }
+    }
+
+    if (titleLower.includes('walkthrough') && (scores.study > 0 || scores.coding > 0)) {
+      scores.gaming = Math.max(0, (scores.gaming || 0) - 4);
+    }
+
+    let bestTag = 'other';
+    let maxScore = 0;
+    for (const [tag, sc] of Object.entries(scores)) {
+      if (sc > maxScore) {
+        maxScore = sc;
         bestTag = tag;
       }
     }
 
+    const bestInfo = categoryTaxonomies[bestTag] || {
+      name: '🎭 General Entertainment',
+      ytId: '24',
+      ytMacro: 'Entertainment'
+    };
+
     if (!shieldEnabled) {
       return {
         is_allowed: true,
-        category: bestCat,
+        category: bestInfo.name,
+        category_tag: bestTag,
+        youtube_category_id: bestInfo.ytId,
+        youtube_macro_category: bestInfo.ytMacro,
         confidence: 0.99,
         matched_preference: 'Shield OFF'
       };
     }
 
-    let isAllowed = false;
-    let matchedPref = '';
-
-    if (activeCategories.includes(bestTag)) {
-      isAllowed = true;
-      matchedPref = bestCat;
-    }
+    let isAllowed = activeCategories.includes(bestTag);
+    let matchedPref = isAllowed ? bestInfo.name : '';
 
     if (!isAllowed) {
       for (const custom of customKeywords) {
         const trimmed = custom.trim();
         if (trimmed) {
-          const pattern = new RegExp('\\b' + escapeRegex(trimmed.toLowerCase()) + '\\b', 'i');
+          const pattern = new RegExp('(?<!\\w)' + escapeRegex(trimmed.toLowerCase()) + '(?!\\w)', 'i');
           if (pattern.test(cleanText)) {
             isAllowed = true;
             matchedPref = `Custom: ${trimmed}`;
@@ -206,7 +380,10 @@
 
     return {
       is_allowed: isAllowed,
-      category: bestCat,
+      category: bestInfo.name,
+      category_tag: bestTag,
+      youtube_category_id: bestInfo.ytId,
+      youtube_macro_category: bestInfo.ytMacro,
       confidence: maxScore > 0 ? 0.96 : 0.85,
       matched_preference: matchedPref || 'Blocked'
     };
@@ -256,12 +433,11 @@
     if (showNotification) showToast(reason);
   }
 
-  // Load initial preferences from chrome.storage.local and immediately re-scan
   try {
     chrome.storage.local.get(
       ['shieldEnabled', 'activeCategories', 'customKeywords', 'updated_at'],
       (res) => {
-        if (! res) return;
+        if (!res) return;
         if (res.shieldEnabled !== undefined) shieldEnabled = res.shieldEnabled;
         if (Array.isArray(res.activeCategories)) activeCategories = res.activeCategories;
         if (Array.isArray(res.customKeywords)) customKeywords = res.customKeywords;
@@ -271,7 +447,6 @@
     );
   } catch (_) {}
 
-  // Listen to storage updates
   try {
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === 'local') {
@@ -281,7 +456,7 @@
           changed = true;
         }
         if (changes.activeCategories !== undefined) {
-          activeCategories = changes.activeCategories.newValue || ['study'];
+          activeCategories = changes.activeCategories.newValue || ['study', 'coding'];
           changed = true;
         }
         if (changes.customKeywords !== undefined) {
@@ -292,14 +467,11 @@
           lastUpdatedAt = changes.updated_at.newValue || 0;
           changed = true;
         }
-        if (changed) {
-          triggerImmediateReScan('Preferences Updated');
-        }
+        if (changed) triggerImmediateReScan('Preferences Updated');
       }
     });
   } catch (_) {}
 
-  // Direct message listener from Popup or Background
   try {
     chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       if (msg.action === 'PREFERENCES_UPDATED') {
@@ -323,7 +495,6 @@
     });
   } catch (_) {}
 
-  // Support window postMessage for local test_youtube_mock.html
   window.addEventListener('message', (event) => {
     if (event.data && event.data.action === 'PREFERENCES_UPDATED') {
       const d = event.data.data;
@@ -355,7 +526,7 @@
 
           if (!categoriesMatch || !shieldMatch || !kwMatch || serverUpdated > lastUpdatedAt + 0.5) {
             shieldEnabled = d.shield_enabled !== undefined ? d.shield_enabled : true;
-            activeCategories = d.active_categories || ['study'];
+            activeCategories = d.active_categories || ['study', 'coding'];
             customKeywords = d.custom_keywords || [];
             lastUpdatedAt = serverUpdated;
 
@@ -419,7 +590,7 @@
     if (!title && window.location.pathname.startsWith('/shorts') && el.hasAttribute('is-active')) {
       const docT = document.title;
       if (docT && docT.toLowerCase() !== 'youtube') {
-        title = docT.replace(/- YouTube$/i, '').trim();
+        title = docT.replace(/- YouTube\$/i, '').trim();
       }
     }
 
@@ -440,6 +611,29 @@
     return { title, channel, href };
   }
 
+  function getThumbnailContainer(el) {
+    const ytdThumb = el.querySelector('ytd-thumbnail, #thumbnail, a#thumbnail');
+    if (ytdThumb) return ytdThumb;
+
+    const thumbBox = el.querySelector('.thumb-box');
+    if (thumbBox) return thumbBox;
+
+    const shortsThumb = el.querySelector(
+      '.shortsLockupViewModelHostThumbnailContainer, .shortsLockupViewModelHostOutsideMetadataEndpoint'
+    );
+    if (shortsThumb) return shortsThumb;
+
+    const lockupImg = el.querySelector(
+      '.yt-lockup-view-model__content-image, .yt-lockup-metadata-view-model-wiz__thumbnail-container'
+    );
+    if (lockupImg) return lockupImg;
+
+    const reelContainer = el.querySelector('#short-video-container, #player-container');
+    if (reelContainer) return reelContainer;
+
+    return el;
+  }
+
   function getDecision(title, channel) {
     const key = `${title.toLowerCase()}::${channel.toLowerCase()}::${shieldEnabled}::${activeCategories.join(',')}`;
     if (decisionCache.has(key)) return Promise.resolve(decisionCache.get(key));
@@ -449,7 +643,7 @@
       const fallbackTimer = setTimeout(() => {
         if (!resolved) {
           resolved = true;
-          const fb = decideLocally(`${title} ${channel}`);
+          const fb = decideLocally(title, channel);
           decisionCache.set(key, fb);
           resolve(fb);
         }
@@ -466,7 +660,7 @@
               decisionCache.set(key, response.data);
               resolve(response.data);
             } else {
-              const fb = decideLocally(`${title} ${channel}`);
+              const fb = decideLocally(title, channel);
               decisionCache.set(key, fb);
               resolve(fb);
             }
@@ -476,7 +670,7 @@
         if (!resolved) {
           resolved = true;
           clearTimeout(fallbackTimer);
-          const fb = decideLocally(`${title} ${channel}`);
+          const fb = decideLocally(title, channel);
           decisionCache.set(key, fb);
           resolve(fb);
         }
@@ -484,45 +678,15 @@
     });
   }
 
-  function getThumbnailContainer(el) {
-    // 1. YouTube standard video cards
-    const ytdThumb = el.querySelector('ytd-thumbnail, #thumbnail, a#thumbnail');
-    if (ytdThumb) return ytdThumb;
-
-    // 2. Mock test page thumbnail box
-    const thumbBox = el.querySelector('.thumb-box');
-    if (thumbBox) return thumbBox;
-
-    // 3. YouTube Shorts shelf items
-    const shortsThumb = el.querySelector(
-      '.shortsLockupViewModelHostThumbnailContainer, .shortsLockupViewModelHostOutsideMetadataEndpoint'
-    );
-    if (shortsThumb) return shortsThumb;
-
-    // 4. Modern lockup view model
-    const lockupImg = el.querySelector(
-      '.yt-lockup-view-model__content-image, .yt-lockup-metadata-view-model-wiz__thumbnail-container'
-    );
-    if (lockupImg) return lockupImg;
-
-    // 5. Fullscreen Shorts player container
-    const reelContainer = el.querySelector('#short-video-container, #player-container');
-    if (reelContainer) return reelContainer;
-
-    return el;
-  }
-
   async function evaluateElement(el) {
     const { title, channel, href } = extractMetadata(el);
     if (!title || title.length < 2) return;
 
-    // Signature prevents stale overlays when YouTube recycles card DOM elements
     const signature = `${href}::${title}`;
     if (el.dataset.studyshieldDone === 'true' && el.dataset.studyshieldSignature === signature) {
       return;
     }
 
-    // If YouTube recycled this DOM element for a different video, clear manual reveal flag
     if (el.dataset.studyshieldSignature && el.dataset.studyshieldSignature !== signature) {
       delete el.dataset.studyshieldUserRevealed;
     }
@@ -545,9 +709,10 @@
       el.classList.contains('ytGridShelfViewModelGridShelfItem') ||
       el.querySelector('a[href*="/shorts/"]') !== null;
 
+    const ytIdLabel = decision.youtube_category_id ? `YT ID ${decision.youtube_category_id}` : 'YT Filter';
+
     if (!decision.is_allowed && !el.dataset.studyshieldUserRevealed) {
-      // 🚫 BLUR ONLY THE VIDEO / THUMBNAIL CONTAINER
-      // The bottom written text (title, channel, views, description) remains 100% UNTOUCHED and VISIBLE!
+      // 🚫 BLUR ONLY THE VIDEO / THUMBNAIL (Never blur the title or description text below!)
       thumbEl.classList.add('studyshield-thumb-blurred');
       thumbEl.classList.remove('studyshield-thumb-verified');
       el.classList.remove('studyshield-study-verified');
@@ -555,7 +720,6 @@
       const existingPill = thumbEl.querySelector('.studyshield-study-pill') || el.querySelector('.studyshield-study-pill');
       if (existingPill) existingPill.remove();
 
-      // Only pause video if it is inside THIS element (or this element is the active Short)
       const isActiveReel = el.hasAttribute('is-active') || el.id === 'shorts-player';
       const videoTag =
         el.querySelector('video') ||
@@ -582,10 +746,10 @@
       const confPct = Math.round((decision.confidence || 0.95) * 100);
       overlay.innerHTML = `
         <div class="studyshield-badge-header">
-          <span>🛡️ StudyShield</span>
+          <span>🛡️ StudyShield • ${ytIdLabel}</span>
         </div>
         <div class="studyshield-badge-sub">
-          Blocked: <strong>${decision.category}</strong> (${confPct}%)
+          <strong>${decision.category}</strong> (${confPct}%)
         </div>
         <button class="studyshield-unblur-btn" type="button">👁️ Reveal & Play</button>
       `;
@@ -618,7 +782,7 @@
           pill.className = 'studyshield-study-pill';
           thumbEl.appendChild(pill);
         }
-        pill.innerHTML = `<span>✓ ${decision.category}</span>`;
+        pill.innerHTML = `<span>✓ ${decision.category} (${ytIdLabel})</span>`;
       }
     }
   }

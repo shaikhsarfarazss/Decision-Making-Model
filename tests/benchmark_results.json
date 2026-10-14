@@ -1,9 +1,11 @@
 {
   "accuracy": 1.0,
   "f1_score": 1.0,
-  "mean_latency_ms": 1.6673940035980195,
-  "p50_latency_ms": 1.5350000176113099,
-  "p95_latency_ms": 2.4758800020208582,
+  "mean_latency_ms": 2.999642004724592,
+  "p50_latency_ms": 2.807800017762929,
+  "p95_latency_ms": 4.56130498787388,
+  "study_count": 10,
+  "coding_count": 15,
   "tp": 25,
   "fp": 0,
   "tn": 25,
@@ -11,452 +13,887 @@
   "detailed": [
     {
       "title": "Complete Machine Learning Course for Beginners (with Python)",
+      "channel": "freeCodeCamp.org",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.7651999951340258,
+      "latency_ms": 3.7365,
       "is_correct": true
     },
     {
       "title": "Gradient Descent Algorithm Explained Mathematically",
+      "channel": "StatQuest with Josh Starmer",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.6709999763406813,
+      "latency_ms": 2.9101,
       "is_correct": true
     },
     {
       "title": "Diploma 5th Sem AI & ML Algorithms - Unit 1 Overview",
+      "channel": "Engineering Lectures",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.148200001101941,
+      "latency_ms": 2.9853,
       "is_correct": true
     },
     {
       "title": "ModernBERT Architecture and Bidirectional Attention Deep Dive",
+      "channel": "Yannic Kilcher",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.8807000014930964,
+      "latency_ms": 2.9491,
       "is_correct": true
     },
     {
       "title": "Linear Algebra for Data Science: Eigenvalues and Eigenvectors",
+      "channel": "3Blue1Brown",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.8580000032670796,
+      "latency_ms": 2.4684,
       "is_correct": true
     },
     {
       "title": "Python Full Stack Web Development Tutorial (Django & React)",
+      "channel": "Programming with Mosh",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.7300000181421638,
+      "latency_ms": 2.8937,
       "is_correct": true
     },
     {
       "title": "Convolutional Neural Networks (CNNs) Explained in 10 Minutes",
+      "channel": "deeplizard",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.569200016092509,
+      "latency_ms": 2.6247,
       "is_correct": true
     },
     {
       "title": "Data Structures & Algorithms in C++: Complete Roadmap",
+      "channel": "Love Babbar",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.4486000183969736,
+      "latency_ms": 3.4173,
       "is_correct": true
     },
     {
       "title": "Decision Trees, Entropy, and Information Gain Walkthrough",
+      "channel": "Krish Naik",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.4981999886222184,
+      "latency_ms": 4.015,
       "is_correct": true
     },
     {
       "title": "Operating Systems - Process Scheduling Algorithms (FCFS, SJF, Round Robin)",
+      "channel": "Gate Smashers",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 3.1475999858230352,
+      "latency_ms": 3.754,
       "is_correct": true
     },
     {
       "title": "Calculus 3: Multiple Integrals and Vector Fields Lecture 12",
+      "channel": "MIT OpenCourseWare",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.05210002604872,
+      "latency_ms": 3.0342,
       "is_correct": true
     },
     {
       "title": "Introduction to Discrete Mathematics and Graph Theory",
+      "channel": "Neso Academy",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3839000021107495,
+      "latency_ms": 2.3693,
       "is_correct": true
     },
     {
       "title": "FastAPI Crash Course: Build REST APIs with Python",
+      "channel": "Traversy Media",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3506999821402133,
+      "latency_ms": 2.2405,
       "is_correct": true
     },
     {
       "title": "How Backpropagation Actually Works in Neural Networks",
+      "channel": "Andrej Karpathy",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3755999971181154,
+      "latency_ms": 2.6402,
       "is_correct": true
     },
     {
       "title": "Computer Networks: OSI Model vs TCP/IP Protocol Suite",
+      "channel": "Knowledge Gate",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4744999934919178,
+      "latency_ms": 2.668,
       "is_correct": true
     },
     {
       "title": "Database Management Systems (DBMS) Full Course for University Exams",
+      "channel": "Apna College",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.202400006353855,
+      "latency_ms": 4.1471,
       "is_correct": true
     },
     {
       "title": "Support Vector Machines (SVM) - Mathematical Intuition & Kernel Trick",
+      "channel": "CampusX",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.665599993430078,
+      "latency_ms": 3.8904,
       "is_correct": true
     },
     {
       "title": "Object Oriented Programming (OOP) in Java with Real Examples",
+      "channel": "Telusko",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4802999794483185,
+      "latency_ms": 2.7655,
       "is_correct": true
     },
     {
       "title": "Computer Organization & Architecture: Pipeline Hazards Explained",
+      "channel": "Gate Smashers",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.556800038088113,
+      "latency_ms": 3.0242,
       "is_correct": true
     },
     {
       "title": "Reinforcement Learning: Q-Learning Algorithm from Scratch",
+      "channel": "Sentdex",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.339700014796108,
+      "latency_ms": 2.2915,
       "is_correct": true
     },
     {
       "title": "Digital Electronics: Logic Gates, K-Maps, and Boolean Algebra",
+      "channel": "Neso Academy",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcda Study & Academics",
+      "category_tag": "study",
+      "youtube_category_id": "27",
+      "youtube_macro_category": "Education",
+      "knowledge_graph_topics": [
+        "/m/01k8wb (Knowledge)",
+        "/m/029f9 (Education)",
+        "/m/04rk0 (Mathematics & Science)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.223399991635233,
+      "latency_ms": 2.626,
       "is_correct": true
     },
     {
       "title": "K-Means Clustering and Unsupervised Learning Tutorial",
+      "channel": "StatQuest with Josh Starmer",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 2.7369000017642975,
+      "latency_ms": 2.9029,
       "is_correct": true
     },
     {
       "title": "Git & GitHub Crash Course for Students & Beginners",
+      "channel": "Fireship",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4682000037282705,
+      "latency_ms": 2.325,
       "is_correct": true
     },
     {
       "title": "Natural Language Processing with Hugging Face Transformers",
+      "channel": "freeCodeCamp.org",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.497299992479384,
+      "latency_ms": 3.1475,
       "is_correct": true
     },
     {
       "title": "C Programming Language Full Course for Engineering Students",
+      "channel": "Jenny's Lectures CS IT",
       "expected_study": true,
       "predicted_study": true,
-      "category": "\ud83d\udcda Study & Education",
+      "category": "\ud83d\udcbb Coding & Dev",
+      "category_tag": "coding",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01mf_ (Software Development)",
+        "/m/026sq (Computer Programming)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.6898000030778348,
+      "latency_ms": 5.2711,
       "is_correct": true
     },
     {
       "title": "I Survived 100 Days in Hardcore Minecraft (Movie)",
+      "channel": "Luke TheNotable",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4932999620214105,
+      "latency_ms": 3.3414,
       "is_correct": true
     },
     {
       "title": "GTA 6 New Leaked Gameplay & Map Details! (Shocking)",
+      "channel": "GamerRealm",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4482999686151743,
+      "latency_ms": 2.6275,
       "is_correct": true
     },
     {
       "title": "Valorant Pro Ranked Highlights: 50 Kills Radiant Ace!",
+      "channel": "TenZ Highlights",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.5170000260695815,
+      "latency_ms": 2.7879,
       "is_correct": true
     },
     {
       "title": "Minecraft But Everything You Touch Turns to Diamonds",
+      "channel": "Dream",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.92,
-      "latency_ms": 1.227599976118654,
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.3254,
       "is_correct": true
     },
     {
       "title": "Elden Ring: Defeating the Hardest Boss with No Armor",
+      "channel": "VaatiVidya",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3876999728381634,
+      "latency_ms": 2.2578,
       "is_correct": true
     },
     {
       "title": "Top 10 Insane Gaming Moments Caught on Stream",
+      "channel": "TwitchClips",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.98,
-      "latency_ms": 1.201000006403774,
+      "category_tag": "gaming",
+      "youtube_category_id": "20",
+      "youtube_macro_category": "Gaming",
+      "knowledge_graph_topics": [
+        "/m/0bzvm2 (Gaming)",
+        "/m/01mw1 (Video Games)",
+        "/m/025zzc (Esports)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.0628,
       "is_correct": true
     },
     {
       "title": "$1 vs $1,000,000 Hotel Room Experience!",
+      "channel": "MrBeast",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.92,
-      "latency_ms": 1.1899000382982194,
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.0598,
       "is_correct": true
     },
     {
       "title": "Day in My Life as a 20-Year-Old in Mumbai (Street Food Vlog)",
+      "channel": "Flying Beast",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udc84 Vlog & Daily Life",
+      "category": "\ud83d\udc84 Vlogs & Lifestyle",
+      "category_tag": "vlog",
+      "youtube_category_id": "22",
+      "youtube_macro_category": "People & Blogs",
+      "knowledge_graph_topics": [
+        "/m/019_rr (Lifestyle)",
+        "/m/013_1c (Videoblogging)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.6772000235505402,
+      "latency_ms": 3.6226,
       "is_correct": true
     },
     {
       "title": "Celebrity Interviews and Spicy Wings Challenge",
+      "channel": "First We Feast",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udf72 Cooking & Food",
-      "confidence": 0.98,
-      "latency_ms": 1.6906000091694295,
+      "category_tag": "cooking",
+      "youtube_category_id": "26",
+      "youtube_macro_category": "Howto & Style",
+      "knowledge_graph_topics": [
+        "/m/02wbm (Food)",
+        "/m/01mtb (Cooking)",
+        "/m/019_rr (Culinary Arts)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 3.004,
       "is_correct": true
     },
     {
       "title": "Stand-Up Comedy Special: Life After College (Full Show)",
+      "channel": "Samay Raina",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\ude02 Comedy & Pranks",
+      "category": "\ud83d\ude02 Comedy & Memes",
+      "category_tag": "comedy",
+      "youtube_category_id": "23",
+      "youtube_macro_category": "Comedy",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09kqc (Humor & Comedy)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.8701999797485769,
+      "latency_ms": 3.8283,
       "is_correct": true
     },
     {
       "title": "We Bought an Abandoned Island and Found This Inside...",
+      "channel": "Yes Theory",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.98,
-      "latency_ms": 1.477500016335398,
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.4475,
       "is_correct": true
     },
     {
       "title": "I Tried Eating Only Pizza for 7 Days Straight",
+      "channel": "BuzzFeed",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83c\udf72 Cooking & Food",
-      "confidence": 0.98,
-      "latency_ms": 1.415100006852299,
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.0918,
       "is_correct": true
     },
     {
       "title": "Funniest Cats and Dogs of 2026 (Try Not to Laugh)",
+      "channel": "AnimalMemes",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\ude02 Comedy & Pranks",
+      "category": "\ud83d\ude02 Comedy & Memes",
+      "category_tag": "comedy",
+      "youtube_category_id": "23",
+      "youtube_macro_category": "Comedy",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09kqc (Humor & Comedy)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.8034999957308173,
+      "latency_ms": 2.3191,
       "is_correct": true
     },
     {
       "title": "Buying Everything in a Mall Blindfolded Challenge",
+      "channel": "Dhar Mann",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3707000180147588,
+      "latency_ms": 2.0213,
       "is_correct": true
     },
     {
       "title": "Room Tour 2026: My Ultra Aesthetic Minimalist Setup",
+      "channel": "TechVlogger",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udc84 Vlog & Daily Life",
+      "category": "\ud83d\udc84 Vlogs & Lifestyle",
+      "category_tag": "vlog",
+      "youtube_category_id": "22",
+      "youtube_macro_category": "People & Blogs",
+      "knowledge_graph_topics": [
+        "/m/019_rr (Lifestyle)",
+        "/m/013_1c (Videoblogging)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3884000363759696,
+      "latency_ms": 2.2162,
       "is_correct": true
     },
     {
       "title": "Prank Calling Random Strangers for 24 Hours",
+      "channel": "Nelk",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\ude02 Comedy & Pranks",
+      "category": "\ud83d\ude02 Comedy & Memes",
+      "category_tag": "comedy",
+      "youtube_category_id": "23",
+      "youtube_macro_category": "Comedy",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09kqc (Humor & Comedy)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.0967000271193683,
+      "latency_ms": 1.9826,
       "is_correct": true
     },
     {
       "title": "SHOCKING: You Won't Believe What Just Happened in Hollywood!",
+      "channel": "GossipCentral",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.5922000166028738,
+      "latency_ms": 2.9277,
       "is_correct": true
     },
     {
       "title": "Secret Wealth Hack They Don't Want You to Know! (Make \u20b910,000/hr)",
+      "channel": "CryptoGuru",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.98,
-      "latency_ms": 1.93060003221035,
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 7.4491,
       "is_correct": true
     },
     {
       "title": "New iPhone 18 Ultra: Apple Just Destroyed Android! (First Look)",
+      "channel": "HypeTech",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.98,
-      "latency_ms": 1.8277999479323626,
+      "category": "\ud83d\udd27 Tech & Gadgets",
+      "category_tag": "tech",
+      "youtube_category_id": "28",
+      "youtube_macro_category": "Science & Technology",
+      "knowledge_graph_topics": [
+        "/m/07c1v (Technology)",
+        "/m/01c8br (Consumer Electronics)",
+        "/m/02p7_j8 (Computer Hardware)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.935,
       "is_correct": true
     },
     {
       "title": "He Was Arrested Right After Doing This... Must Watch!",
+      "channel": "ViralDrama",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.4767000102438033,
+      "latency_ms": 2.8277,
       "is_correct": true
     },
     {
       "title": "Top 5 Conspiracy Theories That Might Actually Be True",
+      "channel": "MysteryFiles",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.98,
-      "latency_ms": 1.402400026563555,
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.4388,
       "is_correct": true
     },
     {
       "title": "Reacting to the Cringiest TikTok Videos on the Internet",
+      "channel": "PewDiePie",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\ude02 Comedy & Pranks",
-      "confidence": 0.92,
-      "latency_ms": 1.4046000433154404,
+      "category": "\ud83d\ude02 Comedy & Memes",
+      "category_tag": "comedy",
+      "youtube_category_id": "23",
+      "youtube_macro_category": "Comedy",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09kqc (Humor & Comedy)"
+      ],
+      "confidence": 0.99,
+      "latency_ms": 2.1822,
       "is_correct": true
     },
     {
       "title": "Bollywood Stars at the Red Carpet Award Night (Unseen Moments)",
+      "channel": "FilmiBeat",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.5530000091530383,
+      "latency_ms": 2.4381,
       "is_correct": true
     },
     {
       "title": "Cricket World Cup Final Super Over Thriller Highlights!",
+      "channel": "ICC Official",
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfcf Sports & Fitness",
+      "category_tag": "sports",
+      "youtube_category_id": "17",
+      "youtube_macro_category": "Sports",
+      "knowledge_graph_topics": [
+        "/m/06ntj (Sports)",
+        "/m/09xp_ (Cricket)",
+        "/m/02vx4 (Football)",
+        "/m/027x7n (Fitness)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.399400003720075,
+      "latency_ms": 3.7898,
       "is_correct": true
     },
     {
       "title": "How to Get Rich in 24 Hours with Zero Effort (Guaranteed)",
+      "channel": "GetRichFast",
       "expected_study": false,
       "predicted_study": false,
-      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "category": "\ud83d\udea8 Clickbait & Drama",
+      "category_tag": "clickbait",
+      "youtube_category_id": "24",
+      "youtube_macro_category": "Entertainment",
+      "knowledge_graph_topics": [
+        "/m/02jjt (Entertainment)",
+        "/m/09k_b (Sensationalism & Viral Media)"
+      ],
       "confidence": 0.99,
-      "latency_ms": 1.3143999967724085,
+      "latency_ms": 4.9002,
       "is_correct": true
     }
   ]

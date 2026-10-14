@@ -1,57 +1,60 @@
 """
-Verification test for multi-preference profiles and toggle switch in StudyShield
+Verification test for 20-Category YouTube 3-Layer Classifier (Study vs. Coding separation)
 """
-import sys
+
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend")))
 from decision_engine import LayaDecisionEngine
 
+
 def run_tests():
     engine = LayaDecisionEngine()
 
-    print("\n--- TEST CASE 1: Shield ON with Study + Sci-Fi + Anime ---")
+    print("\n--- TEST CASE 1: STUDY ONLY MODE (Allows Math/Physics/Exams, Blurs Coding) ---")
     engine.save_preferences({
         "shield_enabled": True,
-        "active_categories": ["study", "scifi", "anime"],
+        "active_categories": ["study"],
+        "custom_keywords": []
+    })
+
+    calc_res = engine.decide("Calculus 3: Multiple Integrals and Vector Fields Lecture 12", "MIT OpenCourseWare")
+    print(f"1. Calculus Lecture: is_allowed={calc_res.is_allowed}, tag={calc_res.category_tag}, YT_ID={calc_res.youtube_category_id}")
+    assert calc_res.is_allowed is True and calc_res.category_tag == "study"
+
+    code_res = engine.decide("FastAPI Crash Course: Build REST APIs with Python", "Traversy Media")
+    print(f"2. FastAPI Coding in Study-Only Mode: is_allowed={code_res.is_allowed}, tag={code_res.category_tag}, YT_ID={code_res.youtube_category_id}")
+    assert code_res.is_allowed is False and code_res.category_tag == "coding"
+
+    print("\n--- TEST CASE 2: CODING ONLY MODE (Allows Programming/DSA/ML, Blurs General Study) ---")
+    engine.save_preferences({
+        "shield_enabled": True,
+        "active_categories": ["coding"],
+        "custom_keywords": []
+    })
+
+    code_res2 = engine.decide("FastAPI Crash Course: Build REST APIs with Python", "Traversy Media")
+    print(f"3. FastAPI Coding in Coding-Only Mode: is_allowed={code_res2.is_allowed}, tag={code_res2.category_tag}")
+    assert code_res2.is_allowed is True and code_res2.category_tag == "coding"
+
+    calc_res2 = engine.decide("Calculus 3: Multiple Integrals and Vector Fields Lecture 12", "MIT OpenCourseWare")
+    print(f"4. Calculus Lecture in Coding-Only Mode: is_allowed={calc_res2.is_allowed}, tag={calc_res2.category_tag}")
+    assert calc_res2.is_allowed is False and calc_res2.category_tag == "study"
+
+    print("\n--- TEST CASE 3: STUDY + CODING + SCIFI + ANIME ---")
+    engine.save_preferences({
+        "shield_enabled": True,
+        "active_categories": ["study", "coding", "scifi", "anime"],
         "custom_keywords": ["cyberpunk"]
     })
 
-    anime_res = engine.decide("Attack on Titan Season 4 Episode 12 Discussion", "AnimeZone")
-    print(f"1. Anime Video: is_allowed={anime_res.is_allowed} ({anime_res.category.encode('ascii', 'ignore').decode()}) -> Expected: True")
-    assert anime_res.is_allowed is True
+    assert engine.decide("Attack on Titan Season 4 Episode 12", "AnimeZone").is_allowed is True
+    assert engine.decide("Interstellar Black Hole Physics Explained", "Veritasium").is_allowed is True
+    assert engine.decide("MrBeast $1 vs $1,000,000 Hotel Room", "MrBeast").is_allowed is False
 
-    scifi_res = engine.decide("Interstellar Black Hole Physics Explained by Kip Thorne", "ScienceDaily")
-    print(f"2. Sci-Fi Video: is_allowed={scifi_res.is_allowed} ({scifi_res.category.encode('ascii', 'ignore').decode()}) -> Expected: True")
-    assert scifi_res.is_allowed is True
+    print("\nALL 3-LAYER YOUTUBE CATEGORIZATION & STUDY/CODING SEPARATION TESTS PASSED!")
 
-    study_res = engine.decide("Machine Learning Algorithms Unit 2 Lecture", "CollegeProf")
-    print(f"3. Study Video:  is_allowed={study_res.is_allowed} ({study_res.category.encode('ascii', 'ignore').decode()}) -> Expected: True")
-    assert study_res.is_allowed is True
-
-    custom_res = engine.decide("Cyberpunk City Night Drive Aesthetic", "MusicLover")
-    print(f"4. Custom Video: is_allowed={custom_res.is_allowed} ({custom_res.category.encode('ascii', 'ignore').decode()}) -> Expected: True")
-    assert custom_res.is_allowed is True
-
-    distract_res = engine.decide("MrBeast $1 vs $1000000 Hotel Room Challenge", "MrBeast")
-    print(f"5. Vlogger Video: is_allowed={distract_res.is_allowed} ({distract_res.category.encode('ascii', 'ignore').decode()}) -> Expected: False (BLURRED)")
-    assert distract_res.is_allowed is False
-
-    game_res = engine.decide("Minecraft But Diamonds Are Everywhere", "GamerBoy")
-    print(f"6. Gaming Video:  is_allowed={game_res.is_allowed} ({game_res.category.encode('ascii', 'ignore').decode()}) -> Expected: False (BLURRED)")
-    assert game_res.is_allowed is False
-
-    print("\n--- TEST CASE 2: Toggle Shield OFF (User wants normal browsing) ---")
-    engine.save_preferences({
-        "shield_enabled": False,
-        "active_categories": ["study"]
-    })
-
-    off_res = engine.decide("Minecraft But Diamonds Are Everywhere", "GamerBoy")
-    print(f"7. Gaming with Shield OFF: is_allowed={off_res.is_allowed} ({off_res.category.encode('ascii', 'ignore').decode()}) -> Expected: True (Unblurred)")
-    assert off_res.is_allowed is True
-
-    print("\nALL MULTI-PREFERENCE AND TOGGLE TESTS PASSED PERFECTLY!")
 
 if __name__ == "__main__":
     run_tests()

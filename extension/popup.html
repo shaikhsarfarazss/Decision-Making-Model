@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StudyShield Control Panel</title>
+  <title>StudyShield — 20-Category YouTube Filter</title>
   <style>
     :root {
       --bg: #070b14;
@@ -24,17 +24,17 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     body {
-      width: 385px;
+      width: 395px;
       background: radial-gradient(circle at top right, #1e1b4b, var(--bg) 60%);
       color: var(--text);
-      padding: 16px;
+      padding: 15px;
     }
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
     .brand {
@@ -55,7 +55,7 @@
       box-shadow: 0 0 14px var(--accent-glow);
     }
     .title {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 800;
       letter-spacing: -0.3px;
     }
@@ -86,13 +86,13 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .stat-box {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 8px 12px;
+      padding: 7px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -111,18 +111,18 @@
       align-items: center;
       justify-content: space-between;
       background: var(--card-bg);
-      padding: 12px 14px;
+      padding: 10px 13px;
       border-radius: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border: 1px solid var(--card-border);
     }
     .switch-info h4 {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--text);
     }
     .switch-info p {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--subtext);
       margin-top: 2px;
     }
@@ -167,14 +167,14 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 13px;
-      margin-bottom: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
     }
     .section-header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 9px;
     }
     .section-title {
       font-size: 11px;
@@ -185,42 +185,55 @@
     }
     .preset-btn-group {
       display: flex;
-      gap: 5px;
+      gap: 4px;
+      width: 100%;
     }
     .preset-btn {
+      flex: 1;
       background: #1e293b;
       border: 1px solid #334155;
       color: #cbd5e1;
       font-size: 10px;
       font-weight: 700;
-      padding: 3px 7px;
+      padding: 4px 5px;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.15s;
     }
     .preset-btn:hover {
-      background: #334155;
+      background: #0284c7;
+      border-color: #38bdf8;
       color: #fff;
     }
     .categories-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
-      margin-bottom: 10px;
+      gap: 6px;
+      max-height: 225px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 8px;
+    }
+    .categories-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+    .categories-grid::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
     }
     .category-label {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       background: rgba(15, 23, 42, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
       padding: 6px 8px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       color: #e2e8f0;
       cursor: pointer;
-      transition: all 0.18s;
+      transition: all 0.16s;
       user-select: none;
     }
     .category-label:hover {
@@ -230,8 +243,8 @@
     .category-label input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       border: 1.5px solid #64748b;
       border-radius: 4px;
       outline: none;
@@ -246,7 +259,7 @@
     }
     .category-label input[type="checkbox"]:checked::after {
       content: "✓";
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
       color: white;
       position: absolute;
@@ -262,7 +275,7 @@
     .custom-input-box {
       display: flex;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
       padding-top: 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
@@ -317,7 +330,7 @@
       background: linear-gradient(135deg, #059669, #10b981);
       color: white;
       border: none;
-      padding: 11px;
+      padding: 10px;
       border-radius: 10px;
       font-size: 12.5px;
       font-weight: 800;
@@ -325,9 +338,6 @@
       box-shadow: 0 4px 14px var(--emerald-glow);
       transition: all 0.2s;
       margin-bottom: 7px;
-    }
-    .save-btn:hover {
-      transform: translateY(-1px);
     }
     .bottom-actions {
       display: grid;
@@ -357,9 +367,9 @@
       font-size: 11px;
       font-weight: 700;
       text-align: center;
-      padding: 7px;
+      padding: 6px;
       border-radius: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
       display: none;
     }
   </style>
@@ -370,7 +380,7 @@
       <div class="logo-badge">🛡️</div>
       <div>
         <div class="title">StudyShield</div>
-        <div class="subtitle">System-1 Local AI Focus Filter</div>
+        <div class="subtitle">3-Layer YouTube AI Categorizer</div>
       </div>
     </div>
     <div class="status-pill" id="statusPill">
@@ -393,7 +403,7 @@
   <div class="switch-card">
     <div class="switch-info">
       <h4>Focus Shield Protection</h4>
-      <p id="switchSub">Blurs non-selected content automatically</p>
+      <p id="switchSub">Blurs non-selected YouTube categories</p>
     </div>
     <label class="toggle">
       <input type="checkbox" id="shieldToggle" checked>
@@ -403,38 +413,48 @@
 
   <div class="pref-section">
     <div class="section-header">
-      <div class="section-title">Allowed Topics (12 Categories)</div>
+      <div class="section-title">YouTube Content Categories (20 Topics)</div>
       <div class="preset-btn-group">
         <button class="preset-btn" id="btnStudyOnly" type="button">📚 Study</button>
+        <button class="preset-btn" id="btnCodeOnly" type="button">💻 Code</button>
+        <button class="preset-btn" id="btnStudyAndCode" type="button">🎓 Both</button>
         <button class="preset-btn" id="btnSelectAll" type="button">All</button>
         <button class="preset-btn" id="btnClearAll" type="button">Clear</button>
       </div>
     </div>
 
     <div class="categories-grid" id="categoriesGrid">
-      <label class="category-label" data-tag="study"><input type="checkbox" value="study"> 📚 Study/Code</label>
-      <label class="category-label" data-tag="tech"><input type="checkbox" value="tech"> 💻 Technology</label>
-      <label class="category-label" data-tag="scifi"><input type="checkbox" value="scifi"> 🚀 Sci-Fi/Space</label>
-      <label class="category-label" data-tag="cooking"><input type="checkbox" value="cooking"> 🍲 Cooking</label>
-      <label class="category-label" data-tag="cartoon"><input type="checkbox" value="cartoon"> 🎨 Cartoon</label>
-      <label class="category-label" data-tag="anime"><input type="checkbox" value="anime"> ⚔️ Anime</label>
-      <label class="category-label" data-tag="gaming"><input type="checkbox" value="gaming"> 🎮 Gaming</label>
-      <label class="category-label" data-tag="music"><input type="checkbox" value="music"> 🎵 Music</label>
-      <label class="category-label" data-tag="sports"><input type="checkbox" value="sports"> 🏏 Sports</label>
-      <label class="category-label" data-tag="vlog"><input type="checkbox" value="vlog"> 💄 Daily Vlogs</label>
-      <label class="category-label" data-tag="comedy"><input type="checkbox" value="comedy"> 😂 Comedy</label>
-      <label class="category-label" data-tag="clickbait"><input type="checkbox" value="clickbait"> 🚨 Clickbait</label>
+      <label class="category-label" data-tag="study" title="YouTube ID 27: Education (Math, Physics, GATE/JEE/NEET, University Lectures)"><input type="checkbox" value="study"> 📚 Study & Exams</label>
+      <label class="category-label" data-tag="coding" title="YouTube ID 28: Science & Tech (Python, C++, DSA, Web Dev, AI/ML Code)"><input type="checkbox" value="coding"> 💻 Coding & Dev</label>
+      <label class="category-label" data-tag="tech" title="YouTube ID 28: Science & Tech (Hardware, Gadgets, Linux, Cloud)"><input type="checkbox" value="tech"> 🔧 Tech & Gadgets</label>
+      <label class="category-label" data-tag="scifi" title="YouTube ID 28: Science & Tech (Astronomy, Space, NASA/ISRO, Quantum)"><input type="checkbox" value="scifi"> 🚀 Science & Space</label>
+      <label class="category-label" data-tag="news" title="YouTube ID 25: News & Politics (Geopolitics, Current Affairs)"><input type="checkbox" value="news"> 📰 News & Politics</label>
+      <label class="category-label" data-tag="finance" title="YouTube ID 27: Finance, Investing, Business & Economics"><input type="checkbox" value="finance"> 📈 Finance & Biz</label>
+      <label class="category-label" data-tag="howto" title="YouTube ID 26: Howto & Style (DIY, Productivity, Design)"><input type="checkbox" value="howto"> 🛠️ How-To & DIY</label>
+      <label class="category-label" data-tag="podcast" title="YouTube ID 22: Podcasts, TEDx Talks & Documentaries"><input type="checkbox" value="podcast"> 🎙️ Podcasts/Talks</label>
+      <label class="category-label" data-tag="cooking" title="YouTube ID 26: Cooking, Recipes & Street Food"><input type="checkbox" value="cooking"> 🍲 Cooking & Food</label>
+      <label class="category-label" data-tag="autos" title="YouTube ID 2: Autos & Vehicles (Cars, Bikes, EVs, F1)"><input type="checkbox" value="autos"> 🚗 Autos & Bikes</label>
+      <label class="category-label" data-tag="pets" title="YouTube ID 15: Pets & Animals (Wildlife, NatGeo, Dogs/Cats)"><input type="checkbox" value="pets"> 🐾 Pets & Nature</label>
+      <label class="category-label" data-tag="travel" title="YouTube ID 19: Travel & Events (World Tours, Aviation)"><input type="checkbox" value="travel"> ✈️ Travel & World</label>
+      <label class="category-label" data-tag="music" title="YouTube ID 10: Music (Songs, Lofi Study Beats, Albums)"><input type="checkbox" value="music"> 🎵 Music & Lofi</label>
+      <label class="category-label" data-tag="sports" title="YouTube ID 17: Sports (Cricket, Football, Gym Fitness)"><input type="checkbox" value="sports"> 🏏 Sports & Gym</label>
+      <label class="category-label" data-tag="anime" title="YouTube ID 31: Anime & Manga"><input type="checkbox" value="anime"> ⚔️ Anime & Manga</label>
+      <label class="category-label" data-tag="cartoon" title="YouTube ID 1: Film & Animation (2D/3D Cartoons)"><input type="checkbox" value="cartoon"> 🎨 Cartoons</label>
+      <label class="category-label" data-tag="gaming" title="YouTube ID 20: Gaming & Esports"><input type="checkbox" value="gaming"> 🎮 Gaming</label>
+      <label class="category-label" data-tag="vlog" title="YouTube ID 22: People & Blogs (Daily Vlogs, Room Tours)"><input type="checkbox" value="vlog"> 💄 Daily Vlogs</label>
+      <label class="category-label" data-tag="comedy" title="YouTube ID 23: Comedy (Stand-Up, Pranks, Memes)"><input type="checkbox" value="comedy"> 😂 Comedy & Memes</label>
+      <label class="category-label" data-tag="clickbait" title="YouTube ID 24: Entertainment (Sensational Stunts, Drama)"><input type="checkbox" value="clickbait"> 🚨 Clickbait</label>
     </div>
 
     <div class="custom-input-box">
-      <input type="text" class="custom-input" id="customInput" placeholder="Add custom keyword (e.g. robotics)...">
+      <input type="text" class="custom-input" id="customInput" placeholder="Add custom keyword (e.g. Gate Unit 3)...">
       <button class="custom-add-btn" id="customAddBtn" type="button">+ Add</button>
     </div>
     <div class="chips-container" id="chipsContainer"></div>
   </div>
 
   <div class="save-toast" id="saveToast">
-    ✅ Preferences Saved & Applied to YouTube!
+    ✅ Saved & Applied to YouTube!
   </div>
 
   <button class="save-btn" id="savePreferencesBtn" type="button">

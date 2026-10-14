@@ -1,9 +1,6 @@
 @echo off
-title StudyShield Desktop Application
-echo ==================================================================
-echo         Launching StudyShield Desktop Control Panel
-echo         Minimalist UI for Laya Decision Model
-echo ==================================================================
-echo.
-cd /d "%~dp0"
+title StudyShield — Desktop Control Center
+echo Starting StudyShield Local Server & Desktop App...
+start /B python backend\server.py
+timeout /t 1 /nobreak >nul
 python desktop_app.py

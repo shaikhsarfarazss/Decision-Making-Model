@@ -1,8 +1,9 @@
 """
-Quick API validation script for StudyShield FastAPI backend
+API validation script for StudyShield FastAPI 3-Layer YouTube Backend
 """
-import sys
+
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend")))
 from fastapi.testclient import TestClient
@@ -10,35 +11,65 @@ from server import app
 
 client = TestClient(app)
 
+
 def test_api():
-    print("Testing /health endpoint...")
+    print("1. Testing /health endpoint...")
     res = client.get("/health")
     assert res.status_code == 200, f"Health check failed: {res.text}"
-    print("  Health check PASS:", res.json())
+    health = res.json()
+    print(f"   PASS: {len(health['categories_supported'])} YouTube categories supported.")
+    assert "study" in health["categories_supported"] and "coding" in health["categories_supported"]
 
-    print("\nTesting /decide endpoint with Educational Video...")
-    res = client.post("/decide", json={
-        "title": "Machine Learning Algorithms Crash Course for Beginners",
-        "channel": "freeCodeCamp.org",
-        "focus_domain": "aiml"
-    })
-    assert res.status_code == 200, f"Decide failed: {res.text}"
+    print("\n2. Testing /decide with Academic Study Lecture (YouTube ID 27)...")
+    res = client.post(
+        "/decide",
+        json={
+            "title": "Calculus 3: Multiple Integrals and Vector Fields Lecture 12",
+            "channel": "MIT OpenCourseWare",
+            "focus_domain": "aiml",
+        },
+    )
+    assert res.status_code == 200
     data = res.json()
-    print("  Educational result: is_study =", data["is_study"], "category =", data["category"].encode('ascii', 'ignore').decode())
-    assert data["is_study"] is True, "Expected study=True for ML course!"
+    print(f"   PASS: tag={data['category_tag']}, yt_id={data['youtube_category_id']} ({data['youtube_macro_category']})")
+    assert data["is_study"] is True
+    assert data["category_tag"] == "study"
+    assert data["youtube_category_id"] == "27"
 
-    print("\nTesting /decide endpoint with Gaming Video...")
-    res = client.post("/decide", json={
-        "title": "I Survived 100 Days in Hardcore Minecraft Survival",
-        "channel": "GamingGuy",
-        "focus_domain": "aiml"
-    })
-    assert res.status_code == 200, f"Decide failed: {res.text}"
+    print("\n3. Testing /decide with Coding & Dev Tutorial (YouTube ID 28)...")
+    res = client.post(
+        "/decide",
+        json={
+            "title": "FastAPI Crash Course: Build REST APIs with Python",
+            "channel": "Traversy Media",
+            "focus_domain": "aiml",
+        },
+    )
+    assert res.status_code == 200
     data = res.json()
-    print("  Gaming result: is_study =", data["is_study"], "category =", data["category"].encode('ascii', 'ignore').decode())
-    assert data["is_study"] is False, "Expected study=False for Minecraft!"
+    print(f"   PASS: tag={data['category_tag']}, yt_id={data['youtube_category_id']} ({data['youtube_macro_category']})")
+    assert data["is_study"] is True
+    assert data["category_tag"] == "coding"
+    assert data["youtube_category_id"] == "28"
 
-    print("\nALL API TESTS PASSED SUCCESSFULLY! Ready for Chrome Extension connection.")
+    print("\n4. Testing /decide with Gaming Distraction (YouTube ID 20)...")
+    res = client.post(
+        "/decide",
+        json={
+            "title": "I Survived 100 Days in Hardcore Minecraft Survival",
+            "channel": "Luke TheNotable",
+            "focus_domain": "aiml",
+        },
+    )
+    assert res.status_code == 200
+    data = res.json()
+    print(f"   PASS: tag={data['category_tag']}, yt_id={data['youtube_category_id']} ({data['youtube_macro_category']})")
+    assert data["is_study"] is False
+    assert data["category_tag"] == "gaming"
+    assert data["youtube_category_id"] == "20"
+
+    print("\nALL FASTAPI 3-LAYER YOUTUBE ENDPOINT TESTS PASSED!")
+
 
 if __name__ == "__main__":
     test_api()

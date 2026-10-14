@@ -1,14 +1,13 @@
 """
-StudyShield — Native Desktop Control Center & Real-Time YouTube Link Analyzer
-Features a modern dark-mode UI, non-blocking background worker threads,
-live telemetry counters, and instant synchronization with the Chrome Extension.
+StudyShield — Native Desktop Control Center (20 YouTube Categories)
+Separates Study & Academics from Coding & Dev and displays full 3-Layer
+YouTube Categorization (videoCategoryId + Knowledge Graph Topics + Confidence).
 """
 
 import os
 import sys
 import threading
 import tkinter as tk
-from tkinter import ttk
 import webbrowser
 import requests
 
@@ -18,55 +17,61 @@ from decision_engine import LayaDecisionEngine
 API_URL = "http://127.0.0.1:8000"
 
 CATEGORIES = [
-    ("study", "📚 Study & Education"),
-    ("tech", "💻 Technology & Software"),
-    ("scifi", "🚀 Sci-Fi & Space"),
-    ("cooking", "🍲 Cooking & Food"),
-    ("cartoon", "🎨 Cartoon & Animation"),
-    ("anime", "⚔️ Anime & Manga"),
-    ("gaming", "🎮 Gaming & Esports"),
-    ("music", "🎵 Music & Songs"),
-    ("sports", "🏏 Sports & Fitness"),
-    ("vlog", "💄 Vlog & Daily Life"),
-    ("comedy", "😂 Comedy & Pranks"),
-    ("clickbait", "🚨 Sensational & Clickbait"),
+    ("study", "📚 Study & Academics (ID 27)"),
+    ("coding", "💻 Coding & Dev (ID 28)"),
+    ("tech", "🔧 Tech & Gadgets (ID 28)"),
+    ("scifi", "🚀 Science & Space (ID 28)"),
+    ("news", "📰 News & Politics (ID 25)"),
+    ("finance", "📈 Finance & Biz (ID 27)"),
+    ("howto", "🛠️ How-To & DIY (ID 26)"),
+    ("podcast", "🎙️ Podcasts & Talks (ID 22)"),
+    ("cooking", "🍲 Cooking & Food (ID 26)"),
+    ("autos", "🚗 Autos & Vehicles (ID 2)"),
+    ("pets", "🐾 Pets & Nature (ID 15)"),
+    ("travel", "✈️ Travel & Culture (ID 19)"),
+    ("music", "🎵 Music & Lofi (ID 10)"),
+    ("sports", "🏏 Sports & Fitness (ID 17)"),
+    ("anime", "⚔️ Anime & Manga (ID 31)"),
+    ("cartoon", "🎨 Cartoons (ID 1)"),
+    ("gaming", "🎮 Gaming & Esports (ID 20)"),
+    ("vlog", "💄 Vlogs & Lifestyle (ID 22)"),
+    ("comedy", "😂 Comedy & Memes (ID 23)"),
+    ("clickbait", "🚨 Clickbait & Drama (ID 24)"),
 ]
 
 
 class StudyShieldDesktopApp:
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("StudyShield — AI Focus Control Center")
-        self.root.geometry("920x680")
-        self.root.minsize(860, 640)
+        self.root.title("StudyShield — 20-Category YouTube AI Focus Center")
+        self.root.geometry("980x740")
+        self.root.minsize(920, 700)
         self.root.configure(bg="#070b14")
 
         self.local_engine = LayaDecisionEngine()
         self.shield_enabled = tk.BooleanVar(value=True)
-        self.cat_vars = {tag: tk.BooleanVar(value=(tag == "study")) for tag, _ in CATEGORIES}
-        self.custom_keywords = []
+        self.cat_vars = {tag: tk.BooleanVar(value=(tag in ("study", "coding"))) for tag, _ in CATEGORIES}
 
         self._build_ui()
         self._load_initial_state()
         self._schedule_telemetry_poll()
 
     def _build_ui(self):
-        # Top Header Bar
-        header = tk.Frame(self.root, bg="#0f172a", padx=22, pady=16, highlightthickness=1, highlightbackground="#1e293b")
-        header.pack(fill="x", padx=20, pady=(18, 12))
+        header = tk.Frame(self.root, bg="#0f172a", padx=22, pady=14, highlightthickness=1, highlightbackground="#1e293b")
+        header.pack(fill="x", padx=20, pady=(16, 10))
 
         title_col = tk.Frame(header, bg="#0f172a")
         title_col.pack(side="left")
         tk.Label(
             title_col,
-            text="🛡️ StudyShield Command Center",
-            font=("Segoe UI", 17, "bold"),
+            text="🛡️ StudyShield — 3-Layer YouTube Categorization Center",
+            font=("Segoe UI", 16, "bold"),
             fg="#f8fafc",
             bg="#0f172a",
         ).pack(anchor="w")
         tk.Label(
             title_col,
-            text="Real-Time Local System-1 AI Video Focus Filter • Laya Decision Engine",
+            text="20 YouTube Categories • Study & Coding Separated • Layer 1 (Category ID) + Layer 2 (Knowledge Graph)",
             font=("Segoe UI", 9),
             fg="#94a3b8",
             bg="#0f172a",
@@ -74,7 +79,7 @@ class StudyShieldDesktopApp:
 
         self.status_badge = tk.Label(
             header,
-            text="● Laya Engine Ready",
+            text="● Laya 3-Layer Ready",
             font=("Segoe UI", 10, "bold"),
             fg="#34d399",
             bg="#064e3b",
@@ -83,25 +88,23 @@ class StudyShieldDesktopApp:
         )
         self.status_badge.pack(side="right")
 
-        # Main Two-Column Container
         body = tk.Frame(self.root, bg="#070b14")
         body.pack(fill="both", expand=True, padx=20, pady=4)
         body.columnconfigure(0, weight=3)
         body.columnconfigure(1, weight=2)
 
-        # Left Column: Shield Toggle + Category Grid + Custom Keywords
-        left_panel = tk.Frame(body, bg="#0f172a", padx=20, pady=18, highlightthickness=1, highlightbackground="#1e293b")
+        left_panel = tk.Frame(body, bg="#0f172a", padx=18, pady=16, highlightthickness=1, highlightbackground="#1e293b")
         left_panel.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
 
-        toggle_row = tk.Frame(left_panel, bg="#1e293b", padx=14, pady=12)
-        toggle_row.pack(fill="x", pady=(0, 14))
+        toggle_row = tk.Frame(left_panel, bg="#1e293b", padx=12, pady=10)
+        toggle_row.pack(fill="x", pady=(0, 12))
 
         tk.Checkbutton(
             toggle_row,
             text=" Enable Real-Time YouTube Focus Shield Protection",
             variable=self.shield_enabled,
             command=self.save_preferences_async,
-            font=("Segoe UI", 11, "bold"),
+            font=("Segoe UI", 10, "bold"),
             fg="#38bdf8",
             bg="#1e293b",
             selectcolor="#0f172a",
@@ -111,16 +114,23 @@ class StudyShieldDesktopApp:
         ).pack(side="left")
 
         preset_row = tk.Frame(left_panel, bg="#0f172a")
-        preset_row.pack(fill="x", pady=(0, 10))
+        preset_row.pack(fill="x", pady=(0, 8))
         tk.Label(
             preset_row,
-            text="ALLOWED CONTENT CATEGORIES",
+            text="20 YOUTUBE CONTENT CATEGORIES",
             font=("Segoe UI", 9, "bold"),
             fg="#cbd5e1",
             bg="#0f172a",
         ).pack(side="left")
 
-        for label, mode in [("Clear", "none"), ("All", "all"), ("📚 Study Only", "study")]:
+        presets = [
+            ("Clear", "none"),
+            ("All", "all"),
+            ("🎓 Study+Code", "both"),
+            ("💻 Code Only", "coding"),
+            ("📚 Study Only", "study"),
+        ]
+        for label, mode in presets:
             tk.Button(
                 preset_row,
                 text=label,
@@ -128,15 +138,15 @@ class StudyShieldDesktopApp:
                 font=("Segoe UI", 8, "bold"),
                 fg="#e2e8f0",
                 bg="#1e293b",
-                activebackground="#334155",
+                activebackground="#0284c7",
                 relief="flat",
-                padx=8,
+                padx=7,
                 pady=3,
                 cursor="hand2",
-            ).pack(side="right", padx=3)
+            ).pack(side="right", padx=2)
 
         grid_frame = tk.Frame(left_panel, bg="#0f172a")
-        grid_frame.pack(fill="x", pady=(0, 14))
+        grid_frame.pack(fill="x", pady=(0, 12))
         for idx, (tag, name) in enumerate(CATEGORIES):
             r, c = divmod(idx, 2)
             grid_frame.columnconfigure(c, weight=1)
@@ -144,28 +154,26 @@ class StudyShieldDesktopApp:
                 grid_frame,
                 text=f" {name}",
                 variable=self.cat_vars[tag],
-                font=("Segoe UI", 10),
+                font=("Segoe UI", 9),
                 fg="#f1f5f9",
                 bg="#131c31",
                 selectcolor="#0284c7",
                 activebackground="#1e293b",
                 activeforeground="#38bdf8",
                 anchor="w",
-                padx=10,
-                pady=7,
+                padx=8,
+                pady=4,
                 cursor="hand2",
             )
-            cb.grid(row=r, column=c, sticky="ew", padx=4, pady=4)
+            cb.grid(row=r, column=c, sticky="ew", padx=3, pady=2)
 
-        # Custom Keywords Input
-        kw_label = tk.Label(
+        tk.Label(
             left_panel,
             text="CUSTOM ALLOWED KEYWORDS (COMMA SEPARATED)",
             font=("Segoe UI", 9, "bold"),
             fg="#cbd5e1",
             bg="#0f172a",
-        )
-        kw_label.pack(anchor="w", pady=(4, 4))
+        ).pack(anchor="w", pady=(2, 4))
 
         self.kw_entry = tk.Entry(
             left_panel,
@@ -177,24 +185,23 @@ class StudyShieldDesktopApp:
             highlightthickness=1,
             highlightbackground="#334155",
         )
-        self.kw_entry.pack(fill="x", ipady=7, pady=(0, 14))
+        self.kw_entry.pack(fill="x", ipady=6, pady=(0, 12))
 
         self.save_btn = tk.Button(
             left_panel,
             text="⚡ Save Preferences & Sync with Chrome Extension",
             command=self.save_preferences_async,
-            font=("Segoe UI", 11, "bold"),
+            font=("Segoe UI", 10, "bold"),
             fg="#ffffff",
             bg="#10b981",
             activebackground="#059669",
             relief="flat",
-            pady=10,
+            pady=9,
             cursor="hand2",
         )
         self.save_btn.pack(fill="x")
 
-        # Right Column: Live Telemetry + Link Analyzer
-        right_panel = tk.Frame(body, bg="#0f172a", padx=20, pady=18, highlightthickness=1, highlightbackground="#1e293b")
+        right_panel = tk.Frame(body, bg="#0f172a", padx=18, pady=16, highlightthickness=1, highlightbackground="#1e293b")
         right_panel.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
 
         tk.Label(
@@ -206,30 +213,29 @@ class StudyShieldDesktopApp:
         ).pack(anchor="w", pady=(0, 8))
 
         stats_frame = tk.Frame(right_panel, bg="#0f172a")
-        stats_frame.pack(fill="x", pady=(0, 16))
+        stats_frame.pack(fill="x", pady=(0, 14))
         stats_frame.columnconfigure(0, weight=1)
         stats_frame.columnconfigure(1, weight=1)
 
-        allowed_card = tk.Frame(stats_frame, bg="#131c31", padx=12, pady=10)
+        allowed_card = tk.Frame(stats_frame, bg="#131c31", padx=12, pady=8)
         allowed_card.grid(row=0, column=0, sticky="ew", padx=(0, 5))
         tk.Label(allowed_card, text="ALLOWED", font=("Segoe UI", 8, "bold"), fg="#94a3b8", bg="#131c31").pack(anchor="w")
-        self.lbl_allowed = tk.Label(allowed_card, text="0", font=("Segoe UI", 20, "bold"), fg="#34d399", bg="#131c31")
+        self.lbl_allowed = tk.Label(allowed_card, text="0", font=("Segoe UI", 18, "bold"), fg="#34d399", bg="#131c31")
         self.lbl_allowed.pack(anchor="w")
 
-        blocked_card = tk.Frame(stats_frame, bg="#131c31", padx=12, pady=10)
+        blocked_card = tk.Frame(stats_frame, bg="#131c31", padx=12, pady=8)
         blocked_card.grid(row=0, column=1, sticky="ew", padx=(5, 0))
         tk.Label(blocked_card, text="BLURRED", font=("Segoe UI", 8, "bold"), fg="#94a3b8", bg="#131c31").pack(anchor="w")
-        self.lbl_blocked = tk.Label(blocked_card, text="0", font=("Segoe UI", 20, "bold"), fg="#f43f5e", bg="#131c31")
+        self.lbl_blocked = tk.Label(blocked_card, text="0", font=("Segoe UI", 18, "bold"), fg="#f43f5e", bg="#131c31")
         self.lbl_blocked.pack(anchor="w")
 
-        # YouTube URL / Title Analyzer
         tk.Label(
             right_panel,
-            text="🔍 YOUTUBE LINK / TITLE TESTER",
+            text="🔍 3-LAYER YOUTUBE LINK / TITLE TESTER",
             font=("Segoe UI", 9, "bold"),
             fg="#cbd5e1",
             bg="#0f172a",
-        ).pack(anchor="w", pady=(6, 6))
+        ).pack(anchor="w", pady=(4, 6))
 
         self.test_entry = tk.Entry(
             right_panel,
@@ -241,12 +247,12 @@ class StudyShieldDesktopApp:
             highlightthickness=1,
             highlightbackground="#334155",
         )
-        self.test_entry.pack(fill="x", ipady=7, pady=(0, 8))
-        self.test_entry.insert(0, "Complete Machine Learning Course with Python")
+        self.test_entry.pack(fill="x", ipady=6, pady=(0, 8))
+        self.test_entry.insert(0, "FastAPI Crash Course: Build REST APIs with Python")
 
         tk.Button(
             right_panel,
-            text="Analyze with Laya Engine",
+            text="Analyze with 3-Layer YouTube Engine",
             command=self.analyze_input_async,
             font=("Segoe UI", 10, "bold"),
             fg="#ffffff",
@@ -259,12 +265,12 @@ class StudyShieldDesktopApp:
 
         self.result_box = tk.Label(
             right_panel,
-            text="Enter any YouTube URL or video title above to inspect Laya's real-time classification and latency.",
+            text="Enter any YouTube URL or video title above to inspect Layer 1 (videoCategoryId), Layer 2 (Knowledge Graph), and Layer 3 verdict.",
             font=("Segoe UI", 9),
             fg="#94a3b8",
             bg="#070b14",
             justify="left",
-            wraplength=290,
+            wraplength=310,
             padx=12,
             pady=12,
         )
@@ -272,7 +278,7 @@ class StudyShieldDesktopApp:
 
         tk.Button(
             right_panel,
-            text="🌐 Open Web Dashboard (localhost:8000)",
+            text="🌐 Open Web Dashboard (127.0.0.1:8000)",
             command=lambda: webbrowser.open("http://127.0.0.1:8000"),
             font=("Segoe UI", 9, "bold"),
             fg="#38bdf8",
@@ -286,6 +292,10 @@ class StudyShieldDesktopApp:
         for tag, var in self.cat_vars.items():
             if mode == "study":
                 var.set(tag == "study")
+            elif mode == "coding":
+                var.set(tag == "coding")
+            elif mode == "both":
+                var.set(tag in ("study", "coding"))
             elif mode == "all":
                 var.set(True)
             else:
@@ -295,7 +305,7 @@ class StudyShieldDesktopApp:
     def _load_initial_state(self):
         prefs = self.local_engine.load_preferences()
         self.shield_enabled.set(prefs.get("shield_enabled", True))
-        active = prefs.get("active_categories", ["study"])
+        active = prefs.get("active_categories", ["study", "coding"])
         for tag, var in self.cat_vars.items():
             var.set(tag in active)
         kws = prefs.get("custom_keywords", [])
@@ -329,7 +339,7 @@ class StudyShieldDesktopApp:
         query = self.test_entry.get().strip()
         if not query:
             return
-        self.result_box.config(text="⏳ Evaluating...", fg="#38bdf8")
+        self.result_box.config(text="⏳ Running 3-Layer YouTube Analysis...", fg="#38bdf8")
 
         def worker():
             data = None
@@ -349,11 +359,13 @@ class StudyShieldDesktopApp:
                 allowed = data.get("is_allowed", False)
                 verdict = "✅ ALLOWED (CLEAR)" if allowed else "🚫 BLOCKED (BLURRED)"
                 color = "#34d399" if allowed else "#fb7185"
+                kg_list = ", ".join(data.get("knowledge_graph_topics", []))
                 text = (
                     f"{verdict}\n\n"
-                    f"Category: {data.get('category')}\n"
-                    f"Confidence: {int(data.get('confidence', 0.95) * 100)}%\n"
-                    f"Latency: {data.get('latency_ms', 0.2)} ms\n\n"
+                    f"Micro-Category: {data.get('category')}\n"
+                    f"Layer 1 (YouTube ID): ID {data.get('youtube_category_id')} ({data.get('youtube_macro_category')})\n"
+                    f"Layer 2 (Knowledge Graph): {kg_list}\n"
+                    f"Confidence: {int(data.get('confidence', 0.95) * 100)}% • Latency: {data.get('latency_ms', 0.2)} ms\n\n"
                     f"{data.get('explanation', '')}"
                 )
                 self.result_box.config(text=text, fg=color)
@@ -378,7 +390,7 @@ class StudyShieldDesktopApp:
                 if online:
                     self.status_badge.config(text="● Server Connected (8000)", fg="#34d399", bg="#064e3b")
                 else:
-                    self.status_badge.config(text="● Local Fallback Mode", fg="#38bdf8", bg="#0c4a6e")
+                    self.status_badge.config(text="● Local 3-Layer Fallback", fg="#38bdf8", bg="#0c4a6e")
                 if prefs:
                     self.lbl_allowed.config(text=str(prefs.get("allowed_count", 0)))
                     self.lbl_blocked.config(text=str(prefs.get("blocked_count", 0)))

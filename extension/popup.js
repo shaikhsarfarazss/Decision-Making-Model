@@ -1,4 +1,4 @@
-// StudyShield Extension Popup Controller
+// StudyShield Extension Popup Controller — 20 YouTube Categories (Study & Coding Separated)
 document.addEventListener('DOMContentLoaded', async () => {
   const shieldToggle = document.getElementById('shieldToggle');
   const switchSub = document.getElementById('switchSub');
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const forceRescanBtn = document.getElementById('forceRescanBtn');
   const saveToast = document.getElementById('saveToast');
   const btnStudyOnly = document.getElementById('btnStudyOnly');
+  const btnCodeOnly = document.getElementById('btnCodeOnly');
+  const btnStudyAndCode = document.getElementById('btnStudyAndCode');
   const btnSelectAll = document.getElementById('btnSelectAll');
   const btnClearAll = document.getElementById('btnClearAll');
   const statusText = document.getElementById('statusText');
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function applyStateToUI(isEnabled, activeCats, keywords) {
     shieldToggle.checked = isEnabled;
     switchSub.innerText = isEnabled
-      ? 'Blurs non-selected content automatically'
+      ? 'Blurs non-selected YouTube categories'
       : 'Shield is OFF. All videos remain clear.';
     categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
       cb.checked = activeCats.includes(cb.value);
@@ -55,7 +57,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderChips();
   }
 
-  // 1. Load from chrome.storage.local first
   const localData = await new Promise((resolve) => {
     chrome.storage.local.get(
       ['shieldEnabled', 'activeCategories', 'customKeywords', 'updated_at'],
@@ -65,11 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   applyStateToUI(
     localData.shieldEnabled !== undefined ? localData.shieldEnabled : true,
-    localData.activeCategories || ['study'],
+    localData.activeCategories || ['study', 'coding'],
     localData.customKeywords || []
   );
 
-  // 2. Check local backend server
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 500);
@@ -77,19 +77,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     clearTimeout(timer);
     if (pRes.ok) {
       const pData = await pRes.json();
-      statusText.innerText = 'Laya Local (0.2ms)';
+      statusText.innerText = 'Laya 3-Layer (0.2ms)';
       allowedStat.innerText = pData.allowed_count || 0;
       blockedStat.innerText = pData.blocked_count || 0;
       if (!localData.updated_at || (pData.updated_at && pData.updated_at >= localData.updated_at)) {
         applyStateToUI(
           pData.shield_enabled !== undefined ? pData.shield_enabled : true,
-          pData.active_categories || ['study'],
+          pData.active_categories || ['study', 'coding'],
           pData.custom_keywords || []
         );
       }
     }
   } catch (_) {
-    statusText.innerText = 'In-Browser Engine';
+    statusText.innerText = 'In-Browser 3-Layer';
   }
 
   categoriesGrid.addEventListener('change', syncCategoryVisuals);
@@ -97,6 +97,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   btnStudyOnly.addEventListener('click', () => {
     categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
       cb.checked = cb.value === 'study';
+    });
+    syncCategoryVisuals();
+  });
+
+  btnCodeOnly.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = cb.value === 'coding';
+    });
+    syncCategoryVisuals();
+  });
+
+  btnStudyAndCode.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = cb.value === 'study' || cb.value === 'coding';
     });
     syncCategoryVisuals();
   });
@@ -152,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     chrome.runtime.sendMessage({ action: 'SAVE_PREFERENCES', data: payload }, () => {
       saveToast.style.display = 'block';
-      saveToast.innerText = `✅ Saved! (${activeCats.length} categories active)`;
+      saveToast.innerText = `✅ Saved! (${activeCats.length} of 20 categories allowed)`;
       setTimeout(() => {
         saveToast.style.display = 'none';
       }, 2200);
@@ -162,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   shieldToggle.addEventListener('change', () => {
     const isEnabled = shieldToggle.checked;
     switchSub.innerText = isEnabled
-      ? 'Blurs non-selected content automatically'
+      ? 'Blurs non-selected YouTube categories'
       : 'Shield is OFF. All videos remain clear.';
     savePreferences();
   });

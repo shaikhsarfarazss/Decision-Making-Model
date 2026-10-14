@@ -1,79 +1,55 @@
-import re
+"""
+Standalone verification of all 20 YouTube Categories in LayaDecisionEngine
+"""
 
-def test_classifier():
-    categories = {
-        "study": {
-            "name": "📚 Study & Education",
-            "keywords": [
-                "lecture", "course", "tutorial", "algorithm", "algorithms", "python", "neural",
-                "calculus", "linear algebra", "discrete", "operating system", "data structure",
-                "dsa", "machine learning", "deep learning", "artificial intelligence", "engineering",
-                "gate", "exam", "exams", "syllabus", "semester", "diploma", "coding", "fastapi",
-                "react", "programming", "computer network", "dbms", "sql", "math", "mathematics",
-                "physics", "electronics", "cnn", "nlp", "transformer", "backpropagation",
-                "gradient descent", "svm", "freecodecamp", "neso academy", "gate smashers",
-                "love babbar", "campusx", "history", "biology", "chemistry", "notes", "upsc",
-                "study with me", "class 12", "neet", "jee", "learn", "how to code", "beginner tutorial"
-            ]
-        },
-        "gaming": {
-            "name": "🎮 Gaming & Esports",
-            "keywords": [
-                "game", "gameplay", "gaming", "minecraft", "gta", "valorant", "fortnite",
-                "pubg", "bgmi", "roblox", "call of duty", "cod", "playthrough", "walkthrough",
-                "stream", "twitch", "esports", "boss fight", "clutch", "ranked", "1v5", "ace"
-            ]
-        },
-        "comedy": {
-            "name": "😂 Comedy & Pranks",
-            "keywords": [
-                "prank", "comedy", "funny", "stand-up", "joke", "roast", "meme", "memes",
-                "try not to laugh", "fails", "humor", "lol", "cringe", "reaction", "parody"
-            ]
-        },
-        "clickbait": {
-            "name": "🚨 Clickbait & Distraction",
-            "keywords": [
-                "mrbeast", "shocking", "you wont believe", "you won't believe", "secret hack",
-                "wealth hack", "make money fast", "crypto", "arrested", "exposed", "billionaire",
-                "$1 vs", "buying everything", "blindfolded", "viral challenge"
-            ]
-        }
-    }
+import os
+import sys
 
-    test_titles = [
-        "INSANE 1v5 Clutch in Valorant Ranked! #shorts",
-        "Funniest Cat Fails of the Week 😂 #shorts #funny",
-        "Python One-Liner Every Developer Must Know #coding #shorts",
-        "MrBeast gave me 10000 dollars #shorts",
-        "Dancing to viral sound in public prank",
-        "Fast Derivative & Calculus Shortcut for Engineering Exams #shorts",
-        "I showed this to my mom and she cried 😭 #shorts",
-        "How backpropagation works in Deep Neural Networks",
-        "Bro thought he was him 💀 #shorts #relatable"
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../backend")))
+from decision_engine import LayaDecisionEngine
+
+
+def test_all_20_categories():
+    engine = LayaDecisionEngine()
+    engine.save_preferences({
+        "shield_enabled": True,
+        "active_categories": ["study", "coding"],
+        "custom_keywords": [],
+    })
+
+    samples = [
+        ("Linear Algebra Eigenvalues & Gate Exam Lecture", "3Blue1Brown", "study"),
+        ("Python FastAPI & React Full Stack Coding Tutorial", "freeCodeCamp", "coding"),
+        ("RTX 5090 Gaming PC Build & Linux Hardware Review", "Linus Tech Tips", "tech"),
+        ("James Webb Telescope Black Hole & Cosmos Astronomy", "Veritasium", "scifi"),
+        ("Breaking News: Parliament Foreign Policy & Geopolitics", "WION", "news"),
+        ("Stock Market Investing, Mutual Funds & Macroeconomics", "Zerodha", "finance"),
+        ("How To Build a Second Brain in Notion & DIY Repair", "Ali Abdaal", "howto"),
+        ("Lex Fridman Podcast Full Episode: Deep Conversation", "Lex Fridman", "podcast"),
+        ("Chicken Biryani Recipe & Street Food MasterChef", "Ranveer Brar", "cooking"),
+        ("Ferrari Supercar vs Tesla EV Drag Race Car Review", "carwow", "autos"),
+        ("National Geographic Wildlife Safari & Cute Puppies", "BBC Earth", "pets"),
+        ("Solo Travel Guide Across Japan & Flight Review", "Drew Binsky", "travel"),
+        ("Lofi Hip Hop Beats Playlist & Official Music Video", "Lofi Girl", "music"),
+        ("Cricket World Cup Super Over Match Highlights", "ICC Official", "sports"),
+        ("Jujutsu Kaisen Gojo vs Sukuna & Attack on Titan Anime", "Crunchyroll", "anime"),
+        ("Tom and Jerry Classic Cartoon & Pixar 3D Animation", "WB Kids", "cartoon"),
+        ("INSANE 1v5 Clutch in Valorant Ranked Gameplay", "TenZ", "gaming"),
+        ("Day in My Life Daily Vlog & Minimalist Room Tour", "Flying Beast", "vlog"),
+        ("Stand-Up Comedy Special & Prank Calling Strangers", "Samay Raina", "comedy"),
+        ("$1 vs $1,000,000 Hotel Room! Shocking Wealth Hack", "MrBeast", "clickbait"),
     ]
 
-    for title in test_titles:
-        text = title.lower()
-        best_cat = "Distraction / Entertainment"
-        best_tag = "other"
-        max_score = 0
+    print(f"{'STATUS':<10} | {'YT ID':<7} | {'TAG':<10} | {'TITLE'}")
+    print("-" * 88)
+    for title, channel, expected_tag in samples:
+        res = engine.decide(title=title, channel=channel, track_stats=False)
+        status = "ALLOWED" if res.is_allowed else "BLURRED"
+        print(f"{status:<10} | ID {res.youtube_category_id:<4} | {res.category_tag:<10} | {title}")
+        assert res.category_tag == expected_tag, f"Expected {expected_tag}, got {res.category_tag} for '{title}'"
 
-        for tag, info in categories.items():
-            score = 0
-            for kw in info["keywords"]:
-                # Use word boundary matching for clean recognition
-                pattern = r'\b' + re.escape(kw) + r'\b'
-                if re.search(pattern, text):
-                    score += len(kw.split()) * 2 # multi-word keywords get higher weight
-            if score > max_score:
-                max_score = score
-                best_cat = info["name"]
-                best_tag = tag
+    print("\nALL 20 YOUTUBE CATEGORIES VERIFIED PERFECTLY!")
 
-        is_allowed = (best_tag == "study")
-        label = "ALLOWED [OK]" if is_allowed else "BLURRED [BLOCK]"
-        print(f"[{label}] ({best_cat.encode('ascii', 'ignore').decode()}) -> {title.encode('ascii', 'ignore').decode()}")
 
 if __name__ == "__main__":
-    test_classifier()
+    test_all_20_categories()
