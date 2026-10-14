@@ -27,8 +27,9 @@
         'kernel trick', 'eigenvalues', 'eigenvectors', 'convolutional', 'cnn', 'cnns',
         'nlp', 'natural language processing', 'hugging face', 'transformer',
         'transformers', 'bert', 'modernbert', 'bidirectional', 'attention',
-        'backpropagation', 'gradient descent', 'engineering', 'gate exam', 'exam',
-        'exams', 'syllabus', 'semester', 'diploma', 'coding', 'fastapi', 'rest api',
+        'backpropagation', 'gradient descent', 'engineering', 'gate', 'gate exam', 'cracked gate',
+        'gate preparation', 'gate smashers', 'iit', 'iit bombay', 'exam', 'exams',
+        'syllabus', 'semester', 'diploma', 'coding', 'fastapi', 'rest api',
         'django', 'react', 'react js', 'programming', 'oop', 'java', 'c++',
         'c programming', 'computer network', 'computer networks', 'osi model',
         'tcp/ip', 'dbms', 'database management', 'sql', 'mathematics', 'physics',
@@ -77,9 +78,17 @@
     anime: {
       name: '⚔️ Anime & Manga',
       kws: [
-        'anime', 'manga', 'naruto', 'one piece', 'bleach', 'attack on titan', 'aot',
-        'jujutsu kaisen', 'jjk', 'demon slayer', 'dragon ball', 'dbz', 'ghibli',
-        'solo leveling', 'chainsaw man', 'gojo', 'goku', 'luffy'
+        'anime', 'manga', 'naruto', 'shippuden', 'sasuke', 'itachi', 'madara',
+        'one piece', 'luffy', 'zoro', 'sanji', 'bleach', 'ichigo', 'aizen', 'tybw',
+        'attack on titan', 'aot', 'eren', 'levi', 'mikasa', 'jujutsu kaisen', 'jjk',
+        'gojo', 'sukuna', 'megumi', 'demon slayer', 'kimetsu', 'tanjiro', 'nezuko',
+        'dragon ball', 'dragon ball z', 'dragon ball super', 'dbz', 'dbs', 'goku',
+        'super saiyan', 'saiyan', 'ssj', 'bardock', 'vegeta', 'gohan', 'broly', 'frieza',
+        'piccolo', 'trunks', 'studio ghibli', 'ghibli', 'solo leveling', 'chainsaw man',
+        'death note', 'vinland saga', 'my hero academia', 'deku', 'one punch man',
+        'saitama', 'hunter x hunter', 'hxh', 'killua', 'tokyo ghoul', 'sword art online',
+        'fullmetal alchemist', 'berserk', 'evangelion', 'jojo', 'crunchyroll',
+        'funimation', 'opening ost', 'amv', 'anime edit', 'anime scene', 'anime clip'
       ]
     },
     gaming: {
@@ -233,10 +242,15 @@
 
   function triggerImmediateReScan(reason = 'Preferences Updated', showNotification = true) {
     decisionCache.clear();
-    document.querySelectorAll('.studyshield-card-container, [data-studyshield-done]').forEach((el) => {
+    document.querySelectorAll('.studyshield-card-container, .studyshield-thumb-container, [data-studyshield-done]').forEach((el) => {
       delete el.dataset.studyshieldDone;
       delete el.dataset.studyshieldSignature;
       delete el.dataset.studyshieldUserRevealed;
+      el.classList.remove('studyshield-thumb-blurred', 'studyshield-thumb-verified', 'studyshield-blurred', 'studyshield-study-verified');
+      const o = el.querySelector('.studyshield-overlay');
+      if (o) o.remove();
+      const p = el.querySelector('.studyshield-study-pill');
+      if (p) p.remove();
     });
     scanAllContent();
     if (showNotification) showToast(reason);
@@ -470,6 +484,34 @@
     });
   }
 
+  function getThumbnailContainer(el) {
+    // 1. YouTube standard video cards
+    const ytdThumb = el.querySelector('ytd-thumbnail, #thumbnail, a#thumbnail');
+    if (ytdThumb) return ytdThumb;
+
+    // 2. Mock test page thumbnail box
+    const thumbBox = el.querySelector('.thumb-box');
+    if (thumbBox) return thumbBox;
+
+    // 3. YouTube Shorts shelf items
+    const shortsThumb = el.querySelector(
+      '.shortsLockupViewModelHostThumbnailContainer, .shortsLockupViewModelHostOutsideMetadataEndpoint'
+    );
+    if (shortsThumb) return shortsThumb;
+
+    // 4. Modern lockup view model
+    const lockupImg = el.querySelector(
+      '.yt-lockup-view-model__content-image, .yt-lockup-metadata-view-model-wiz__thumbnail-container'
+    );
+    if (lockupImg) return lockupImg;
+
+    // 5. Fullscreen Shorts player container
+    const reelContainer = el.querySelector('#short-video-container, #player-container');
+    if (reelContainer) return reelContainer;
+
+    return el;
+  }
+
   async function evaluateElement(el) {
     const { title, channel, href } = extractMetadata(el);
     if (!title || title.length < 2) return;
@@ -492,6 +534,9 @@
     el.dataset.studyshieldDone = 'true';
     el.dataset.studyshieldSignature = signature;
 
+    const thumbEl = getThumbnailContainer(el);
+    thumbEl.classList.add('studyshield-thumb-container');
+
     const isShort =
       el.tagName.toLowerCase().includes('reel') ||
       el.classList.contains('shortsLockupViewModelHost') ||
@@ -501,10 +546,13 @@
       el.querySelector('a[href*="/shorts/"]') !== null;
 
     if (!decision.is_allowed && !el.dataset.studyshieldUserRevealed) {
-      el.classList.add('studyshield-blurred');
+      // 🚫 BLUR ONLY THE VIDEO / THUMBNAIL CONTAINER
+      // The bottom written text (title, channel, views, description) remains 100% UNTOUCHED and VISIBLE!
+      thumbEl.classList.add('studyshield-thumb-blurred');
+      thumbEl.classList.remove('studyshield-thumb-verified');
       el.classList.remove('studyshield-study-verified');
 
-      const existingPill = el.querySelector('.studyshield-study-pill');
+      const existingPill = thumbEl.querySelector('.studyshield-study-pill') || el.querySelector('.studyshield-study-pill');
       if (existingPill) existingPill.remove();
 
       // Only pause video if it is inside THIS element (or this element is the active Short)
@@ -522,12 +570,12 @@
         } catch (_) {}
       }
 
-      let overlay = el.querySelector('.studyshield-overlay');
+      let overlay = thumbEl.querySelector('.studyshield-overlay');
       if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'studyshield-overlay';
         if (isShort) overlay.classList.add('studyshield-overlay-shorts');
-        const targetContainer = (isShort && el.querySelector('#short-video-container')) || el;
+        const targetContainer = (isShort && el.querySelector('#short-video-container')) || thumbEl;
         targetContainer.appendChild(overlay);
       }
 
@@ -537,7 +585,7 @@
           <span>🛡️ StudyShield</span>
         </div>
         <div class="studyshield-badge-sub">
-          Blocked ${isShort ? 'Short' : 'Video'}: <strong>${decision.category}</strong> (${confPct}%)
+          Blocked: <strong>${decision.category}</strong> (${confPct}%)
         </div>
         <button class="studyshield-unblur-btn" type="button">👁️ Reveal & Play</button>
       `;
@@ -547,7 +595,7 @@
         e.stopPropagation();
         e.preventDefault();
         el.dataset.studyshieldUserRevealed = 'true';
-        el.classList.remove('studyshield-blurred');
+        thumbEl.classList.remove('studyshield-thumb-blurred');
         overlay.remove();
         if (videoTag) {
           videoTag.muted = false;
@@ -555,18 +603,20 @@
         }
       });
     } else {
-      el.classList.remove('studyshield-blurred');
+      // ✅ ALLOWED VIDEO
+      thumbEl.classList.remove('studyshield-thumb-blurred');
+      thumbEl.classList.add('studyshield-thumb-verified');
       el.classList.add('studyshield-study-verified');
 
-      const existingOverlay = el.querySelector('.studyshield-overlay');
+      const existingOverlay = thumbEl.querySelector('.studyshield-overlay') || el.querySelector('.studyshield-overlay');
       if (existingOverlay) existingOverlay.remove();
 
       if (!isShort) {
-        let pill = el.querySelector('.studyshield-study-pill');
+        let pill = thumbEl.querySelector('.studyshield-study-pill');
         if (!pill) {
           pill = document.createElement('div');
           pill.className = 'studyshield-study-pill';
-          el.appendChild(pill);
+          thumbEl.appendChild(pill);
         }
         pill.innerHTML = `<span>✓ ${decision.category}</span>`;
       }

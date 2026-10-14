@@ -1,9 +1,9 @@
 {
   "accuracy": 1.0,
   "f1_score": 1.0,
-  "mean_latency_ms": 1.163281996268779,
-  "p50_latency_ms": 1.1232499673496932,
-  "p95_latency_ms": 1.4176199940266088,
+  "mean_latency_ms": 1.6673940035980195,
+  "p50_latency_ms": 1.5350000176113099,
+  "p95_latency_ms": 2.4758800020208582,
   "tp": 25,
   "fp": 0,
   "tn": 25,
@@ -15,7 +15,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.512399991042912,
+      "latency_ms": 1.7651999951340258,
       "is_correct": true
     },
     {
@@ -24,7 +24,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.3572999741882086,
+      "latency_ms": 1.6709999763406813,
       "is_correct": true
     },
     {
@@ -33,7 +33,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.4118999824859202,
+      "latency_ms": 2.148200001101941,
       "is_correct": true
     },
     {
@@ -42,7 +42,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.294999965466559,
+      "latency_ms": 1.8807000014930964,
       "is_correct": true
     },
     {
@@ -51,7 +51,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.3162000104784966,
+      "latency_ms": 1.8580000032670796,
       "is_correct": true
     },
     {
@@ -60,7 +60,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.3287999900057912,
+      "latency_ms": 1.7300000181421638,
       "is_correct": true
     },
     {
@@ -69,7 +69,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.1668999795801938,
+      "latency_ms": 1.569200016092509,
       "is_correct": true
     },
     {
@@ -78,7 +78,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.3701000134460628,
+      "latency_ms": 2.4486000183969736,
       "is_correct": true
     },
     {
@@ -87,7 +87,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.0987999849021435,
+      "latency_ms": 2.4981999886222184,
       "is_correct": true
     },
     {
@@ -96,7 +96,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.4223000034689903,
+      "latency_ms": 3.1475999858230352,
       "is_correct": true
     },
     {
@@ -105,7 +105,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.2820999836549163,
+      "latency_ms": 2.05210002604872,
       "is_correct": true
     },
     {
@@ -114,7 +114,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.0252000065520406,
+      "latency_ms": 1.3839000021107495,
       "is_correct": true
     },
     {
@@ -123,7 +123,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.0457999887876213,
+      "latency_ms": 1.3506999821402133,
       "is_correct": true
     },
     {
@@ -132,7 +132,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.0470999986864626,
+      "latency_ms": 1.3755999971181154,
       "is_correct": true
     },
     {
@@ -141,7 +141,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.1125999735668302,
+      "latency_ms": 1.4744999934919178,
       "is_correct": true
     },
     {
@@ -150,7 +150,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.2546000070869923,
+      "latency_ms": 2.202400006353855,
       "is_correct": true
     },
     {
@@ -159,7 +159,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.254499948117882,
+      "latency_ms": 1.665599993430078,
       "is_correct": true
     },
     {
@@ -168,7 +168,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.118200016207993,
+      "latency_ms": 1.4802999794483185,
       "is_correct": true
     },
     {
@@ -177,7 +177,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.197399978991598,
+      "latency_ms": 1.556800038088113,
       "is_correct": true
     },
     {
@@ -186,7 +186,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.0053999722003937,
+      "latency_ms": 1.339700014796108,
       "is_correct": true
     },
     {
@@ -195,7 +195,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.2137999874539673,
+      "latency_ms": 2.223399991635233,
       "is_correct": true
     },
     {
@@ -204,7 +204,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.2295999913476408,
+      "latency_ms": 2.7369000017642975,
       "is_correct": true
     },
     {
@@ -213,7 +213,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 0.9894999675452709,
+      "latency_ms": 1.4682000037282705,
       "is_correct": true
     },
     {
@@ -222,7 +222,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.1193999671377242,
+      "latency_ms": 1.497299992479384,
       "is_correct": true
     },
     {
@@ -231,7 +231,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.248000015038997,
+      "latency_ms": 1.6898000030778348,
       "is_correct": true
     },
     {
@@ -240,7 +240,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.99,
-      "latency_ms": 1.1172000085934997,
+      "latency_ms": 1.4932999620214105,
       "is_correct": true
     },
     {
@@ -249,7 +249,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.99,
-      "latency_ms": 1.0956000187434256,
+      "latency_ms": 1.4482999686151743,
       "is_correct": true
     },
     {
@@ -258,7 +258,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.99,
-      "latency_ms": 1.1399000068195164,
+      "latency_ms": 1.5170000260695815,
       "is_correct": true
     },
     {
@@ -267,7 +267,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.92,
-      "latency_ms": 0.9466999908909202,
+      "latency_ms": 1.227599976118654,
       "is_correct": true
     },
     {
@@ -276,7 +276,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.99,
-      "latency_ms": 1.2291999883018434,
+      "latency_ms": 1.3876999728381634,
       "is_correct": true
     },
     {
@@ -285,7 +285,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.98,
-      "latency_ms": 1.0701999999582767,
+      "latency_ms": 1.201000006403774,
       "is_correct": true
     },
     {
@@ -294,7 +294,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.92,
-      "latency_ms": 0.9276000200770795,
+      "latency_ms": 1.1899000382982194,
       "is_correct": true
     },
     {
@@ -303,7 +303,7 @@
       "predicted_study": false,
       "category": "\ud83d\udc84 Vlog & Daily Life",
       "confidence": 0.99,
-      "latency_ms": 1.2877000262960792,
+      "latency_ms": 1.6772000235505402,
       "is_correct": true
     },
     {
@@ -312,7 +312,7 @@
       "predicted_study": false,
       "category": "\ud83c\udf72 Cooking & Food",
       "confidence": 0.98,
-      "latency_ms": 0.9812000207602978,
+      "latency_ms": 1.6906000091694295,
       "is_correct": true
     },
     {
@@ -321,7 +321,7 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.99,
-      "latency_ms": 1.1270999675616622,
+      "latency_ms": 1.8701999797485769,
       "is_correct": true
     },
     {
@@ -330,7 +330,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.98,
-      "latency_ms": 1.0793000110425055,
+      "latency_ms": 1.477500016335398,
       "is_correct": true
     },
     {
@@ -339,7 +339,7 @@
       "predicted_study": false,
       "category": "\ud83c\udf72 Cooking & Food",
       "confidence": 0.98,
-      "latency_ms": 0.93629996990785,
+      "latency_ms": 1.415100006852299,
       "is_correct": true
     },
     {
@@ -348,7 +348,7 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.99,
-      "latency_ms": 1.0969999711960554,
+      "latency_ms": 1.8034999957308173,
       "is_correct": true
     },
     {
@@ -357,7 +357,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.1029000161215663,
+      "latency_ms": 1.3707000180147588,
       "is_correct": true
     },
     {
@@ -366,7 +366,7 @@
       "predicted_study": false,
       "category": "\ud83d\udc84 Vlog & Daily Life",
       "confidence": 0.99,
-      "latency_ms": 1.0801000171341002,
+      "latency_ms": 1.3884000363759696,
       "is_correct": true
     },
     {
@@ -375,7 +375,7 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.99,
-      "latency_ms": 0.826000003144145,
+      "latency_ms": 1.0967000271193683,
       "is_correct": true
     },
     {
@@ -384,7 +384,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.2125000357627869,
+      "latency_ms": 1.5922000166028738,
       "is_correct": true
     },
     {
@@ -393,7 +393,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.98,
-      "latency_ms": 1.5410000341944396,
+      "latency_ms": 1.93060003221035,
       "is_correct": true
     },
     {
@@ -402,7 +402,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.98,
-      "latency_ms": 1.2546000070869923,
+      "latency_ms": 1.8277999479323626,
       "is_correct": true
     },
     {
@@ -411,7 +411,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.095700019504875,
+      "latency_ms": 1.4767000102438033,
       "is_correct": true
     },
     {
@@ -420,7 +420,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.98,
-      "latency_ms": 1.060800044797361,
+      "latency_ms": 1.402400026563555,
       "is_correct": true
     },
     {
@@ -429,7 +429,7 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.92,
-      "latency_ms": 1.0574000189080834,
+      "latency_ms": 1.4046000433154404,
       "is_correct": true
     },
     {
@@ -438,7 +438,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.1983999866060913,
+      "latency_ms": 1.5530000091530383,
       "is_correct": true
     },
     {
@@ -447,7 +447,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfcf Sports & Fitness",
       "confidence": 0.99,
-      "latency_ms": 1.0839999886229634,
+      "latency_ms": 1.399400003720075,
       "is_correct": true
     },
     {
@@ -456,7 +456,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.1927999439649284,
+      "latency_ms": 1.3143999967724085,
       "is_correct": true
     }
   ]
