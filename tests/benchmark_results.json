@@ -1,0 +1,463 @@
+{
+  "accuracy": 0.94,
+  "f1_score": 0.9361702127659575,
+  "mean_latency_ms": 1.540854000049876,
+  "p50_latency_ms": 1.4752999995835125,
+  "p95_latency_ms": 1.9135600017762044,
+  "tp": 22,
+  "fp": 0,
+  "tn": 25,
+  "fn": 3,
+  "detailed": [
+    {
+      "title": "Complete Machine Learning Course for Beginners (with Python)",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.8942000024253502,
+      "is_correct": true
+    },
+    {
+      "title": "Gradient Descent Algorithm Explained Mathematically",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.810599998862017,
+      "is_correct": true
+    },
+    {
+      "title": "Diploma 5th Sem AI & ML Algorithms - Unit 1 Overview",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.5876999968895689,
+      "is_correct": true
+    },
+    {
+      "title": "ModernBERT Architecture and Bidirectional Attention Deep Dive",
+      "expected_study": true,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.4958000028855167,
+      "is_correct": false
+    },
+    {
+      "title": "Linear Algebra for Data Science: Eigenvalues and Eigenvectors",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.5397999959532171,
+      "is_correct": true
+    },
+    {
+      "title": "Python Full Stack Web Development Tutorial (Django & React)",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.5705999976489693,
+      "is_correct": true
+    },
+    {
+      "title": "Convolutional Neural Networks (CNNs) Explained in 10 Minutes",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.6271999993477948,
+      "is_correct": true
+    },
+    {
+      "title": "Data Structures & Algorithms in C++: Complete Roadmap",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.4762999999220483,
+      "is_correct": true
+    },
+    {
+      "title": "Decision Trees, Entropy, and Information Gain Walkthrough",
+      "expected_study": true,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.74,
+      "latency_ms": 1.5432000000146218,
+      "is_correct": false
+    },
+    {
+      "title": "Operating Systems - Process Scheduling Algorithms (FCFS, SJF, Round Robin)",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.7354999945382588,
+      "is_correct": true
+    },
+    {
+      "title": "Calculus 3: Multiple Integrals and Vector Fields Lecture 12",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.6193999981624074,
+      "is_correct": true
+    },
+    {
+      "title": "Introduction to Discrete Mathematics and Graph Theory",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.4242999968701042,
+      "is_correct": true
+    },
+    {
+      "title": "FastAPI Crash Course: Build REST APIs with Python",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.469900002120994,
+      "is_correct": true
+    },
+    {
+      "title": "How Backpropagation Actually Works in Neural Networks",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.4058999950066209,
+      "is_correct": true
+    },
+    {
+      "title": "Computer Networks: OSI Model vs TCP/IP Protocol Suite",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.4471999966190197,
+      "is_correct": true
+    },
+    {
+      "title": "Database Management Systems (DBMS) Full Course for University Exams",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.3806999995722435,
+      "is_correct": true
+    },
+    {
+      "title": "Support Vector Machines (SVM) - Mathematical Intuition & Kernel Trick",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.98,
+      "latency_ms": 1.4023999974597245,
+      "is_correct": true
+    },
+    {
+      "title": "Object Oriented Programming (OOP) in Java with Real Examples",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.4539999974658713,
+      "is_correct": true
+    },
+    {
+      "title": "Computer Organization & Architecture: Pipeline Hazards Explained",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.4726000008522533,
+      "is_correct": true
+    },
+    {
+      "title": "Reinforcement Learning: Q-Learning Algorithm from Scratch",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.4855999979772605,
+      "is_correct": true
+    },
+    {
+      "title": "Digital Electronics: Logic Gates, K-Maps, and Boolean Algebra",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.5119000017875805,
+      "is_correct": true
+    },
+    {
+      "title": "K-Means Clustering and Unsupervised Learning Tutorial",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.4236999995773658,
+      "is_correct": true
+    },
+    {
+      "title": "Git & GitHub Crash Course for Students & Beginners",
+      "expected_study": true,
+      "predicted_study": false,
+      "category": "\ud83d\udcbb Technology & Software",
+      "confidence": 0.98,
+      "latency_ms": 1.3923000005888753,
+      "is_correct": false
+    },
+    {
+      "title": "Natural Language Processing with Hugging Face Transformers",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.74,
+      "latency_ms": 1.421599998138845,
+      "is_correct": true
+    },
+    {
+      "title": "C Programming Language Full Course for Engineering Students",
+      "expected_study": true,
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.4921000038157217,
+      "is_correct": true
+    },
+    {
+      "title": "I Survived 100 Days in Hardcore Minecraft (Movie)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.74,
+      "latency_ms": 1.4253000044845976,
+      "is_correct": true
+    },
+    {
+      "title": "GTA 6 New Leaked Gameplay & Map Details! (Shocking)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.98,
+      "latency_ms": 1.4619000066886656,
+      "is_correct": true
+    },
+    {
+      "title": "Valorant Pro Ranked Highlights: 50 Kills Radiant Ace!",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.99,
+      "latency_ms": 2.4454000013065524,
+      "is_correct": true
+    },
+    {
+      "title": "Minecraft But Everything You Touch Turns to Diamonds",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.74,
+      "latency_ms": 1.3546000045607798,
+      "is_correct": true
+    },
+    {
+      "title": "Elden Ring: Defeating the Hardest Boss with No Armor",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.582800003234297,
+      "is_correct": true
+    },
+    {
+      "title": "Top 10 Insane Gaming Moments Caught on Stream",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.98,
+      "latency_ms": 1.5368000022135675,
+      "is_correct": true
+    },
+    {
+      "title": "$1 vs $1,000,000 Hotel Room Experience!",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.74,
+      "latency_ms": 1.4066000003367662,
+      "is_correct": true
+    },
+    {
+      "title": "Day in My Life as a 20-Year-Old in Mumbai (Street Food Vlog)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udc84 Vlog & Daily Life",
+      "confidence": 0.99,
+      "latency_ms": 1.5081000019563362,
+      "is_correct": true
+    },
+    {
+      "title": "Celebrity Interviews and Spicy Wings Challenge",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.3829000017722137,
+      "is_correct": true
+    },
+    {
+      "title": "Stand-Up Comedy Special: Life After College (Full Show)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\ude02 Comedy & Pranks",
+      "confidence": 0.99,
+      "latency_ms": 1.4742999992449768,
+      "is_correct": true
+    },
+    {
+      "title": "We Bought an Abandoned Island and Found This Inside...",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.5483000024687499,
+      "is_correct": true
+    },
+    {
+      "title": "I Tried Eating Only Pizza for 7 Days Straight",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udf72 Cooking & Food",
+      "confidence": 0.98,
+      "latency_ms": 1.3182000038796104,
+      "is_correct": true
+    },
+    {
+      "title": "Funniest Cats and Dogs of 2026 (Try Not to Laugh)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\ude02 Comedy & Pranks",
+      "confidence": 0.99,
+      "latency_ms": 1.4177999983076006,
+      "is_correct": true
+    },
+    {
+      "title": "Buying Everything in a Mall Blindfolded Challenge",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.99,
+      "latency_ms": 1.4269999956013635,
+      "is_correct": true
+    },
+    {
+      "title": "Room Tour 2026: My Ultra Aesthetic Minimalist Setup",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udc84 Vlog & Daily Life",
+      "confidence": 0.98,
+      "latency_ms": 1.7015999983414076,
+      "is_correct": true
+    },
+    {
+      "title": "Prank Calling Random Strangers for 24 Hours",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\ude02 Comedy & Pranks",
+      "confidence": 0.74,
+      "latency_ms": 1.3729999991483055,
+      "is_correct": true
+    },
+    {
+      "title": "SHOCKING: You Won't Believe What Just Happened in Hollywood!",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.99,
+      "latency_ms": 1.542800004244782,
+      "is_correct": true
+    },
+    {
+      "title": "Secret Wealth Hack They Don't Want You to Know! (Make \u20b910,000/hr)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.98,
+      "latency_ms": 1.5787000011187047,
+      "is_correct": true
+    },
+    {
+      "title": "New iPhone 18 Ultra: Apple Just Destroyed Android! (First Look)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 2.3242999959620647,
+      "is_correct": true
+    },
+    {
+      "title": "He Was Arrested Right After Doing This... Must Watch!",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.99,
+      "latency_ms": 1.4494999995804392,
+      "is_correct": true
+    },
+    {
+      "title": "Top 5 Conspiracy Theories That Might Actually Be True",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.5003000007709488,
+      "is_correct": true
+    },
+    {
+      "title": "Reacting to the Cringiest TikTok Videos on the Internet",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.396699997712858,
+      "is_correct": true
+    },
+    {
+      "title": "Bollywood Stars at the Red Carpet Award Night (Unseen Moments)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.4015000051585957,
+      "is_correct": true
+    },
+    {
+      "title": "Cricket World Cup Final Super Over Thriller Highlights!",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "\ud83c\udfcf Sports & Fitness",
+      "confidence": 0.99,
+      "latency_ms": 1.470399998652283,
+      "is_correct": true
+    },
+    {
+      "title": "How to Get Rich in 24 Hours with Zero Effort (Guaranteed)",
+      "expected_study": false,
+      "predicted_study": false,
+      "category": "Distraction / Entertainment",
+      "confidence": 0.85,
+      "latency_ms": 1.9294000012450852,
+      "is_correct": true
+    }
+  ]
+}

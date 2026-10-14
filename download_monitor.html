@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyShield — Laya Model Download Monitor</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --success: #34d399;
+      --text: #f8fafc;
+      --subtext: #94a3b8;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .badge {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      font-size: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+    p.sub {
+      color: var(--subtext);
+      font-size: 13px;
+      margin: 4px 0 0 0;
+    }
+    .progress-bar-bg {
+      background: #334155;
+      border-radius: 12px;
+      height: 22px;
+      overflow: hidden;
+      margin: 24px 0 16px 0;
+      position: relative;
+    }
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 12px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .stat-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--subtext);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+    .status-text {
+      font-size: 13px;
+      color: var(--subtext);
+      text-align: center;
+      margin-top: 20px;
+    }
+    .pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      margin-right: 6px;
+      box-shadow: 0 0 8px var(--success);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="badge">📥</div>
+      <div>
+        <h1>Laya Decision Model</h1>
+        <p class="sub">Source: convaiinnovations/laya (Hugging Face)</p>
+      </div>
+    </div>
+
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Progress</div>
+        <div class="stat-value" id="percentText">0.0%</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Downloaded</div>
+        <div class="stat-value" id="downloadedText">0 / 803 MB</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Speed</div>
+        <div class="stat-value" id="speedText">-- MB/s</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Estimated Time</div>
+        <div class="stat-value" id="etaText">-- s</div>
+      </div>
+    </div>
+
+    <div class="status-text">
+      <span class="pulse"></span><span id="statusMessage">Connecting to stream...</span>
+    </div>
+  </div>
+
+  <script>
+    async function updateStatus() {
+      try {
+        const res = await fetch('backend/models/laya/download_status.json?t=' + Date.now());
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        document.getElementById('progressFill').style.width = data.percentage + '%';
+        document.getElementById('percentText').innerText = data.percentage + '%';
+        document.getElementById('downloadedText').innerText = data.downloaded_mb + ' / ' + data.total_mb + ' MB';
+        document.getElementById('speedText').innerText = data.speed_mb_s + ' MB/s';
+        document.getElementById('etaText').innerText = data.eta_seconds > 0 ? data.eta_seconds + ' s' : 'Finishing...';
+        document.getElementById('statusMessage').innerText = data.status;
+
+        if (data.percentage >= 100) {
+          document.getElementById('statusMessage').innerHTML = '✅ Download Complete! Saved to backend/models/laya/model.safetensors';
+          document.getElementById('statusMessage').style.color = '#34d399';
+        }
+      } catch (err) {
+        // waiting for file creation
+      }
+    }
+    setInterval(updateStatus, 1000);
+    updateStatus();
+  </script>
+</body>
+</html>

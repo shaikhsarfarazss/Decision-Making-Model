@@ -1,0 +1,8 @@
+{
+  "percentage": 100.0,
+  "downloaded_mb": 803.6,
+  "total_mb": 803.6,
+  "speed_mb_s": 0.0,
+  "eta_seconds": 0,
+  "status": "Download 100% Complete! Saved to backend/models/laya/model.safetensors"
+}

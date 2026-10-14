@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Large Model Weights (exceeds GitHub 100MB limit)
+*.safetensors
+backend/models/laya/model.safetensors
+backend/models/laya/typed-decisions/model.safetensors
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
