@@ -1,11 +1,10 @@
 {
-  "shield_enabled": false,
+  "shield_enabled": true,
   "active_categories": [
-    "study",
-    "scifi",
-    "tech"
+    "study"
   ],
-  "allowed_count": 5,
-  "blocked_count": 6,
-  "custom_keywords": []
+  "custom_keywords": [],
+  "blocked_count": 0,
+  "allowed_count": 0,
+  "updated_at": 1791960000.0
 }

@@ -6,91 +6,75 @@
   <title>StudyShield Control Panel</title>
   <style>
     :root {
-      --bg: #090d16;
-      --card-bg: #131b2e;
-      --card-border: #202b42;
+      --bg: #070b14;
+      --card-bg: #111827;
+      --card-border: rgba(148, 163, 184, 0.16);
       --accent-blue: #38bdf8;
       --accent-glow: rgba(56, 189, 248, 0.35);
       --emerald: #10b981;
       --emerald-glow: rgba(16, 185, 129, 0.35);
-      --danger: #f87171;
+      --danger: #f43f5e;
       --text: #f8fafc;
       --subtext: #94a3b8;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
     body {
-      width: 370px;
-      max-height: 590px;
-      overflow-y: auto;
-      background: var(--bg);
+      width: 385px;
+      background: radial-gradient(circle at top right, #1e1b4b, var(--bg) 60%);
       color: var(--text);
       padding: 16px;
     }
-
-    body::-webkit-scrollbar {
-      width: 5px;
-    }
-    body::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
-    }
-
-    /* Header */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .logo-badge {
-      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      background: linear-gradient(135deg, #0284c7, #6366f1);
       color: white;
-      font-size: 16px;
-      font-weight: 800;
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
+      font-size: 17px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 12px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
     }
-
     .title {
       font-size: 16px;
       font-weight: 800;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.3px;
     }
-
+    .subtitle {
+      font-size: 10px;
+      color: var(--subtext);
+    }
     .status-pill {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 10px;
       font-weight: 700;
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(16, 185, 129, 0.14);
       border: 1px solid rgba(16, 185, 129, 0.4);
       color: #34d399;
-      padding: 3px 8px;
-      border-radius: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
     }
-
     .dot {
       width: 6px;
       height: 6px;
@@ -98,8 +82,30 @@
       background: #10b981;
       box-shadow: 0 0 6px #10b981;
     }
-
-    /* Master Shield Card */
+    .telemetry-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stat-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-box span.lbl {
+      font-size: 11px;
+      color: var(--subtext);
+      font-weight: 600;
+    }
+    .stat-box span.val {
+      font-size: 15px;
+      font-weight: 800;
+    }
     .switch-card {
       display: flex;
       align-items: center;
@@ -107,10 +113,9 @@
       background: var(--card-bg);
       padding: 12px 14px;
       border-radius: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       border: 1px solid var(--card-border);
     }
-
     .switch-info h4 {
       font-size: 13px;
       font-weight: 700;
@@ -121,20 +126,17 @@
       color: var(--subtext);
       margin-top: 2px;
     }
-
     .toggle {
       position: relative;
       display: inline-block;
       width: 44px;
       height: 24px;
     }
-
     .toggle input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-
     .slider {
       position: absolute;
       cursor: pointer;
@@ -143,7 +145,6 @@
       transition: .25s;
       border-radius: 24px;
     }
-
     .slider:before {
       position: absolute;
       content: "";
@@ -155,49 +156,41 @@
       transition: .25s;
       border-radius: 50%;
     }
-
     input:checked + .slider {
       background-color: #0284c7;
       box-shadow: 0 0 10px var(--accent-glow);
     }
-
     input:checked + .slider:before {
       transform: translateX(20px);
     }
-
-    /* Preferences Panel */
     .pref-section {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 13px;
+      margin-bottom: 12px;
     }
-
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-
     .section-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #cbd5e1;
     }
-
     .preset-btn-group {
       display: flex;
       gap: 5px;
     }
-
     .preset-btn {
       background: #1e293b;
       border: 1px solid #334155;
-      color: #94a3b8;
+      color: #cbd5e1;
       font-size: 10px;
       font-weight: 700;
       padding: 3px 7px;
@@ -209,83 +202,73 @@
       background: #334155;
       color: #fff;
     }
-
-    /* Category Checkbox Grid */
     .categories-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 7px;
+      margin-bottom: 10px;
     }
-
     .category-label {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(15, 23, 42, 0.6);
+      gap: 7px;
+      background: rgba(15, 23, 42, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
-      padding: 7px 9px;
-      font-size: 12px;
+      padding: 6px 8px;
+      font-size: 11.5px;
       font-weight: 600;
       color: #e2e8f0;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s;
       user-select: none;
     }
-
     .category-label:hover {
       background: rgba(56, 189, 248, 0.1);
       border-color: rgba(56, 189, 248, 0.3);
     }
-
     .category-label input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       border: 1.5px solid #64748b;
       border-radius: 4px;
       outline: none;
       cursor: pointer;
       position: relative;
       background: #0f172a;
-      transition: all 0.15s;
+      flex-shrink: 0;
     }
-
     .category-label input[type="checkbox"]:checked {
       background: #0284c7;
       border-color: #38bdf8;
     }
-
     .category-label input[type="checkbox"]:checked::after {
-      content: "✔";
+      content: "✓";
       font-size: 10px;
+      font-weight: 800;
       color: white;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
-
     .category-label.active {
-      border-color: rgba(56, 189, 248, 0.5);
-      background: rgba(2, 132, 199, 0.15);
+      border-color: rgba(56, 189, 248, 0.55);
+      background: rgba(2, 132, 199, 0.18);
       color: #38bdf8;
     }
-
-    /* Custom Keywords */
     .custom-input-box {
       display: flex;
       gap: 6px;
-      margin-top: 10px;
-      padding-top: 10px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
-
     .custom-input {
       flex: 1;
-      background: #0f172a;
+      background: #090d16;
       border: 1px solid #334155;
       border-radius: 7px;
       color: #fff;
@@ -296,7 +279,6 @@
     .custom-input:focus {
       border-color: var(--accent-blue);
     }
-
     .custom-add-btn {
       background: #334155;
       border: none;
@@ -307,84 +289,67 @@
       border-radius: 7px;
       cursor: pointer;
     }
-    .custom-add-btn:hover {
-      background: #475569;
-    }
-
     .chips-container {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
       margin-top: 6px;
     }
-
     .chip {
       background: #1e293b;
       border: 1px solid #334155;
       color: #f1f5f9;
       font-size: 10px;
       font-weight: 600;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 10px;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
     .chip-del {
       cursor: pointer;
-      color: #f87171;
+      color: #f43f5e;
       font-weight: bold;
     }
-
-    /* ACTION BUTTONS */
     .save-btn {
       width: 100%;
       background: linear-gradient(135deg, #059669, #10b981);
       color: white;
       border: none;
-      padding: 12px;
+      padding: 11px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
-      letter-spacing: 0.3px;
       cursor: pointer;
       box-shadow: 0 4px 14px var(--emerald-glow);
       transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
-
     .save-btn:hover {
-      background: linear-gradient(135deg, #047857, #059669);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px var(--emerald-glow);
     }
-
-    .save-btn:active {
-      transform: translateY(0);
+    .bottom-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
-
     .rescan-btn {
-      width: 100%;
       background: #1e293b;
-      color: #94a3b8;
+      color: #cbd5e1;
       border: 1px solid #334155;
-      padding: 8px;
+      padding: 7px;
       border-radius: 8px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
+      text-align: center;
+      text-decoration: none;
     }
     .rescan-btn:hover {
       background: #334155;
       color: #fff;
     }
-
-    /* Save Notification Toast Banner inside popup */
     .save-toast {
       background: rgba(16, 185, 129, 0.2);
       border: 1px solid rgba(16, 185, 129, 0.6);
@@ -396,32 +361,35 @@
       border-radius: 8px;
       margin-bottom: 8px;
       display: none;
-      animation: fadeIn 0.2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <div class="header">
     <div class="brand">
       <div class="logo-badge">🛡️</div>
       <div>
         <div class="title">StudyShield</div>
+        <div class="subtitle">System-1 Local AI Focus Filter</div>
       </div>
     </div>
     <div class="status-pill" id="statusPill">
-      <div class="dot"></div>
-      <span id="statusText">Laya Offline</span>
+      <div class="dot" id="statusDot"></div>
+      <span id="statusText">Checking...</span>
     </div>
   </div>
 
-  <!-- Master Shield Switch -->
+  <div class="telemetry-bar">
+    <div class="stat-box">
+      <span class="lbl">✅ Allowed</span>
+      <span class="val" id="allowedStat" style="color:#34d399">0</span>
+    </div>
+    <div class="stat-box">
+      <span class="lbl">🚫 Blurred</span>
+      <span class="val" id="blockedStat" style="color:#f43f5e">0</span>
+    </div>
+  </div>
+
   <div class="switch-card">
     <div class="switch-info">
       <h4>Focus Shield Protection</h4>
@@ -433,72 +401,50 @@
     </label>
   </div>
 
-  <!-- Preferences Section -->
   <div class="pref-section">
     <div class="section-header">
-      <div class="section-title">What Do You Want to Watch?</div>
+      <div class="section-title">Allowed Topics (12 Categories)</div>
       <div class="preset-btn-group">
-        <button class="preset-btn" id="btnStudyOnly" type="button">📚 Study Only</button>
+        <button class="preset-btn" id="btnStudyOnly" type="button">📚 Study</button>
         <button class="preset-btn" id="btnSelectAll" type="button">All</button>
         <button class="preset-btn" id="btnClearAll" type="button">Clear</button>
       </div>
     </div>
 
-    <!-- Category Checkboxes -->
     <div class="categories-grid" id="categoriesGrid">
-      <label class="category-label" data-tag="study">
-        <input type="checkbox" value="study"> 📚 Study/Code
-      </label>
-      <label class="category-label" data-tag="tech">
-        <input type="checkbox" value="tech"> 💻 Technology
-      </label>
-      <label class="category-label" data-tag="scifi">
-        <input type="checkbox" value="scifi"> 🚀 Sci-Fi/Space
-      </label>
-      <label class="category-label" data-tag="cooking">
-        <input type="checkbox" value="cooking"> 🍲 Cooking
-      </label>
-      <label class="category-label" data-tag="cartoon">
-        <input type="checkbox" value="cartoon"> 🎬 Cartoon
-      </label>
-      <label class="category-label" data-tag="anime">
-        <input type="checkbox" value="anime"> 🎌 Anime
-      </label>
-      <label class="category-label" data-tag="gaming">
-        <input type="checkbox" value="gaming"> 🎮 Gaming
-      </label>
-      <label class="category-label" data-tag="music">
-        <input type="checkbox" value="music"> 🎵 Music
-      </label>
-      <label class="category-label" data-tag="sports">
-        <input type="checkbox" value="sports"> 🏏 Sports
-      </label>
-      <label class="category-label" data-tag="vlog">
-        <input type="checkbox" value="vlog"> 💄 Daily Vlogs
-      </label>
+      <label class="category-label" data-tag="study"><input type="checkbox" value="study"> 📚 Study/Code</label>
+      <label class="category-label" data-tag="tech"><input type="checkbox" value="tech"> 💻 Technology</label>
+      <label class="category-label" data-tag="scifi"><input type="checkbox" value="scifi"> 🚀 Sci-Fi/Space</label>
+      <label class="category-label" data-tag="cooking"><input type="checkbox" value="cooking"> 🍲 Cooking</label>
+      <label class="category-label" data-tag="cartoon"><input type="checkbox" value="cartoon"> 🎨 Cartoon</label>
+      <label class="category-label" data-tag="anime"><input type="checkbox" value="anime"> ⚔️ Anime</label>
+      <label class="category-label" data-tag="gaming"><input type="checkbox" value="gaming"> 🎮 Gaming</label>
+      <label class="category-label" data-tag="music"><input type="checkbox" value="music"> 🎵 Music</label>
+      <label class="category-label" data-tag="sports"><input type="checkbox" value="sports"> 🏏 Sports</label>
+      <label class="category-label" data-tag="vlog"><input type="checkbox" value="vlog"> 💄 Daily Vlogs</label>
+      <label class="category-label" data-tag="comedy"><input type="checkbox" value="comedy"> 😂 Comedy</label>
+      <label class="category-label" data-tag="clickbait"><input type="checkbox" value="clickbait"> 🚨 Clickbait</label>
     </div>
 
-    <!-- Custom Keywords -->
     <div class="custom-input-box">
-      <input type="text" class="custom-input" id="customInput" placeholder="Add custom keyword (e.g. chess)...">
+      <input type="text" class="custom-input" id="customInput" placeholder="Add custom keyword (e.g. robotics)...">
       <button class="custom-add-btn" id="customAddBtn" type="button">+ Add</button>
     </div>
     <div class="chips-container" id="chipsContainer"></div>
   </div>
 
-  <!-- Notification Banner -->
   <div class="save-toast" id="saveToast">
-    ✅ Preferences Saved! Applied immediately to all YouTube tabs.
+    ✅ Preferences Saved & Applied to YouTube!
   </div>
 
-  <!-- Big Glowing Save Button -->
   <button class="save-btn" id="savePreferencesBtn" type="button">
-    💾 Save Preferences & Apply to YouTube
+    ⚡ Save Preferences & Apply to YouTube
   </button>
 
-  <button class="rescan-btn" id="forceRescanBtn" type="button">
-    🔄 Force Re-Scan Page Now
-  </button>
+  <div class="bottom-actions">
+    <button class="rescan-btn" id="forceRescanBtn" type="button">🔄 Force Re-Scan</button>
+    <a class="rescan-btn" href="http://127.0.0.1:8000/" target="_blank">🌐 Web Dashboard</a>
+  </div>
 
   <script src="popup.js"></script>
 </body>

@@ -1,13 +1,13 @@
 {
-  "accuracy": 0.94,
-  "f1_score": 0.9361702127659575,
-  "mean_latency_ms": 1.540854000049876,
-  "p50_latency_ms": 1.4752999995835125,
-  "p95_latency_ms": 1.9135600017762044,
-  "tp": 22,
+  "accuracy": 1.0,
+  "f1_score": 1.0,
+  "mean_latency_ms": 1.163281996268779,
+  "p50_latency_ms": 1.1232499673496932,
+  "p95_latency_ms": 1.4176199940266088,
+  "tp": 25,
   "fp": 0,
   "tn": 25,
-  "fn": 3,
+  "fn": 0,
   "detailed": [
     {
       "title": "Complete Machine Learning Course for Beginners (with Python)",
@@ -15,7 +15,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.8942000024253502,
+      "latency_ms": 1.512399991042912,
       "is_correct": true
     },
     {
@@ -24,7 +24,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.810599998862017,
+      "latency_ms": 1.3572999741882086,
       "is_correct": true
     },
     {
@@ -33,25 +33,25 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.5876999968895689,
+      "latency_ms": 1.4118999824859202,
       "is_correct": true
     },
     {
       "title": "ModernBERT Architecture and Bidirectional Attention Deep Dive",
       "expected_study": true,
-      "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.4958000028855167,
-      "is_correct": false
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.294999965466559,
+      "is_correct": true
     },
     {
       "title": "Linear Algebra for Data Science: Eigenvalues and Eigenvectors",
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.5397999959532171,
+      "confidence": 0.99,
+      "latency_ms": 1.3162000104784966,
       "is_correct": true
     },
     {
@@ -60,7 +60,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.5705999976489693,
+      "latency_ms": 1.3287999900057912,
       "is_correct": true
     },
     {
@@ -68,8 +68,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.6271999993477948,
+      "confidence": 0.99,
+      "latency_ms": 1.1668999795801938,
       "is_correct": true
     },
     {
@@ -77,18 +77,18 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.4762999999220483,
+      "confidence": 0.99,
+      "latency_ms": 1.3701000134460628,
       "is_correct": true
     },
     {
       "title": "Decision Trees, Entropy, and Information Gain Walkthrough",
       "expected_study": true,
-      "predicted_study": false,
-      "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.74,
-      "latency_ms": 1.5432000000146218,
-      "is_correct": false
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 1.0987999849021435,
+      "is_correct": true
     },
     {
       "title": "Operating Systems - Process Scheduling Algorithms (FCFS, SJF, Round Robin)",
@@ -96,7 +96,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.7354999945382588,
+      "latency_ms": 1.4223000034689903,
       "is_correct": true
     },
     {
@@ -104,8 +104,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.6193999981624074,
+      "confidence": 0.99,
+      "latency_ms": 1.2820999836549163,
       "is_correct": true
     },
     {
@@ -114,7 +114,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.4242999968701042,
+      "latency_ms": 1.0252000065520406,
       "is_correct": true
     },
     {
@@ -123,7 +123,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.469900002120994,
+      "latency_ms": 1.0457999887876213,
       "is_correct": true
     },
     {
@@ -131,8 +131,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.4058999950066209,
+      "confidence": 0.99,
+      "latency_ms": 1.0470999986864626,
       "is_correct": true
     },
     {
@@ -140,8 +140,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.4471999966190197,
+      "confidence": 0.99,
+      "latency_ms": 1.1125999735668302,
       "is_correct": true
     },
     {
@@ -149,8 +149,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.3806999995722435,
+      "confidence": 0.99,
+      "latency_ms": 1.2546000070869923,
       "is_correct": true
     },
     {
@@ -158,8 +158,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.98,
-      "latency_ms": 1.4023999974597245,
+      "confidence": 0.99,
+      "latency_ms": 1.254499948117882,
       "is_correct": true
     },
     {
@@ -167,8 +167,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.4539999974658713,
+      "confidence": 0.99,
+      "latency_ms": 1.118200016207993,
       "is_correct": true
     },
     {
@@ -177,7 +177,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.4726000008522533,
+      "latency_ms": 1.197399978991598,
       "is_correct": true
     },
     {
@@ -185,8 +185,8 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.4855999979772605,
+      "confidence": 0.99,
+      "latency_ms": 1.0053999722003937,
       "is_correct": true
     },
     {
@@ -195,7 +195,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.5119000017875805,
+      "latency_ms": 1.2137999874539673,
       "is_correct": true
     },
     {
@@ -203,26 +203,26 @@
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.4236999995773658,
+      "confidence": 0.99,
+      "latency_ms": 1.2295999913476408,
       "is_correct": true
     },
     {
       "title": "Git & GitHub Crash Course for Students & Beginners",
       "expected_study": true,
-      "predicted_study": false,
-      "category": "\ud83d\udcbb Technology & Software",
-      "confidence": 0.98,
-      "latency_ms": 1.3923000005888753,
-      "is_correct": false
+      "predicted_study": true,
+      "category": "\ud83d\udcda Study & Education",
+      "confidence": 0.99,
+      "latency_ms": 0.9894999675452709,
+      "is_correct": true
     },
     {
       "title": "Natural Language Processing with Hugging Face Transformers",
       "expected_study": true,
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
-      "confidence": 0.74,
-      "latency_ms": 1.421599998138845,
+      "confidence": 0.99,
+      "latency_ms": 1.1193999671377242,
       "is_correct": true
     },
     {
@@ -231,7 +231,7 @@
       "predicted_study": true,
       "category": "\ud83d\udcda Study & Education",
       "confidence": 0.99,
-      "latency_ms": 1.4921000038157217,
+      "latency_ms": 1.248000015038997,
       "is_correct": true
     },
     {
@@ -239,8 +239,8 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.74,
-      "latency_ms": 1.4253000044845976,
+      "confidence": 0.99,
+      "latency_ms": 1.1172000085934997,
       "is_correct": true
     },
     {
@@ -248,8 +248,8 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.98,
-      "latency_ms": 1.4619000066886656,
+      "confidence": 0.99,
+      "latency_ms": 1.0956000187434256,
       "is_correct": true
     },
     {
@@ -258,7 +258,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.99,
-      "latency_ms": 2.4454000013065524,
+      "latency_ms": 1.1399000068195164,
       "is_correct": true
     },
     {
@@ -266,17 +266,17 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
-      "confidence": 0.74,
-      "latency_ms": 1.3546000045607798,
+      "confidence": 0.92,
+      "latency_ms": 0.9466999908909202,
       "is_correct": true
     },
     {
       "title": "Elden Ring: Defeating the Hardest Boss with No Armor",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.582800003234297,
+      "category": "\ud83c\udfae Gaming & Esports",
+      "confidence": 0.99,
+      "latency_ms": 1.2291999883018434,
       "is_correct": true
     },
     {
@@ -285,7 +285,7 @@
       "predicted_study": false,
       "category": "\ud83c\udfae Gaming & Esports",
       "confidence": 0.98,
-      "latency_ms": 1.5368000022135675,
+      "latency_ms": 1.0701999999582767,
       "is_correct": true
     },
     {
@@ -293,8 +293,8 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
-      "confidence": 0.74,
-      "latency_ms": 1.4066000003367662,
+      "confidence": 0.92,
+      "latency_ms": 0.9276000200770795,
       "is_correct": true
     },
     {
@@ -303,16 +303,16 @@
       "predicted_study": false,
       "category": "\ud83d\udc84 Vlog & Daily Life",
       "confidence": 0.99,
-      "latency_ms": 1.5081000019563362,
+      "latency_ms": 1.2877000262960792,
       "is_correct": true
     },
     {
       "title": "Celebrity Interviews and Spicy Wings Challenge",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.3829000017722137,
+      "category": "\ud83c\udf72 Cooking & Food",
+      "confidence": 0.98,
+      "latency_ms": 0.9812000207602978,
       "is_correct": true
     },
     {
@@ -321,16 +321,16 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.99,
-      "latency_ms": 1.4742999992449768,
+      "latency_ms": 1.1270999675616622,
       "is_correct": true
     },
     {
       "title": "We Bought an Abandoned Island and Found This Inside...",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.5483000024687499,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.98,
+      "latency_ms": 1.0793000110425055,
       "is_correct": true
     },
     {
@@ -339,7 +339,7 @@
       "predicted_study": false,
       "category": "\ud83c\udf72 Cooking & Food",
       "confidence": 0.98,
-      "latency_ms": 1.3182000038796104,
+      "latency_ms": 0.93629996990785,
       "is_correct": true
     },
     {
@@ -348,7 +348,7 @@
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
       "confidence": 0.99,
-      "latency_ms": 1.4177999983076006,
+      "latency_ms": 1.0969999711960554,
       "is_correct": true
     },
     {
@@ -357,7 +357,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.4269999956013635,
+      "latency_ms": 1.1029000161215663,
       "is_correct": true
     },
     {
@@ -365,8 +365,8 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83d\udc84 Vlog & Daily Life",
-      "confidence": 0.98,
-      "latency_ms": 1.7015999983414076,
+      "confidence": 0.99,
+      "latency_ms": 1.0801000171341002,
       "is_correct": true
     },
     {
@@ -374,8 +374,8 @@
       "expected_study": false,
       "predicted_study": false,
       "category": "\ud83d\ude02 Comedy & Pranks",
-      "confidence": 0.74,
-      "latency_ms": 1.3729999991483055,
+      "confidence": 0.99,
+      "latency_ms": 0.826000003144145,
       "is_correct": true
     },
     {
@@ -384,7 +384,7 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.542800004244782,
+      "latency_ms": 1.2125000357627869,
       "is_correct": true
     },
     {
@@ -393,16 +393,16 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.98,
-      "latency_ms": 1.5787000011187047,
+      "latency_ms": 1.5410000341944396,
       "is_correct": true
     },
     {
       "title": "New iPhone 18 Ultra: Apple Just Destroyed Android! (First Look)",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 2.3242999959620647,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.98,
+      "latency_ms": 1.2546000070869923,
       "is_correct": true
     },
     {
@@ -411,34 +411,34 @@
       "predicted_study": false,
       "category": "\ud83d\udea8 Sensational & Clickbait",
       "confidence": 0.99,
-      "latency_ms": 1.4494999995804392,
+      "latency_ms": 1.095700019504875,
       "is_correct": true
     },
     {
       "title": "Top 5 Conspiracy Theories That Might Actually Be True",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.5003000007709488,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.98,
+      "latency_ms": 1.060800044797361,
       "is_correct": true
     },
     {
       "title": "Reacting to the Cringiest TikTok Videos on the Internet",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.396699997712858,
+      "category": "\ud83d\ude02 Comedy & Pranks",
+      "confidence": 0.92,
+      "latency_ms": 1.0574000189080834,
       "is_correct": true
     },
     {
       "title": "Bollywood Stars at the Red Carpet Award Night (Unseen Moments)",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.4015000051585957,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.99,
+      "latency_ms": 1.1983999866060913,
       "is_correct": true
     },
     {
@@ -447,16 +447,16 @@
       "predicted_study": false,
       "category": "\ud83c\udfcf Sports & Fitness",
       "confidence": 0.99,
-      "latency_ms": 1.470399998652283,
+      "latency_ms": 1.0839999886229634,
       "is_correct": true
     },
     {
       "title": "How to Get Rich in 24 Hours with Zero Effort (Guaranteed)",
       "expected_study": false,
       "predicted_study": false,
-      "category": "Distraction / Entertainment",
-      "confidence": 0.85,
-      "latency_ms": 1.9294000012450852,
+      "category": "\ud83d\udea8 Sensational & Clickbait",
+      "confidence": 0.99,
+      "latency_ms": 1.1927999439649284,
       "is_correct": true
     }
   ]
