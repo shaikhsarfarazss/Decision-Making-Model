@@ -2,15 +2,11 @@
   "shield_enabled": true,
   "active_categories": [
     "study",
-    "coding",
-    "scifi",
-    "anime"
+    "coding"
   ],
-  "custom_keywords": [
-    "cyberpunk"
-  ],
-  "blocked_count": 4,
-  "allowed_count": 4,
-  "updated_at": 1791968383.8449607,
+  "custom_keywords": [],
+  "blocked_count": 261,
+  "allowed_count": 17,
+  "updated_at": 1792294472.0808847,
   "recent_decisions": []
 }

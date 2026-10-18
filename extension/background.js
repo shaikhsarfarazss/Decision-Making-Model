@@ -3,7 +3,7 @@
 
 const API_BASE = 'http://127.0.0.1:8000';
 
-async function fetchBackend(path, options = {}, timeoutMs = 450) {
+async function fetchBackend(path, options = {}, timeoutMs = 3000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -22,13 +22,9 @@ async function fetchBackend(path, options = {}, timeoutMs = 450) {
 
 function broadcastToTabs(payload) {
   chrome.tabs.query({}, (tabs) => {
+    if (!tabs) return;
     tabs.forEach((tab) => {
-      const url = tab.url || '';
-      if (
-        url.includes('youtube.com') ||
-        url.includes('test_youtube_mock.html') ||
-        url.startsWith('file://')
-      ) {
+      if (tab.id) {
         try {
           chrome.tabs.sendMessage(tab.id, payload, () => {
             void chrome.runtime.lastError;
@@ -40,6 +36,28 @@ function broadcastToTabs(payload) {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'BATCH_DECIDE') {
+    fetchBackend('/batch_decide', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: request.items || [] })
+    }, 1200)
+      .then((data) => sendResponse({ success: true, data: data.results || {} }))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
+    return true;
+  }
+
+  if (request.action === 'PROBE_METADATA') {
+    fetchBackend('/probe_metadata', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ video_id: request.videoId })
+    }, 3500)
+      .then((data) => sendResponse({ success: true, data: data.data }))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
+    return true;
+  }
+
   if (request.action === 'DECIDE') {
     fetchBackend('/decide', {
       method: 'POST',
@@ -59,19 +77,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === 'SAVE_PREFERENCES') {
-    fetchBackend('/preferences', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request.data)
-    }).catch(() => {});
-
     chrome.storage.local.set(request.data, () => {
       broadcastToTabs({
         action: 'PREFERENCES_UPDATED',
         data: request.data
       });
-      sendResponse({ success: true });
     });
+
+    fetchBackend('/preferences', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request.data)
+    }, 3000)
+      .then((data) => sendResponse({ success: true, data }))
+      .catch((err) => sendResponse({ success: true, offline: true }));
     return true;
   }
 

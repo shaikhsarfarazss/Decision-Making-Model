@@ -51,8 +51,21 @@ class LinkAnalysisRequest(BaseModel):
 
 class PreferenceUpdate(BaseModel):
     shield_enabled: Optional[bool] = None
+    shieldEnabled: Optional[bool] = None
     active_categories: Optional[List[str]] = None
+    activeCategories: Optional[List[str]] = None
     custom_keywords: Optional[List[str]] = None
+    customKeywords: Optional[List[str]] = None
+    updated_at: Optional[float] = None
+
+
+class BatchDecisionRequest(BaseModel):
+    items: List[Dict[str, Any]] = Field(..., description="List of video items to classify in a batch")
+    focus_domain: Optional[str] = Field(None, description="Optional domain override")
+
+
+class ProbeRequest(BaseModel):
+    video_id: str = Field(..., description="YouTube Video ID to probe via InnerTube player API")
 
 
 @app.get("/health")
@@ -79,12 +92,15 @@ def get_preferences() -> Dict[str, Any]:
 @app.post("/preferences")
 def update_preferences(pref: PreferenceUpdate) -> Dict[str, Any]:
     update_dict = {}
-    if pref.shield_enabled is not None:
-        update_dict["shield_enabled"] = pref.shield_enabled
-    if pref.active_categories is not None:
-        update_dict["active_categories"] = pref.active_categories
-    if pref.custom_keywords is not None:
-        update_dict["custom_keywords"] = pref.custom_keywords
+    shield = pref.shield_enabled if pref.shield_enabled is not None else pref.shieldEnabled
+    if shield is not None:
+        update_dict["shield_enabled"] = shield
+    cats = pref.active_categories if pref.active_categories is not None else pref.activeCategories
+    if cats is not None:
+        update_dict["active_categories"] = cats
+    kws = pref.custom_keywords if pref.custom_keywords is not None else pref.customKeywords
+    if kws is not None:
+        update_dict["custom_keywords"] = kws
     curr = engine.save_preferences(update_dict)
     return {"status": "updated", "preferences": curr}
 
@@ -122,6 +138,47 @@ def get_decision(req: DecisionRequest) -> Dict[str, Any]:
 def classify_endpoint(req: DecisionRequest) -> Dict[str, Any]:
     """Alias for /decide endpoint."""
     return get_decision(req)
+
+
+@app.post("/batch_decide")
+def batch_decide(req: BatchDecisionRequest) -> Dict[str, Any]:
+    """
+    Classifies up to 25 videos in a single vectorized batch (<15ms).
+    Uses Tier 0 (RAM/SQLite + Channel Authority) -> Tier 1 (3-Layer + Contrastive Vector) -> Tier 2 Flagging.
+    """
+    results = engine.decide_batch(req.items, focus_domain=req.focus_domain or "aiml")
+    now_str = time.strftime("%H:%M:%S")
+
+    # Push batch evaluations into the Live YouTube Interception Stream on the Web Dashboard
+    for item in req.items[:10]:
+        vid = str(item.get("id") or item.get("video_id") or "")
+        res = results.get(vid)
+        if res and item.get("title"):
+            recent_decisions.appendleft(
+                {
+                    "title": item.get("title", "Batch Item")[:72],
+                    "channel": item.get("channel", "YouTube")[:36],
+                    "is_allowed": res.get("is_allowed", False),
+                    "category": res.get("category", "General"),
+                    "youtube_category_id": res.get("youtube_category_id", "24"),
+                    "youtube_macro_category": res.get("youtube_macro_category", "Entertainment"),
+                    "confidence": res.get("confidence", 0.90),
+                    "latency_ms": res.get("latency_ms", 0.5),
+                    "timestamp": now_str,
+                }
+            )
+    return {"success": True, "results": results}
+
+
+@app.post("/probe_metadata")
+def probe_metadata(req: ProbeRequest) -> Dict[str, Any]:
+    """
+    Tier 2 Async Probe: Queries YouTube's internal player API for official categoryId and microformat.
+    """
+    result = engine.probe_youtube_category(req.video_id)
+    if result:
+        return {"success": True, "data": result}
+    return {"success": False, "message": f"Could not probe metadata for video {req.video_id}"}
 
 
 
@@ -329,6 +386,7 @@ def web_dashboard() -> str:
             state.active_categories.push(c.tag);
           }
           renderCategories();
+          savePrefs(false);
         };
         grid.appendChild(div);
       });
@@ -352,24 +410,35 @@ def web_dashboard() -> str:
         state.custom_keywords.push(v);
         inp.value = '';
         renderChips();
+        savePrefs(false);
       }
     }
-    function removeKw(i) { state.custom_keywords.splice(i, 1); renderChips(); }
-    function toggleMaster() { state.shield_enabled = !state.shield_enabled; savePrefs(); }
+    function removeKw(i) {
+      state.custom_keywords.splice(i, 1);
+      renderChips();
+      savePrefs(false);
+    }
+    function toggleMaster() {
+      state.shield_enabled = !state.shield_enabled;
+      savePrefs(true);
+    }
     function setPreset(p) {
       state.active_categories = p === 'all' ? CATEGORIES.map(c => c.tag) : p;
       renderCategories();
+      savePrefs(false);
     }
 
-    async function savePrefs() {
+    async function savePrefs(showFeedback = true) {
       const btn = document.getElementById('saveBtn');
       await fetch('/preferences', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(state)
       });
-      btn.innerText = '✅ Saved & Broadcasted!';
-      setTimeout(() => btn.innerText = '⚡ Save & Sync to Chrome Extension + Desktop', 1800);
+      if (showFeedback) {
+        btn.innerText = '✅ Saved & Broadcasted!';
+        setTimeout(() => btn.innerText = '⚡ Save & Sync to Chrome Extension + Desktop', 1800);
+      }
       pollState();
     }
 
@@ -410,11 +479,35 @@ def web_dashboard() -> str:
       try {
         const res = await fetch('/preferences');
         const d = await res.json();
-        state.shield_enabled = d.shield_enabled;
-        document.getElementById('statShield').innerText = d.shield_enabled ? 'ACTIVE' : 'PAUSED';
-        document.getElementById('statShield').style.color = d.shield_enabled ? '#38bdf8' : '#f59e0b';
+
+        // 1. Sync Shield Enabled toggle
+        if (d.shield_enabled !== undefined && state.shield_enabled !== d.shield_enabled) {
+          state.shield_enabled = d.shield_enabled;
+        }
+        document.getElementById('statShield').innerText = state.shield_enabled ? 'ACTIVE' : 'PAUSED';
+        document.getElementById('statShield').style.color = state.shield_enabled ? '#38bdf8' : '#f59e0b';
         document.getElementById('statAllowed').innerText = d.allowed_count || 0;
         document.getElementById('statBlocked').innerText = d.blocked_count || 0;
+
+        // 2. Real-time two-way synchronization: If preferences updated in Extension, reflect them immediately!
+        const currentCatsSorted = (state.active_categories || []).slice().sort();
+        const serverCatsSorted = (d.active_categories || []).slice().sort();
+        const categoriesChanged = JSON.stringify(currentCatsSorted) !== JSON.stringify(serverCatsSorted);
+
+        const currentKwSorted = (state.custom_keywords || []).slice().sort();
+        const serverKwSorted = (d.custom_keywords || []).slice().sort();
+        const keywordsChanged = JSON.stringify(currentKwSorted) !== JSON.stringify(serverKwSorted);
+
+        if (categoriesChanged) {
+          state.active_categories = d.active_categories || ['study', 'coding'];
+          renderCategories();
+        }
+        if (keywordsChanged) {
+          state.custom_keywords = d.custom_keywords || [];
+          renderChips();
+        }
+
+        // 3. Update live interception stream
         if (d.recent_decisions && d.recent_decisions.length) {
           const fl = document.getElementById('feedList');
           fl.innerHTML = d.recent_decisions.map(item => `
@@ -439,7 +532,7 @@ def web_dashboard() -> str:
       renderCategories();
       renderChips();
       pollState();
-      setInterval(pollState, 2000);
+      setInterval(pollState, 1000);
     })();
   </script>
 </body>

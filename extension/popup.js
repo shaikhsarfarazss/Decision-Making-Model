@@ -1,4 +1,4 @@
-// StudyShield Extension Popup Controller — 20 YouTube Categories (Study & Coding Separated)
+// StudyShield Extension Popup Controller — 20 YouTube Categories (Real-Time Bidirectional Sync)
 document.addEventListener('DOMContentLoaded', async () => {
   const shieldToggle = document.getElementById('shieldToggle');
   const switchSub = document.getElementById('switchSub');
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const idx = parseInt(e.target.dataset.idx, 10);
         currentKeywords.splice(idx, 1);
         renderChips();
+        savePreferences(false);
       });
     });
   }
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderChips();
   }
 
+  // 1. Initial State from Local Storage (instant UI populate)
   const localData = await new Promise((resolve) => {
     chrome.storage.local.get(
       ['shieldEnabled', 'activeCategories', 'customKeywords', 'updated_at'],
@@ -70,13 +72,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     localData.customKeywords || []
   );
 
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 500);
-    const pRes = await fetch('http://127.0.0.1:8000/preferences', { signal: controller.signal });
-    clearTimeout(timer);
-    if (pRes.ok) {
-      const pData = await pRes.json();
+  // 2. Fetch Latest State from Backend ONCE at startup to get server state and live stats
+  chrome.runtime.sendMessage({ action: 'GET_PREFERENCES' }, (response) => {
+    if (!chrome.runtime.lastError && response && response.success && response.data) {
+      const pData = response.data;
       statusText.innerText = 'Laya 3-Layer (0.2ms)';
       allowedStat.innerText = pData.allowed_count || 0;
       blockedStat.innerText = pData.blocked_count || 0;
@@ -87,66 +86,26 @@ document.addEventListener('DOMContentLoaded', async () => {
           pData.custom_keywords || []
         );
       }
+    } else {
+      statusText.innerText = 'In-Browser 3-Layer';
     }
-  } catch (_) {
-    statusText.innerText = 'In-Browser 3-Layer';
+  });
+
+  // 3. Periodic Telemetry Stats Polling ONLY (NEVER touches checkboxes to prevent unselecting!)
+  function pollTelemetry() {
+    chrome.runtime.sendMessage({ action: 'GET_PREFERENCES' }, (response) => {
+      if (!chrome.runtime.lastError && response && response.success && response.data) {
+        const pData = response.data;
+        statusText.innerText = 'Laya 3-Layer (0.2ms)';
+        allowedStat.innerText = pData.allowed_count || 0;
+        blockedStat.innerText = pData.blocked_count || 0;
+      }
+    });
   }
+  const pollTimer = setInterval(pollTelemetry, 2000);
 
-  categoriesGrid.addEventListener('change', syncCategoryVisuals);
-
-  btnStudyOnly.addEventListener('click', () => {
-    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-      cb.checked = cb.value === 'study';
-    });
-    syncCategoryVisuals();
-  });
-
-  btnCodeOnly.addEventListener('click', () => {
-    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-      cb.checked = cb.value === 'coding';
-    });
-    syncCategoryVisuals();
-  });
-
-  btnStudyAndCode.addEventListener('click', () => {
-    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-      cb.checked = cb.value === 'study' || cb.value === 'coding';
-    });
-    syncCategoryVisuals();
-  });
-
-  btnSelectAll.addEventListener('click', () => {
-    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-      cb.checked = true;
-    });
-    syncCategoryVisuals();
-  });
-
-  btnClearAll.addEventListener('click', () => {
-    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-      cb.checked = false;
-    });
-    syncCategoryVisuals();
-  });
-
-  function addKeyword() {
-    const val = customInput.value.trim().toLowerCase();
-    if (val && !currentKeywords.includes(val)) {
-      currentKeywords.push(val);
-      customInput.value = '';
-      renderChips();
-    }
-  }
-
-  customAddBtn.addEventListener('click', addKeyword);
-  customInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addKeyword();
-    }
-  });
-
-  function savePreferences() {
+  // 4. Save Preferences function
+  function savePreferences(showToast = false) {
     const activeCats = Array.from(
       categoriesGrid.querySelectorAll('input[type="checkbox"]:checked')
     ).map((cb) => cb.value);
@@ -164,24 +123,94 @@ document.addEventListener('DOMContentLoaded', async () => {
       updated_at: timestamp
     };
 
-    chrome.runtime.sendMessage({ action: 'SAVE_PREFERENCES', data: payload }, () => {
-      saveToast.style.display = 'block';
-      saveToast.innerText = `✅ Saved! (${activeCats.length} of 20 categories allowed)`;
-      setTimeout(() => {
-        saveToast.style.display = 'none';
-      }, 2200);
+    // Immediately persist to local storage so user choices are never lost
+    chrome.storage.local.set(payload);
+
+    // Save to server & broadcast to all YouTube tabs
+    chrome.runtime.sendMessage({ action: 'SAVE_PREFERENCES', data: payload }, (res) => {
+      if (showToast) {
+        saveToast.style.display = 'block';
+        saveToast.innerText = `✅ Saved! (${activeCats.length} of 20 categories allowed)`;
+        setTimeout(() => {
+          saveToast.style.display = 'none';
+        }, 1800);
+      }
     });
   }
+
+  // 5. User Interaction Listeners — Checkboxes stay selected permanently!
+  categoriesGrid.addEventListener('change', () => {
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  btnStudyOnly.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = cb.value === 'study';
+    });
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  btnCodeOnly.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = cb.value === 'coding';
+    });
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  btnStudyAndCode.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = cb.value === 'study' || cb.value === 'coding';
+    });
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  btnSelectAll.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = true;
+    });
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  btnClearAll.addEventListener('click', () => {
+    categoriesGrid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+      cb.checked = false;
+    });
+    syncCategoryVisuals();
+    savePreferences(false);
+  });
+
+  function addKeyword() {
+    const val = customInput.value.trim().toLowerCase();
+    if (val && !currentKeywords.includes(val)) {
+      currentKeywords.push(val);
+      customInput.value = '';
+      renderChips();
+      savePreferences(false);
+    }
+  }
+
+  customAddBtn.addEventListener('click', addKeyword);
+  customInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addKeyword();
+    }
+  });
 
   shieldToggle.addEventListener('change', () => {
     const isEnabled = shieldToggle.checked;
     switchSub.innerText = isEnabled
       ? 'Blurs non-selected YouTube categories'
       : 'Shield is OFF. All videos remain clear.';
-    savePreferences();
+    savePreferences(true);
   });
 
-  savePreferencesBtn.addEventListener('click', savePreferences);
+  savePreferencesBtn.addEventListener('click', () => savePreferences(true));
 
   forceRescanBtn.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: 'FORCE_RESCAN' }, () => {

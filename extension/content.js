@@ -331,24 +331,46 @@
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  // Pre-compile all 20-category regexes ONCE at startup (prevents 15,000x RegExp lag in decideLocally)
+  const compiledTaxonomies = {};
+  for (const [tag, info] of Object.entries(categoryTaxonomies)) {
+    compiledTaxonomies[tag] = {
+      ...info,
+      channelsLower: (info.channels || []).map((c) => c.toLowerCase()),
+      kwPatterns: (info.kws || []).map((kw) => ({
+        regex: new RegExp('(?<!\\w)' + escapeRegex(kw.toLowerCase()) + '(?!\\w)', 'i'),
+        weight: kw.split(' ').length * 2 + (kw.includes(' ') ? 1 : 0)
+      }))
+    };
+  }
+
+  function setCacheLRU(key, value) {
+    if (decisionCache.has(key)) {
+      decisionCache.delete(key);
+    } else if (decisionCache.size >= 2000) {
+      // Evict oldest entry (strict 2,000-item LRU bound)
+      const oldestKey = decisionCache.keys().next().value;
+      if (oldestKey !== undefined) decisionCache.delete(oldestKey);
+    }
+    decisionCache.set(key, value);
+  }
+
   function decideLocally(title, channel = '') {
     const titleLower = (title || '').toLowerCase();
     const channelLower = (channel || '').toLowerCase();
     const cleanText = `${titleLower} ${channelLower}`.trim();
 
     const scores = {};
-    for (const [tag, info] of Object.entries(categoryTaxonomies)) {
+    for (const [tag, info] of Object.entries(compiledTaxonomies)) {
       let score = 0;
-      if (channelLower && info.channels) {
-        for (const ch of info.channels) {
+      if (channelLower && info.channelsLower) {
+        for (const ch of info.channelsLower) {
           if (channelLower.includes(ch)) score += 5;
         }
       }
-      for (const kw of info.kws) {
-        // Enforce strict word boundaries so substrings like "doc" never match inside "Bardock"
-        const pattern = new RegExp('(?<!\\w)' + escapeRegex(kw.toLowerCase()) + '(?!\\w)', 'i');
-        if (pattern.test(cleanText)) {
-          score += kw.split(' ').length * 2 + (kw.includes(' ') ? 1 : 0);
+      for (const { regex, weight } of info.kwPatterns) {
+        if (regex.test(cleanText)) {
+          score += weight;
         }
       }
       scores[tag] = score;
@@ -388,7 +410,7 @@
     }
 
     const bestInfo = categoryTaxonomies[bestTag] || {
-      name: '🎭 General Entertainment',
+      name: '🎬 General Entertainment',
       ytId: '24',
       ytMacro: 'Entertainment'
     };
@@ -455,7 +477,43 @@
   function extractVideoInfo(card) {
     let title = '';
     let channel = '';
+    let videoId = '';
+    let duration = '';
+    let isArtist = false;
 
+    // 1. Extract link & videoId
+    const linkEl = card.querySelector(
+      'a#thumbnail, a#video-title-link, a.shortsLockupViewModelHostEndpoint, a[href*="/watch?v="], a[href*="/shorts/"]'
+    );
+    const href = linkEl ? linkEl.getAttribute('href') : '';
+    if (href) {
+      const matchV = href.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+      const matchS = href.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
+      if (matchV) videoId = matchV[1];
+      else if (matchS) videoId = matchS[1];
+    }
+    if (!videoId && card.getAttribute('id')) {
+      const idAttr = card.getAttribute('id');
+      if (idAttr && idAttr.length === 11) videoId = idAttr;
+    }
+
+    // 2. Extract Duration
+    const timeEl = card.querySelector(
+      'ytd-thumbnail-overlay-time-status-renderer, span.ytd-thumbnail-overlay-time-status-renderer, .badge-shape-wiz__text'
+    );
+    if (timeEl && timeEl.textContent.trim()) {
+      duration = timeEl.textContent.trim();
+    }
+
+    // 3. Extract Official Artist Channel Badge
+    const artistBadge = card.querySelector(
+      '.badge-style-type-official-artist-badge, svg path[d*="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21"]'
+    );
+    if (artistBadge) {
+      isArtist = true;
+    }
+
+    // 4. Extract Title (Resilient modern 2026 YouTube layout fallbacks)
     const modernShortsTitle = card.querySelector(
       '.shortsLockupViewModelHostOutsideMetadataTitle, h3.shortsLockupViewModelHostMetadataTitle, a.shortsLockupViewModelHostOutsideMetadataEndpoint, .ytShortsVideoTitleViewModelShortsVideoTitle'
     );
@@ -465,7 +523,7 @@
 
     if (!title) {
       const fullscreenTitle = card.querySelector(
-        'yt-shorts-video-title-view-model span, ytd-reel-player-header-renderer #title, .reel-player-header-renderer h2, h1.ytShortsVideoTitleViewModelShortsVideoTitle'
+        'yt-reel-metapanel-view-model h2, h2.reel-player-header-renderer, #overlay ytd-reel-player-header-renderer #title, yt-shorts-video-title-view-model span, h1.ytShortsVideoTitleViewModelShortsVideoTitle'
       );
       if (fullscreenTitle && fullscreenTitle.textContent.trim()) {
         title = fullscreenTitle.textContent.trim();
@@ -481,14 +539,15 @@
       }
     }
 
-    if (!title) {
-      const anchor = card.querySelector(
-        'a#video-title-link, a.shortsLockupViewModelHostEndpoint, a[href*="/shorts/"], a[href*="/watch?v="], a#thumbnail'
-      );
-      if (anchor) {
-        const attrTitle = anchor.getAttribute('title') || anchor.getAttribute('aria-label');
-        if (attrTitle && attrTitle.trim()) {
-          title = attrTitle.trim();
+    if (!title && linkEl) {
+      const attrTitle = linkEl.getAttribute('title');
+      if (attrTitle && attrTitle.trim()) {
+        title = attrTitle.trim();
+      } else {
+        const ariaLabel = linkEl.getAttribute('aria-label');
+        if (ariaLabel && ariaLabel.trim()) {
+          // ONLY strip trailing screen-reader duration/views when falling back to aria-label!
+          title = ariaLabel.replace(/\s+\d+\s*(hours?|minutes?|seconds?)\s+[\d,]+\s+views?.*$/i, '').trim();
         }
       }
     }
@@ -496,69 +555,138 @@
     if (!title && window.location.pathname.startsWith('/shorts') && card.hasAttribute('is-active')) {
       const docT = document.title;
       if (docT && docT.toLowerCase() !== 'youtube') {
-        title = docT.replace(/- YouTube\$/i, '').trim();
+        // Fixed regex end-of-string anchor (was /- YouTube\$/i)
+        title = docT.replace(/\s*-\s*YouTube$/i, '').trim();
       }
     }
 
-    if (title) {
-      title = title.replace(/\b\d+\s*(hours?|minutes?|seconds?|views?)\b/gi, '').trim();
-    }
-
+    // 5. Extract Channel
     const channelEl = card.querySelector(
-      '.shortsLockupViewModelHostMetadataSubhead, yt-reel-channel-bar-view-model a, #channel-name, ytd-channel-name, .ytd-channel-name, .yt-content-metadata-view-model__metadata-row'
+      '.shortsLockupViewModelHostMetadataSubhead, yt-reel-channel-bar-view-model a, .ytReelChannelBarViewModelChannelName, #channel-name, ytd-channel-name, .ytd-channel-name, .yt-content-metadata-view-model__metadata-row'
     );
     if (channelEl) {
       channel = channelEl.textContent.trim().split('\n')[0].trim();
+      if (channel.includes('♪') || channel.includes('Official Artist')) {
+        isArtist = true;
+      }
     }
 
-    const linkEl = card.querySelector('a[href*="/watch?v="], a[href*="/shorts/"]');
-    const href = linkEl ? linkEl.getAttribute('href') : '';
-
-    return { title, channel, href };
+    return { title, channel, href, videoId, duration, isArtist };
   }
 
-  function getDecision(title, channel) {
-    const key = `${title.toLowerCase()}::${channel.toLowerCase()}::${shieldEnabled}::${activeCategories.join(',')}`;
-    if (decisionCache.has(key)) return Promise.resolve(decisionCache.get(key));
+  // 35ms Debounced Batch Queue & Multi-Element Map
+  const cardBatchQueue = [];
+  let batchDebounceTimer = null;
+  const cardElementsMap = new Map(); // videoId -> Set of card DOM nodes
 
-    return new Promise((resolve) => {
-      let resolved = false;
-      const fallbackTimer = setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          const fb = decideLocally(title, channel);
-          decisionCache.set(key, fb);
-          resolve(fb);
-        }
-      }, 250);
+  function queueCardForBatch(card, info) {
+    const { videoId, title, channel, duration, isArtist } = info;
+    const vid = videoId || `syn_${Math.abs(hashString(title + channel))}`;
+    const prefKey = `${shieldEnabled}::${activeCategories.join(',')}::${customKeywords.join(',')}`;
+    const cacheKey = `${vid}::${title.toLowerCase()}::${channel.toLowerCase()}::${prefKey}`;
 
-      try {
-        chrome.runtime.sendMessage(
-          { action: 'DECIDE', data: { title, channel } },
-          (response) => {
-            if (resolved) return;
-            resolved = true;
-            clearTimeout(fallbackTimer);
-            if (!chrome.runtime.lastError && response && response.success && response.data) {
-              decisionCache.set(key, response.data);
-              resolve(response.data);
-            } else {
-              const fb = decideLocally(title, channel);
-              decisionCache.set(key, fb);
-              resolve(fb);
+    // 1. LRU Cache Hit (0.001ms)
+    if (decisionCache.has(cacheKey)) {
+      applyCardState(card, decisionCache.get(cacheKey));
+      return;
+    }
+
+    // Map DOM card to this videoId for batch delivery
+    if (!cardElementsMap.has(vid)) {
+      cardElementsMap.set(vid, new Set());
+    }
+    cardElementsMap.get(vid).add(card);
+
+    if (!cardBatchQueue.some((item) => item.id === vid)) {
+      cardBatchQueue.push({
+        id: vid,
+        title,
+        channel,
+        duration,
+        is_artist: isArtist
+      });
+    }
+
+    if (!batchDebounceTimer) {
+      batchDebounceTimer = setTimeout(flushBatchQueue, 35);
+    }
+  }
+
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash << 5) - hash + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash;
+  }
+
+  function flushBatchQueue() {
+    batchDebounceTimer = null;
+    if (cardBatchQueue.length === 0) return;
+
+    const itemsToProcess = cardBatchQueue.splice(0, 25);
+
+    // CRITICAL FIX: If more than 25 cards were queued, schedule the next batch immediately!
+    if (cardBatchQueue.length > 0 && !batchDebounceTimer) {
+      batchDebounceTimer = setTimeout(flushBatchQueue, 35);
+    }
+
+    const prefKey = `${shieldEnabled}::${activeCategories.join(',')}::${customKeywords.join(',')}`;
+
+    chrome.runtime.sendMessage(
+      { action: 'BATCH_DECIDE', items: itemsToProcess },
+      (response) => {
+        if (!chrome.runtime.lastError && response && response.success && response.data) {
+          const results = response.data;
+          itemsToProcess.forEach((item) => {
+            const vid = item.id;
+            const res = results[vid] || decideLocally(item.title, item.channel);
+            const cacheKey = `${vid}::${item.title.toLowerCase()}::${item.channel.toLowerCase()}::${prefKey}`;
+            setCacheLRU(cacheKey, res);
+
+            const cards = cardElementsMap.get(vid);
+            if (cards) {
+              cards.forEach((card) => applyCardState(card, res));
+              cardElementsMap.delete(vid);
             }
-          }
-        );
-      } catch (_) {
-        if (!resolved) {
-          resolved = true;
-          clearTimeout(fallbackTimer);
-          const fb = decideLocally(title, channel);
-          decisionCache.set(key, fb);
-          resolve(fb);
+
+            // Tier 2 Async Failover: probe player category if flagged
+            if (res.needs_probe && vid && !vid.startsWith('syn_')) {
+              chrome.runtime.sendMessage(
+                { action: 'PROBE_METADATA', videoId: vid },
+                (probeResp) => {
+                  if (
+                    !chrome.runtime.lastError &&
+                    probeResp &&
+                    probeResp.success &&
+                    probeResp.data
+                  ) {
+                    const updatedRes = probeResp.data;
+                    setCacheLRU(cacheKey, updatedRes);
+                    const activeCards = document.querySelectorAll(`[data-ss-video-id="${vid}"]`);
+                    activeCards.forEach((c) => applyCardState(c, updatedRes));
+                  }
+                }
+              );
+            }
+          });
+        } else {
+          // Offline fallback
+          itemsToProcess.forEach((item) => {
+            const vid = item.id;
+            const fb = decideLocally(item.title, item.channel);
+            const cacheKey = `${vid}::${item.title.toLowerCase()}::${item.channel.toLowerCase()}::${prefKey}`;
+            setCacheLRU(cacheKey, fb);
+            const cards = cardElementsMap.get(vid);
+            if (cards) {
+              cards.forEach((card) => applyCardState(card, fb));
+              cardElementsMap.delete(vid);
+            }
+          });
         }
       }
-    });
+    );
   }
 
   function applyCardState(card, result) {
@@ -574,20 +702,25 @@
     const category = result.category || (isBlocked ? 'Blocked Distraction' : 'Allowed Content');
     const ytIdLabel = result.youtube_category_id ? `ID ${result.youtube_category_id}` : '';
 
-    // 1. Reset card indicator borders
+    // 1. Set data-ss-resolved for zero-flash CSS styling
+    card.dataset.ssResolved = isBlocked ? 'BLUR' : 'ALLOW';
+    card.dataset.studyshieldBlocked = isBlocked ? 'true' : 'false';
     card.classList.remove('studyshield-card-allowed', 'studyshield-card-blocked');
     card.classList.add(isBlocked ? 'studyshield-card-blocked' : 'studyshield-card-allowed');
-    card.dataset.studyshieldBlocked = isBlocked ? 'true' : 'false';
 
     // 2. Ensure downside text/details are NEVER blurred
-    const detailsEl = card.querySelector('#details, #meta, .yt-lockup-metadata-view-model, .meta-box, .shortsLockupViewModelHostOutsideMetadata');
+    const detailsEl = card.querySelector(
+      '#details, #meta, .yt-lockup-metadata-view-model, .meta-box, .shortsLockupViewModelHostOutsideMetadata'
+    );
     if (detailsEl) {
       detailsEl.style.setProperty('filter', 'none', 'important');
       detailsEl.style.setProperty('opacity', '1', 'important');
     }
 
     // 3. Blur ONLY the media elements inside the upper thumbnail container
-    const mediaElements = thumbContainer.querySelectorAll('img, video, ytd-moving-thumbnail-renderer, #video-preview, .thumb-box, .shortsLockupViewModelHostThumbnailContainer');
+    const mediaElements = thumbContainer.querySelectorAll(
+      'img, video, ytd-moving-thumbnail-renderer, #video-preview, .thumb-box, .shortsLockupViewModelHostThumbnailContainer'
+    );
     if (mediaElements.length > 0) {
       mediaElements.forEach((media) => {
         if (isBlocked && !card.dataset.studyshieldUserRevealed) {
@@ -604,14 +737,32 @@
       }
     }
 
-    // Pause active video on blocked reel/shorts
-    if (isBlocked && !card.dataset.studyshieldUserRevealed) {
-      const vid = card.querySelector('video');
-      if (vid && !vid.paused) {
-        try {
-          vid.pause();
-          vid.muted = true;
-        } catch (_) {}
+    // YouTube Shorts Audio Muting & Floating Center Pill
+    const isShorts =
+      window.location.pathname.startsWith('/shorts') ||
+      card.tagName.toLowerCase() === 'ytd-reel-video-renderer';
+    if (isShorts) {
+      let pill = card.querySelector('.studyshield-shorts-pill');
+      if (isBlocked && !card.dataset.studyshieldUserRevealed) {
+        const vidEl = card.querySelector('video');
+        if (vidEl) {
+          vidEl.muted = true;
+        }
+        if (!pill) {
+          pill = document.createElement('div');
+          pill.className = 'studyshield-shorts-pill';
+          pill.innerHTML = `<span>🛡️ ${category} Blurred (Click to Reveal)</span>`;
+          pill.addEventListener('click', (e) => {
+            e.stopPropagation();
+            card.dataset.studyshieldUserRevealed = 'true';
+            card.dataset.ssResolved = 'ALLOW';
+            if (vidEl) vidEl.muted = false;
+            pill.remove();
+          });
+          thumbContainer.appendChild(pill);
+        }
+      } else if (pill) {
+        pill.remove();
       }
     }
 
@@ -627,28 +778,31 @@
     if (isBlocked) {
       badge.classList.add(category.includes('Anime') ? 'studyshield-badge-anime' : 'studyshield-badge-blocked');
       badge.innerHTML = `<span>🚫 ${category} ${ytIdLabel}</span>`;
-      
-      // Unblur reveal button
+
       if (!card.dataset.studyshieldUserRevealed) {
-        const unblurBtn = document.createElement('button');
-        unblurBtn.className = 'studyshield-unblur-btn';
-        unblurBtn.textContent = '👁️ Reveal';
-        unblurBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          card.dataset.studyshieldUserRevealed = 'true';
-          card.classList.remove('studyshield-card-blocked');
-          card.classList.add('studyshield-card-allowed');
-          mediaElements.forEach((m) => m.classList.remove('studyshield-blur-media'));
-          thumbContainer.classList.remove('studyshield-thumb-blurred');
-          badge.remove();
-          const vid = card.querySelector('video');
-          if (vid) {
-            vid.muted = false;
-            vid.play().catch(() => {});
-          }
-        });
-        badge.appendChild(unblurBtn);
+        let unblurBtn = badge.querySelector('.studyshield-unblur-btn');
+        if (!unblurBtn) {
+          unblurBtn = document.createElement('button');
+          unblurBtn.className = 'studyshield-unblur-btn';
+          unblurBtn.textContent = '👁️ Reveal';
+          unblurBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            card.dataset.studyshieldUserRevealed = 'true';
+            card.dataset.ssResolved = 'ALLOW';
+            card.classList.remove('studyshield-card-blocked');
+            card.classList.add('studyshield-card-allowed');
+            mediaElements.forEach((m) => m.classList.remove('studyshield-blur-media'));
+            thumbContainer.classList.remove('studyshield-thumb-blurred');
+            badge.remove();
+            const vid = card.querySelector('video');
+            if (vid) {
+              vid.muted = false;
+              vid.play().catch(() => {});
+            }
+          });
+          badge.appendChild(unblurBtn);
+        }
       }
     } else {
       badge.classList.add('studyshield-badge-study');
@@ -656,7 +810,7 @@
     }
   }
 
-  // Keep YouTube's hover inline video preview blurred if the hovered card is blocked
+  // Hover inline video preview blur protection
   document.addEventListener(
     'mouseover',
     (e) => {
@@ -673,31 +827,58 @@
     true
   );
 
-  async function classifyCard(card) {
-    const { title, channel, href } = extractVideoInfo(card);
-    if (!title || title.length < 2) return;
+  // IntersectionObserver for lazy on-screen card classification
+  const cardObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          classifyCard(entry.target);
+        }
+      });
+    },
+    { rootMargin: '300px 0px' }
+  );
 
-    const signature = `${href}::${title}`;
-    if (card.dataset.studyshieldDone === 'true' && card.dataset.studyshieldSignature === signature) {
-      return;
-    }
+  function classifyCard(card) {
+    const info = extractVideoInfo(card);
+    if (!info.title || info.title.length < 2) return;
 
-    if (card.dataset.studyshieldSignature && card.dataset.studyshieldSignature !== signature) {
+    // Polymer Recycling Detection:
+    // If the videoId changed on this recycled DOM node, reset its state
+    if (card.dataset.ssVideoId && card.dataset.ssVideoId !== info.videoId) {
+      delete card.dataset.ssResolved;
+      delete card.dataset.studyshieldDone;
       delete card.dataset.studyshieldUserRevealed;
     }
 
-    card.dataset.studyshieldDone = 'true';
-    card.dataset.studyshieldSignature = signature;
-    processedCards.set(card, title);
-
-    const result = await getDecision(title, channel);
-    if (result) {
-      applyCardState(card, result);
+    if (card.dataset.ssResolved && card.dataset.ssVideoId === info.videoId) {
+      return; // Already resolved for this exact video
     }
+
+    card.dataset.ssVideoId = info.videoId || `syn_${Math.abs(hashString(info.title + info.channel))}`;
+    card.dataset.studyshieldDone = 'true';
+    processedCards.set(card, info.title);
+
+    queueCardForBatch(card, info);
   }
 
   function scanAllContent() {
-    document.querySelectorAll(VIDEO_CARD_SELECTORS).forEach(classifyCard);
+    // 1. Observe all feed cards via IntersectionObserver
+    document.querySelectorAll(VIDEO_CARD_SELECTORS).forEach((card) => {
+      cardObserver.observe(card);
+    });
+
+    // 2. Pre-cache next YouTube Shorts reel
+    if (window.location.pathname.startsWith('/shorts')) {
+      const activeReel = document.querySelector('ytd-reel-video-renderer[is-active]');
+      if (activeReel) {
+        classifyCard(activeReel);
+        const nextReel = activeReel.nextElementSibling;
+        if (nextReel && nextReel.tagName.toLowerCase() === 'ytd-reel-video-renderer') {
+          classifyCard(nextReel);
+        }
+      }
+    }
   }
 
   function scheduleScan() {
@@ -705,7 +886,7 @@
     scanDebounceTimer = setTimeout(() => {
       scanDebounceTimer = null;
       scanAllContent();
-    }, 120);
+    }, 40);
   }
 
   function showToast(message) {
@@ -738,12 +919,33 @@
 
   function triggerImmediateReScan(reason = 'Preferences Updated', showNotification = true) {
     decisionCache.clear();
-    document.querySelectorAll(VIDEO_CARD_SELECTORS).forEach((el) => {
+    cardBatchQueue.length = 0;
+    if (batchDebounceTimer) {
+      clearTimeout(batchDebounceTimer);
+      batchDebounceTimer = null;
+    }
+    cardElementsMap.clear();
+
+    const cards = document.querySelectorAll(VIDEO_CARD_SELECTORS);
+    cards.forEach((el) => {
       delete el.dataset.studyshieldDone;
       delete el.dataset.studyshieldSignature;
       delete el.dataset.studyshieldUserRevealed;
+      delete el.dataset.ssResolved;
+      delete el.dataset.ssVideoId;
     });
-    scanAllContent();
+
+    // Immediately re-classify all cards currently in the DOM so on-screen videos blur/unblur instantly
+    cards.forEach((card) => {
+      classifyCard(card);
+      cardObserver.observe(card);
+    });
+
+    if (window.location.pathname.startsWith('/shorts')) {
+      const activeReel = document.querySelector('ytd-reel-video-renderer[is-active]');
+      if (activeReel) classifyCard(activeReel);
+    }
+
     if (showNotification) showToast(reason);
   }
 
@@ -831,12 +1033,14 @@
         if (response && response.success && response.data) {
           const d = response.data;
           const serverUpdated = d.updated_at || 0;
-          const categoriesMatch =
-            JSON.stringify(activeCategories) === JSON.stringify(d.active_categories);
+          const activeSorted = (activeCategories || []).slice().sort();
+          const serverCatsSorted = (d.active_categories || []).slice().sort();
+          const categoriesMatch = JSON.stringify(activeSorted) === JSON.stringify(serverCatsSorted);
           const shieldMatch =
             shieldEnabled === (d.shield_enabled !== undefined ? d.shield_enabled : true);
-          const kwMatch =
-            JSON.stringify(customKeywords) === JSON.stringify(d.custom_keywords || []);
+          const kwSorted = (customKeywords || []).slice().sort();
+          const serverKwSorted = (d.custom_keywords || []).slice().sort();
+          const kwMatch = JSON.stringify(kwSorted) === JSON.stringify(serverKwSorted);
 
           if (!categoriesMatch || !shieldMatch || !kwMatch || serverUpdated > lastUpdatedAt + 0.5) {
             shieldEnabled = d.shield_enabled !== undefined ? d.shield_enabled : true;
@@ -844,12 +1048,6 @@
             customKeywords = d.custom_keywords || [];
             lastUpdatedAt = serverUpdated;
 
-            chrome.storage.local.set({
-              shieldEnabled,
-              activeCategories,
-              customKeywords,
-              updated_at: lastUpdatedAt
-            });
             triggerImmediateReScan('Synced with Local Server');
           }
         }

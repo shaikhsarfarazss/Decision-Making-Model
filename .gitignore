@@ -19,3 +19,8 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# Databases / Caches
+*.db
+*.sqlite
+*.sqlite3

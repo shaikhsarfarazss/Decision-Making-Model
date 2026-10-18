@@ -47,6 +47,35 @@ yt-thumbnail-view-model,
   pointer-events: none !important;
 }
 
+/* Zero-Flash Optimistic Pre-Shield (Soft blur for ~35ms until batch resolves) */
+ytd-rich-item-renderer:not([data-ss-resolved]) ytd-thumbnail img,
+ytd-video-renderer:not([data-ss-resolved]) ytd-thumbnail img,
+ytd-compact-video-renderer:not([data-ss-resolved]) ytd-thumbnail img,
+.yt-lockup-view-model:not([data-ss-resolved]) img {
+  filter: blur(10px) grayscale(20%);
+  transition: filter 0.18s ease-out;
+}
+
+/* Confirmed Study Video -> Instantly sharp */
+[data-ss-resolved="ALLOW"] ytd-thumbnail img,
+[data-ss-resolved="ALLOW"] yt-thumbnail-view-model img,
+[data-ss-resolved="ALLOW"] .yt-lockup-view-model__content-image img,
+[data-ss-resolved="ALLOW"] .thumb-box img {
+  filter: none !important;
+}
+
+/* Confirmed Distraction -> Heavy Blur on Thumbnail & Hover Preview */
+[data-ss-resolved="BLUR"] ytd-thumbnail img,
+[data-ss-resolved="BLUR"] ytd-thumbnail video,
+[data-ss-resolved="BLUR"] yt-thumbnail-view-model img,
+[data-ss-resolved="BLUR"] .yt-lockup-view-model__content-image img,
+[data-ss-resolved="BLUR"] .thumb-box img,
+[data-ss-resolved="BLUR"] ytd-video-preview,
+[data-ss-resolved="BLUR"] #mouseover-overlay {
+  filter: blur(26px) brightness(0.75) !important;
+  pointer-events: none !important;
+}
+
 /* Also blur YouTube's floating inline hover preview player when blocked */
 ytd-video-preview.studyshield-preview-blocked video,
 ytd-video-preview.studyshield-preview-blocked img {
@@ -57,6 +86,36 @@ ytd-video-preview.studyshield-preview-blocked img {
 ytd-reel-video-renderer.studyshield-card-blocked video,
 ytd-reel-video-renderer.studyshield-card-blocked #player-container {
   filter: blur(28px) brightness(0.65) !important;
+}
+
+/* Shorts StudyShield Floating Center Pill */
+.studyshield-shorts-pill {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 99999 !important;
+  background: rgba(15, 23, 42, 0.92) !important;
+  border: 1px solid rgba(239, 68, 68, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #f8fafc !important;
+  padding: 12px 22px !important;
+  border-radius: 999px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6) !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+}
+
+.studyshield-shorts-pill:hover {
+  transform: translate(-50%, -50%) scale(1.04) !important;
+  background: rgba(30, 41, 59, 0.96) !important;
 }
 
 /* NEVER BLUR THE DOWNSIDE TEXT (Title, Channel Name, Views, Avatar) */
